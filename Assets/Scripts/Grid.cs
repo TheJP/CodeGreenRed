@@ -1,16 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Linq;
+using System.Collections.Generic;
 
 public class Grid : MonoBehaviour
 {
-    public GameObject rectangle;
-    public GameObject wall;
+    public GameObject playerPrefab;
+    public GameObject rectanglePrefab;
+    public GameObject wallPrefab;
     public int width;
     public int height;
 
     private GameObject wallContainer = null;
     private bool[,] walls = null;
+    private readonly List<Player> players = new List<Player>();
+
+    /// <summary>Readonly, duplicate list of the contained players.</summary>
+    public IList<Player> Players { get { return players.ToList().AsReadOnly(); } }
 
     void Start()
     {
@@ -26,7 +32,7 @@ public class Grid : MonoBehaviour
         {
             for(int x = 0; x < width; ++x)
             {
-                var tile = Instantiate(rectangle);
+                var tile = Instantiate(rectanglePrefab);
                 tile.transform.parent = transform;
                 tile.transform.localPosition = new Vector3(x - 0.05f, y - 0.05f);
             }
@@ -49,11 +55,21 @@ public class Grid : MonoBehaviour
             {
                 if (this.walls[y, x])
                 {
-                    var tile = Instantiate(wall);
+                    var tile = Instantiate(wallPrefab);
                     tile.transform.parent = wallContainer.transform;
                     tile.transform.localPosition = new Vector3(x, y);
                 }
             }
         }
+    }
+
+    public Player AddPlayer(Point startPosition, Directions direction, Teams team) //TODO: Add sprite parameter
+    {
+        var player = Instantiate(playerPrefab).GetComponent<Player>();
+        player.Grid = this;
+        player.SetInitialPosition(startPosition, direction);
+        player.Team = team;
+        player.transform.parent = transform;
+        return player;
     }
 }

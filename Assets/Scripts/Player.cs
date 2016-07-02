@@ -164,6 +164,7 @@ public class Player : MonoBehaviour
         arrow.transform.parent = head.transform;
         arrow.transform.localPosition = new Vector3(0f, 0f, -1f);
         arrow.GetComponent<Arrow>().Turn(Direction.Angle(), Direction.Angle());
+        arrow.GetComponent<Arrow>().Team = Team;
         //TODO: Generalize
         head.GetComponent<SpriteRenderer>().sprite = playerSprites[0];
     }
