@@ -1,35 +1,53 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Linq;
 using System.Collections.Generic;
+using Assets.Scripts.CardEffects;
+using Assets.Scripts.Cards.CardEffects;
+using Assets.Scripts.Cards;
+using System;
 
-public class CardManager : MonoBehaviour {
+public class CardManager : MonoBehaviour
+{
     public List<GameObject> cards;
     public GameObject cardPrefab;
     public Transform[] CardSpawnPositions;
-   
+    public Grid grid;
 
-    GameObject selected = null;
-    Vector2 dragStartPos; //point in world coordinates where the mouse was originally clicked
-    Vector3 mouseLast = Vector3.zero;
+
+    private GameObject selected = null;
+    private Vector2 dragStartPos; //point in world coordinates where the mouse was originally clicked
+    private Vector3 mouseLast = Vector3.zero;
+    private CardEffectFactory cardEffectFactory = new CardEffectFactory();
+
+    private Queue<CardEffect> effects = new Queue<CardEffect>();
+    private PlayerInfo[] players;
+    private PlayerInfo currentPlayer;
+
+
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
 
-        foreach(var t in CardSpawnPositions)
+        addFactories();
+
+        foreach (var t in CardSpawnPositions)
         {
             var card = Instantiate<GameObject>(cardPrefab);
             card.transform.position = t.position;
             cards.Add(card);
-        } 
+        }
     }
-    
+
     // Update is called once per frame
-    void Update () {
+    void Update()
+    {
 
 
         CheckMouseSelection();
         HearthStoneDragRotationTrollolol();
+        TakeActionForSelected();
+
+        TestExecuteOnKeyPress();
     }
 
     void CheckMouseSelection()
@@ -44,7 +62,7 @@ public class CardManager : MonoBehaviour {
             {
                 selected = cards.Find(c => c.transform == hit.transform);
 
-                if(selected != null)
+                if (selected != null)
                 {
                     Debug.Log("You selected the " + selected.name); // ensure you picked right object
                     selected.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
@@ -80,11 +98,56 @@ public class CardManager : MonoBehaviour {
         }
         mouseLast = Input.mousePosition;
     }
-
-    IEnumerable ScaleMe(Transform objTr)
+    void TakeActionForSelected()
     {
-        objTr.localScale *= 1.2f;
-        yield return new WaitForSeconds(0.5f);
-        objTr.localScale /= 1.2f;
+        if (selected != null)
+        {
+            //get cardEffect from Selected
+            var effect = selected.GetComponent<Card>().type.GetEffectType();
+            Debug.Log("type " + effect);
+
+            var parameters = new CardEffectParamerters();
+            
+            effects.Enqueue(cardEffectFactory.create(effect,parameters));
+        }
     }
+
+    void TestExecuteOnKeyPress()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            effects.Dequeue().Execute();
+        }
+    }
+
+    struct PlayerInfo
+    {
+        uint playerNumber;
+    }
+
+    private void addFactories()
+    {
+        //UPDATE these entries and cardEffectDictionary below
+        //TODO could be done with relection
+        cardEffectFactory.addFactoryMethod<MoveEffect>(MoveEffect.GetFactory());
+        cardEffectFactory.addFactoryMethod<DebugEffect>(DebugEffect.GetFactory());
+    }
+}
+
+public enum CardType { MOVE, RIGHT, LEFT, DEBUG }
+/// <summary>
+/// Enables us to select cardtype in unity Editor
+/// </summary>
+public static class CardTypeExtension
+{
+    static Dictionary<CardType, Type> cardEffectDictionary = new Dictionary<CardType, Type>()
+        {
+            {CardType.MOVE,typeof(MoveEffect) },
+            {CardType.DEBUG,typeof(DebugEffect) }
+        };
+    public static Type GetEffectType(this CardType cardType)
+    {
+        return cardEffectDictionary[cardType];
+    }
+
 }

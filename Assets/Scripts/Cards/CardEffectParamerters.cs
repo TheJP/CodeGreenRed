@@ -8,9 +8,9 @@ namespace Assets.Scripts.CardEffects
 {
     public struct CardEffectParamerters
     {
-        public GameObject caster { get;}
+        public GameObject Caster { get; set; }
         public GameObject[] players; //all except caster
-        public Player castingPlayer { get; }
+        public Player CastingPlayer { get; set; }
 
 
 
