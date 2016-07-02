@@ -17,8 +17,8 @@ public class Grid : MonoBehaviour
         //Add walls parent gameobject
         wallContainer = new GameObject();
         wallContainer.name = "Walls";
-        wallContainer.transform.position = new Vector3(0, 0, 1); //Render all walls behind the grid for now
         wallContainer.transform.parent = transform;
+        wallContainer.transform.localPosition = new Vector3(0, 0, 1); //Render all walls behind the grid for now
         if (walls == null) { walls = new bool[height, width]; } //Initialize with no walls
         else { SetWallLayout(walls); }
         //Create grid (rectangles)
@@ -26,8 +26,9 @@ public class Grid : MonoBehaviour
         {
             for(int x = 0; x < width; ++x)
             {
-                var tile = (GameObject)Instantiate(rectangle, new Vector3(x - 0.05f, y - 0.05f), Quaternion.identity);
+                var tile = Instantiate(rectangle);
                 tile.transform.parent = transform;
+                tile.transform.localPosition = new Vector3(x - 0.05f, y - 0.05f);
             }
         }
     }
@@ -48,8 +49,9 @@ public class Grid : MonoBehaviour
             {
                 if (this.walls[y, x])
                 {
-                    var tile = (GameObject)Instantiate(wall, new Vector3(x, y), Quaternion.identity);
+                    var tile = Instantiate(wall);
                     tile.transform.parent = wallContainer.transform;
+                    tile.transform.localPosition = new Vector3(x, y);
                 }
             }
         }

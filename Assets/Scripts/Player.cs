@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public const int BodyElementsPerTile = 3;
-    public const float MovementSpeed = 1f;
+    public const float MovementSpeed = 2f;
     public readonly Vector3 PlayerOffset = new Vector3(0.5f, 0.5f);
 
     public GameObject playerHeadPrefab;
