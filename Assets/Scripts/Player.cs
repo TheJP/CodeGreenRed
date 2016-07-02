@@ -19,6 +19,8 @@ public class Player : MonoBehaviour
     private int grow = 0;
     private readonly Queue<Point> headAnimation = new Queue<Point>();
     private readonly List<Vector3> bodyAnimation = new List<Vector3>();
+    private int animationHasToGrow = 0;
+    private Vector3 previousHeadAnimation;
 
     public Directions Direction { get; private set; }
     public Point Position { get; private set; }
@@ -41,7 +43,7 @@ public class Player : MonoBehaviour
     public void Grow(int amount = 1)
     {
         grow += amount;
-        if(grow < 0) { grow = 0; } //Cannot be less than 0
+        if (grow < 0) { grow = 0; } //Cannot be less than 0
     }
 
     /// <summary>Makes the snake shorter by the given amount.</summary>
@@ -55,14 +57,63 @@ public class Player : MonoBehaviour
     /// <param name="amount">Amount that the snake will move meassured in tiles.</param>
     public void Move(int amount = 1)
     {
-        var oldPosition = Position.ToVector();
-        for(int i = 0; i < amount; ++i)
+        var startMovement = !headAnimation.Any() && amount > 0;
+        if (startMovement) { previousHeadAnimation = Position.ToVector() + PlayerOffset; }
+        for (int i = 0; i < amount; ++i)
         {
             Position += Direction.Movement();
             BodyPositions.Enqueue(Position);
             headAnimation.Enqueue(Position);
-            if (grow > 0) { --grow; } //SpawnBody(bodyAnimation.Count > 0 ? bodyAnimation.Last() : oldPosition); } //TODO: Correct body for amount > 1
+            if (grow > 0) { --grow; ++animationHasToGrow; }
             else { BodyPositions.Dequeue(); }
+        }
+        if (startMovement) { StartHeadMovement(); }
+    }
+
+    private void StartHeadMovement()
+    {
+        if (animationHasToGrow > 0)
+        {
+            --animationHasToGrow;
+            SpawnBody();
+        }
+        //if (bodyAnimation.Any())
+        //{
+        //    for (int i = bodyAnimation.Count - 1; i >= BodyElementsPerTile; --i)
+        //    {
+        //        bodyAnimation[i] = bodyAnimation[i - BodyElementsPerTile];
+        //    }
+        //    var distance = ((headAnimation.Peek().ToVector() + PlayerOffset) - head.transform.localPosition) / BodyElementsPerTile;
+        //    for (int i = 0; i < BodyElementsPerTile; ++i)
+        //    {
+        //        bodyAnimation[i] = (headAnimation.Peek().ToVector() + PlayerOffset) - (i + 1) * distance;
+        //    }
+        //}
+        for (int i = 0; i + BodyElementsPerTile < bodyAnimation.Count; ++i)
+        {
+            bodyAnimation[i] = bodyAnimation[i + BodyElementsPerTile];
+        }
+        if (bodyAnimation.Any())
+        {
+            var distance = ((headAnimation.Peek().ToVector() + PlayerOffset) - head.transform.localPosition) / BodyElementsPerTile;
+            for (int i = 0; i < BodyElementsPerTile; ++i)
+            {
+                bodyAnimation[bodyAnimation.Count - 1 - i] = (headAnimation.Peek().ToVector() + PlayerOffset) - (i + 1) * distance;
+            }
+        }
+    }
+
+    private void SpawnBody()
+    {
+        for (int i = 0; i < BodyElementsPerTile; ++i)
+        {
+            var bodyPart = Instantiate(playerBodyPrefab);
+            bodyPart.transform.parent = transform;
+            bodyPart.transform.localPosition = bodyAnimation.Count > 0 ? bodyAnimation.Last() : previousHeadAnimation;
+            //TODO: Generalize
+            bodyPart.GetComponent<SpriteRenderer>().sprite = playerSprites[0];
+            body.Add(bodyPart);
+            bodyAnimation.Add(bodyPart.transform.localPosition);
         }
     }
 
@@ -102,6 +153,8 @@ public class Player : MonoBehaviour
             if (direction.magnitude < Time.deltaTime * MovementSpeed)
             {
                 head.transform.localPosition = headAnimation.Dequeue().ToVector() + PlayerOffset;
+                previousHeadAnimation = head.transform.localPosition;
+                if (headAnimation.Any()) { StartHeadMovement(); }
                 //if (headAnimation.Any())
                 //{
                 //    for (int i = 0; i + BodyElementsPerTile < bodyAnimation.Count; ++i)
