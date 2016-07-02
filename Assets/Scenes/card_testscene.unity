@@ -165,7 +165,7 @@ Light:
   serializedVersion: 6
   m_Type: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.5
   m_Range: 10
   m_SpotAngle: 30
   m_CookieSize: 10
@@ -265,10 +265,6 @@ Prefab:
     - target: {fileID: 464498, guid: d8fabefd7142ce344bb09932f177b755, type: 2}
       propertyPath: m_RootOrder
       value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 185122, guid: d8fabefd7142ce344bb09932f177b755, type: 2}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d8fabefd7142ce344bb09932f177b755, type: 2}
@@ -480,6 +476,7 @@ MonoBehaviour:
   - {fileID: 1715977821}
   - {fileID: 252274988}
   - {fileID: 1630569172}
+  grid: {fileID: 0}
 --- !u!4 &1997401178
 Transform:
   m_ObjectHideFlags: 0
