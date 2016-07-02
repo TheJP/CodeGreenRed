@@ -77,28 +77,16 @@ public class Player : MonoBehaviour
             --animationHasToGrow;
             SpawnBody();
         }
-        //if (bodyAnimation.Any())
-        //{
-        //    for (int i = bodyAnimation.Count - 1; i >= BodyElementsPerTile; --i)
-        //    {
-        //        bodyAnimation[i] = bodyAnimation[i - BodyElementsPerTile];
-        //    }
-        //    var distance = ((headAnimation.Peek().ToVector() + PlayerOffset) - head.transform.localPosition) / BodyElementsPerTile;
-        //    for (int i = 0; i < BodyElementsPerTile; ++i)
-        //    {
-        //        bodyAnimation[i] = (headAnimation.Peek().ToVector() + PlayerOffset) - (i + 1) * distance;
-        //    }
-        //}
-        for (int i = 0; i + BodyElementsPerTile < bodyAnimation.Count; ++i)
-        {
-            bodyAnimation[i] = bodyAnimation[i + BodyElementsPerTile];
-        }
         if (bodyAnimation.Any())
         {
+            for (int i = bodyAnimation.Count - 1; i >= BodyElementsPerTile; --i)
+            {
+                bodyAnimation[i] = bodyAnimation[i - BodyElementsPerTile];
+            }
             var distance = ((headAnimation.Peek().ToVector() + PlayerOffset) - head.transform.localPosition) / BodyElementsPerTile;
             for (int i = 0; i < BodyElementsPerTile; ++i)
             {
-                bodyAnimation[bodyAnimation.Count - 1 - i] = (headAnimation.Peek().ToVector() + PlayerOffset) - (i + 1) * distance;
+                bodyAnimation[i] = (headAnimation.Peek().ToVector() + PlayerOffset) - (i + 1) * distance;
             }
         }
     }
@@ -116,21 +104,6 @@ public class Player : MonoBehaviour
             bodyAnimation.Add(bodyPart.transform.localPosition);
         }
     }
-
-    //private void SpawnBody(Vector3 spawn)
-    //{
-    //    --grow;
-    //    var distance = Direction.Movement().ToVector() / BodyElementsPerTile;
-    //    for(int i = 0; i < BodyElementsPerTile; ++i)
-    //    {
-    //        var bodyPart = Instantiate(playerBodyPrefab);
-    //        bodyPart.transform.parent = transform;
-    //        bodyPart.transform.localPosition = spawn + PlayerOffset;
-    //        bodyPart.GetComponent<SpriteRenderer>().sprite = playerSprites[0];
-    //        body.Add(bodyPart);
-    //        bodyAnimation.Add(Position.ToVector() + PlayerOffset - (i + 1) * distance);
-    //    }
-    //}
 
     public void TurnLeft() { Direction = Direction.TurnLeft(); }
     public void TurnRight() { Direction = Direction.TurnRight(); }
@@ -155,18 +128,6 @@ public class Player : MonoBehaviour
                 head.transform.localPosition = headAnimation.Dequeue().ToVector() + PlayerOffset;
                 previousHeadAnimation = head.transform.localPosition;
                 if (headAnimation.Any()) { StartHeadMovement(); }
-                //if (headAnimation.Any())
-                //{
-                //    for (int i = 0; i + BodyElementsPerTile < bodyAnimation.Count; ++i)
-                //    {
-                //        bodyAnimation[i] = bodyAnimation[i + BodyElementsPerTile];
-                //    }
-                //    var distance = (headAnimation.Peek().ToVector() + PlayerOffset) - head.transform.localPosition / BodyElementsPerTile;
-                //    for(int i = 0; i < BodyElementsPerTile; ++i)
-                //    {
-                //        bodyAnimation[bodyAnimation.Count - 1 - i] = (headAnimation.Peek().ToVector() + PlayerOffset) - (i + 1) * distance;
-                //    }
-                //}
             }
             else
             {
