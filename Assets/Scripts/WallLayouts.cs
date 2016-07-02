@@ -30,7 +30,8 @@ public static class WallLayoutsExtension
                     walls[i, width - 1] = true;
                 }
                 return walls;
+            default:
+                throw new ArgumentException("Unkown or unimplemented wall layout: " + layout.ToString());
         }
-        throw new ArgumentException("Unkown or unimplemented wall layout: " + layout.ToString());
     }
 }
