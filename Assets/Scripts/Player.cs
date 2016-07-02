@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ public class Player : MonoBehaviour
 {
     public const int BodyElementsPerTile = 3;
     public const float MovementSpeed = 2f;
+    private const float Epsilon = 0.001f;
     public readonly Vector3 PlayerOffset = new Vector3(0.5f, 0.5f);
 
     public GameObject playerHeadPrefab;
@@ -13,14 +15,15 @@ public class Player : MonoBehaviour
     public Sprite[] playerSprites;
 
     private GameObject head;
-    private readonly Stack<GameObject> body = new Stack<GameObject>();
+    private readonly List<GameObject> body = new List<GameObject>();
     private int grow = 0;
     private readonly Queue<Point> headAnimation = new Queue<Point>();
+    private readonly List<Vector3> bodyAnimation = new List<Vector3>();
 
     public Directions Direction { get; private set; }
     public Point Position { get; private set; }
     public Queue<Point> BodyPositions { get; private set; }
-    public int SnakeLength { get { return BodyPositions.Count; } }
+    public int SnakeLength { get { return BodyPositions.Count + grow; } }
 
     public Player() { BodyPositions = new Queue<Point>(); }
 
@@ -52,15 +55,31 @@ public class Player : MonoBehaviour
     /// <param name="amount">Amount that the snake will move meassured in tiles.</param>
     public void Move(int amount = 1)
     {
+        var oldPosition = Position.ToVector();
         for(int i = 0; i < amount; ++i)
         {
             Position += Direction.Movement();
             BodyPositions.Enqueue(Position);
             headAnimation.Enqueue(Position);
-            if(grow > 0) { --grow; } //TODO: Spawn body??
+            if (grow > 0) { --grow; } //SpawnBody(bodyAnimation.Count > 0 ? bodyAnimation.Last() : oldPosition); } //TODO: Correct body for amount > 1
             else { BodyPositions.Dequeue(); }
         }
     }
+
+    //private void SpawnBody(Vector3 spawn)
+    //{
+    //    --grow;
+    //    var distance = Direction.Movement().ToVector() / BodyElementsPerTile;
+    //    for(int i = 0; i < BodyElementsPerTile; ++i)
+    //    {
+    //        var bodyPart = Instantiate(playerBodyPrefab);
+    //        bodyPart.transform.parent = transform;
+    //        bodyPart.transform.localPosition = spawn + PlayerOffset;
+    //        bodyPart.GetComponent<SpriteRenderer>().sprite = playerSprites[0];
+    //        body.Add(bodyPart);
+    //        bodyAnimation.Add(Position.ToVector() + PlayerOffset - (i + 1) * distance);
+    //    }
+    //}
 
     public void TurnLeft() { Direction = Direction.TurnLeft(); }
     public void TurnRight() { Direction = Direction.TurnRight(); }
@@ -83,10 +102,36 @@ public class Player : MonoBehaviour
             if (direction.magnitude < Time.deltaTime * MovementSpeed)
             {
                 head.transform.localPosition = headAnimation.Dequeue().ToVector() + PlayerOffset;
+                //if (headAnimation.Any())
+                //{
+                //    for (int i = 0; i + BodyElementsPerTile < bodyAnimation.Count; ++i)
+                //    {
+                //        bodyAnimation[i] = bodyAnimation[i + BodyElementsPerTile];
+                //    }
+                //    var distance = (headAnimation.Peek().ToVector() + PlayerOffset) - head.transform.localPosition / BodyElementsPerTile;
+                //    for(int i = 0; i < BodyElementsPerTile; ++i)
+                //    {
+                //        bodyAnimation[bodyAnimation.Count - 1 - i] = (headAnimation.Peek().ToVector() + PlayerOffset) - (i + 1) * distance;
+                //    }
+                //}
             }
             else
             {
                 head.transform.Translate(direction.normalized * Time.deltaTime * MovementSpeed, Space.Self);
+            }
+        }
+
+        //Body animation
+        for(int i = 0; i < body.Count; ++i)
+        {
+            var direction = bodyAnimation[i] - body[i].transform.localPosition;
+            if(direction.magnitude < Time.deltaTime * MovementSpeed)
+            {
+                body[i].transform.localPosition = bodyAnimation[i];
+            }
+            else
+            {
+                body[i].transform.Translate(direction.normalized * Time.deltaTime * MovementSpeed, Space.Self);
             }
         }
     }

@@ -21,5 +21,6 @@ public class ControllerTest : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.W)) { player.Move(); }
         if (Input.GetKeyDown(KeyCode.A)) { player.TurnLeft(); }
         if (Input.GetKeyDown(KeyCode.D)) { player.TurnRight(); }
+        if (Input.GetKeyDown(KeyCode.G)) { player.Grow(); }
     }
 }
