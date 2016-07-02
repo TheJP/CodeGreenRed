@@ -11,7 +11,7 @@ GameObject:
   - 33: {fileID: 3320220}
   - 23: {fileID: 2371784}
   m_Layer: 0
-  m_Name: Quad
+  m_Name: Outline Quad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -72,7 +72,7 @@ MeshRenderer:
   m_CastShadows: 2
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: c0f70ba2955cf9645915eeccdb4b16ac, type: 2}
+  - {fileID: 2100000, guid: 7b8af15320c2fce43a6f9830fb656a58, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc69ebabb05e2d247bfde96d78a45183, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 3
+  type: 2
 --- !u!114 &11405950
 MonoBehaviour:
   m_ObjectHideFlags: 1
