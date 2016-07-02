@@ -6,7 +6,7 @@ public class ControllerTest : MonoBehaviour
     public GameObject grid;
     void Start()
     {
-        var field = Instantiate(grid);
-        field.GetComponent<Grid>().SetWallLayout(WallLayouts.Border.CreateArray(15, 15));
+        var field = Instantiate(grid).GetComponent<Grid>();
+        field.SetWallLayout(WallLayouts.Border.CreateArray(field.width, field.height));
     }
 }
