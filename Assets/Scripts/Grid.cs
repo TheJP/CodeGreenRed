@@ -5,15 +5,20 @@ using System.Collections.Generic;
 
 public class Grid : MonoBehaviour
 {
+    private const int MaxPowerupSpawnTries = 100;
+
     public GameObject playerPrefab;
     public GameObject rectanglePrefab;
     public GameObject wallPrefab;
+    public GameObject[] powerupPrefabs;
     public int width;
     public int height;
 
     private GameObject wallContainer = null;
+    private GameObject powerupContainer = null;
     private bool[,] walls = null;
     private readonly List<Player> players = new List<Player>();
+    private readonly List<Powerup> powerups = new List<Powerup>();
 
     /// <summary>Readonly, duplicate list of the contained players.</summary>
     public IList<Player> Players { get { return players.ToList().AsReadOnly(); } }
@@ -27,8 +32,13 @@ public class Grid : MonoBehaviour
         wallContainer.transform.localPosition = new Vector3(0, 0, 1); //Render all walls behind the grid for now
         if (walls == null) { walls = new bool[height, width]; } //Initialize with no walls
         else { SetWallLayout(walls); }
+        //Add powerup parent gameobject
+        powerupContainer = new GameObject();
+        powerupContainer.name = "Powerups";
+        powerupContainer.transform.parent = transform;
+        powerupContainer.transform.localPosition = new Vector3(0, 0, -2); //Render all powerups in front of the grid
         //Create grid (rectangles)
-        for(int y = 0; y < height; ++y)
+        for (int y = 0; y < height; ++y)
         {
             for(int x = 0; x < width; ++x)
             {
@@ -86,22 +96,59 @@ public class Grid : MonoBehaviour
     /// <summary>Event handler, that is called, before a player moves.</summary>
     private void PlayerBeforeMove(MoveEventArguments arguments)
     {
-        //Wall collision
-        if(walls != null && walls[arguments.TargetPosition.Y, arguments.TargetPosition.X])
-        {
-            arguments.Cancel();
-            arguments.Player.Die();
-        }
-        //Enemy player collision
-        else if(players
-            .Where(p => p.Team != arguments.Player.Team)
+        if (
+            //Wall collision
+            (walls != null && walls[arguments.TargetPosition.Y, arguments.TargetPosition.X]) ||
+            //Enemy player collision
+            players.Where(p => p.Team != arguments.Player.Team)
             .SelectMany(p => p.BodyPositions)
-            .Any(position => position.X == arguments.TargetPosition.X && position.Y == arguments.TargetPosition.Y))
-        {
+            .Any(position => position.X == arguments.TargetPosition.X && position.Y == arguments.TargetPosition.Y)
+        ){
             arguments.Cancel();
             arguments.Player.Die();
         }
-        //Player collision
-        //TODO: Get powerups, when moving over them
+        //Canceled somewhere else?
+        if (arguments.Canceled) { return; }
+        //Pickup all powerups on the target field
+        foreach(var powerup in powerups.Where(up => up.Position.X == arguments.TargetPosition.X && up.Position.Y == arguments.TargetPosition.Y).ToList())
+        {
+            powerup.PickedUp(new PickupParameters(arguments.Player, this));
+            powerups.Remove(powerup);
+            powerup.Consumed();
+        }
+    }
+
+    public void SpawnRandomPowerup()
+    {
+        SpawnPowerup(powerupPrefabs[Random.Range(0, powerupPrefabs.Length)]);
+    }
+
+    public bool SpawnPowerup(GameObject powerupPrefab, Point? position = null)
+    {
+        //Find spawn location
+        if(position.HasValue && !PowerupCanSpawn(position.Value)) { return false; }
+        var spawn = position.HasValue ? position.Value : PickRandomSpawn();
+        var tries = 0;
+        while (!PowerupCanSpawn(spawn) && tries < MaxPowerupSpawnTries) { spawn = PickRandomSpawn(); ++tries; }
+        if(tries >= MaxPowerupSpawnTries) { return false; }
+        //Spawn powerup
+        var powerup = Instantiate(powerupPrefab).GetComponent<Powerup>();
+        powerup.transform.parent = powerupContainer.transform;
+        powerup.Position = spawn;
+        powerups.Add(powerup);
+        return true;
+    }
+
+    private Point PickRandomSpawn() { return new Point(Random.Range(0, width), Random.Range(0, height)); }
+
+    /// <summary>Determines, if a powerup can spawn at the given location.</summary>
+    /// <param name="position"></param>
+    /// <returns></returns>
+    public bool PowerupCanSpawn(Point position)
+    {
+        return (walls == null || !walls[position.Y, position.X]) &&
+            !players.SelectMany(p => p.BodyPositions).Any(pos => pos.X == position.X && pos.Y == position.Y) &&
+            position.X >= 0 && position.Y >= 0 &&
+            position.X < width && position.Y < height;
     }
 }
