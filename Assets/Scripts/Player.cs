@@ -176,10 +176,10 @@ public class Player : MonoBehaviour
         //Wrap around the edges of the grid
         if (direction.magnitude > 2f)
         {
-            if (target.x + 2f < transform.position.x) { transform.Translate(-Grid.width, 0f, 0f); }
-            if (target.x - 2f > transform.position.x) { transform.Translate(Grid.width, 0f, 0f); }
-            if (target.y + 2f < transform.position.y) { transform.Translate(0f, -Grid.height, 0f); }
-            if (target.y - 2f > transform.position.y) { transform.Translate(0f, Grid.height, 0f); }
+            if (target.x + 2f < transform.localPosition.x) { transform.Translate(-Grid.width, 0f, 0f, Space.Self); }
+            if (target.x - 2f > transform.localPosition.x) { transform.Translate(Grid.width, 0f, 0f, Space.Self); }
+            if (target.y + 2f < transform.localPosition.y) { transform.Translate(0f, -Grid.height, 0f, Space.Self); }
+            if (target.y - 2f > transform.localPosition.y) { transform.Translate(0f, Grid.height, 0f, Space.Self); }
         }
         transform.Translate(direction.normalized * Time.deltaTime * MovementSpeed, Space.Self);
     }

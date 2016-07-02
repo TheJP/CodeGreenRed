@@ -39,6 +39,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed7c994a0b47f5f4ab1a580549c653f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  arrowPrefab: {fileID: 131464, guid: 367d4c35c3ab8b347aea0953e9bfc162, type: 2}
   playerHeadPrefab: {fileID: 187962, guid: 026a2861cd79e9b41a0b325675857ebc, type: 2}
   playerBodyPrefab: {fileID: 177182, guid: eae566db28e762e40aacd906d57fad4f, type: 2}
   playerSprites:
