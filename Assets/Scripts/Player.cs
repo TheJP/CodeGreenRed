@@ -20,6 +20,9 @@ public class Player : MonoBehaviour
     public GameObject playerBodyPrefab;
     public Sprite[] playerSprites;
 
+    public event Action<MoveEventArguments> BeforeMove;
+    public event Action<Player> AfterDeath;
+
     //Cached GameObjects for arrow, head and body
     private GameObject arrow = null;
     private GameObject head;
@@ -52,6 +55,8 @@ public class Player : MonoBehaviour
     }
     /// <summary>Grid, in which the snake moves. Has to be set, before the snake starts.</summary>
     public Grid Grid { get; set; }
+    /// <summary>Determines, if the player is dead.</summary>
+    public bool Dead { get; private set; }
 
     public Player() { BodyPositions = new Queue<Point>(); }
 
@@ -84,9 +89,20 @@ public class Player : MonoBehaviour
     public void Move(int amount = 1)
     {
         var startMovement = !headAnimation.Any() && amount > 0;
-        if (startMovement) { previousHeadAnimation = Position.ToVector() + PlayerOffset; }
+        var previousHeadAnimation = Position.ToVector() + PlayerOffset;
+        var canceled = 0;
         for (int i = 0; i < amount; ++i)
         {
+            if (Dead) { return; } //Can happen after a move
+            //Trigger movement event
+            if(BeforeMove != null)
+            {
+                var targetPosition = Position + Direction.Movement();
+                var arguments = new MoveEventArguments(this, targetPosition);
+                BeforeMove(arguments);
+                if (arguments.Canceled) { ++canceled; continue; }
+            }
+            //Move player
             Position += Direction.Movement();
             //Wrap around the edges of the grid
             if (Position.X < 0) { Position = new Point(Position.X + Grid.width, Position.Y); }
@@ -98,7 +114,11 @@ public class Player : MonoBehaviour
             if (grow > 0) { --grow; ++animationHasToGrow; }
             else { BodyPositions.Dequeue(); }
         }
-        if (startMovement) { StartHeadMovement(); }
+        if (startMovement && canceled < amount)
+        {
+            this.previousHeadAnimation = previousHeadAnimation;
+            StartHeadMovement();
+        }
     }
 
     /// <summary>Called whenever the snake head starts to move away from the center of a tile. Only relevant for the snake animation / visualisation.</summary>
@@ -150,6 +170,22 @@ public class Player : MonoBehaviour
     {
         Direction = Direction.TurnRight();
         arrow.GetComponent<Arrow>().TurnTo(Direction.Angle());
+    }
+
+    /// <summary>Kills this snake.</summary>
+    public void Die()
+    {
+        Destroy(head);
+        foreach(var bodyPart in body.ToList()) { Destroy(bodyPart); }
+        arrow = null;
+        head = null;
+        body.Clear();
+        headAnimation.Clear();
+        bodyAnimation.Clear();
+        grow = 0;
+        animationHasToGrow = 0;
+        BodyPositions.Clear();
+        if(AfterDeath != null) { AfterDeath(this); }
     }
 
     void Start()

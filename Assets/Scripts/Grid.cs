@@ -63,13 +63,45 @@ public class Grid : MonoBehaviour
         }
     }
 
+    /// <summary>Adds a player to the grid at the given position.</summary>
+    /// <param name="startPosition"></param>
+    /// <param name="direction"></param>
+    /// <param name="team"></param>
+    /// <returns></returns>
     public Player AddPlayer(Point startPosition, Directions direction, Teams team) //TODO: Add sprite parameter
     {
+        if(walls != null && walls[startPosition.Y, startPosition.X]) { throw new System.ArgumentException("There's a wall at the given spawn location."); }
+        if(players.Any(p => p.Position.X == startPosition.X && p.Position.Y == startPosition.Y)) { throw new System.ArgumentException("There's already a player at the given spawn location."); }
+        //Spawn new player
         var player = Instantiate(playerPrefab).GetComponent<Player>();
         player.Grid = this;
         player.SetInitialPosition(startPosition, direction);
         player.Team = team;
         player.transform.parent = transform;
+        player.BeforeMove += PlayerBeforeMove;
+        players.Add(player);
         return player;
+    }
+
+    /// <summary>Event handler, that is called, before a player moves.</summary>
+    private void PlayerBeforeMove(MoveEventArguments arguments)
+    {
+        //Wall collision
+        if(walls != null && walls[arguments.TargetPosition.Y, arguments.TargetPosition.X])
+        {
+            arguments.Cancel();
+            arguments.Player.Die();
+        }
+        //Enemy player collision
+        else if(players
+            .Where(p => p.Team != arguments.Player.Team)
+            .SelectMany(p => p.BodyPositions)
+            .Any(position => position.X == arguments.TargetPosition.X && position.Y == arguments.TargetPosition.Y))
+        {
+            arguments.Cancel();
+            arguments.Player.Die();
+        }
+        //Player collision
+        //TODO: Get powerups, when moving over them
     }
 }
