@@ -5,7 +5,9 @@ Shader "Stencil/Outline"
 		_Color("Color", Color) = (1,0,0,1)
 		_Thickness("Thickness", float) = 4
 	}
-		SubShader
+
+
+	SubShader
 	{
 
 		Tags{ "Queue" = "Geometry" "IgnoreProjector" = "True" "RenderType" = "Transparent" }
@@ -154,9 +156,13 @@ Shader "Stencil/Outline"
 	return _Color;
 	}
 
+
+
 		ENDCG
 
 	}
 	}
-		FallBack "Diffuse"
+		
+
+	FallBack "Diffuse"
 }
