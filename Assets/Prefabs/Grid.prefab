@@ -42,6 +42,8 @@ MonoBehaviour:
   playerPrefab: {fileID: 131300, guid: f2bf312294b9e54419ccab358b0fdb80, type: 2}
   rectanglePrefab: {fileID: 101978, guid: fdcdeed56421af24c8005a8fdd879874, type: 2}
   wallPrefab: {fileID: 105590, guid: d515d5c8952411d488d49461f19a72f7, type: 2}
+  powerupPrefabs:
+  - {fileID: 172102, guid: bc8bc1992bf4d26499a6f0ef7dbdce2a, type: 2}
   width: 15
   height: 15
 --- !u!1001 &100100000
