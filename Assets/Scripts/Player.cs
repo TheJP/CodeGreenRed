@@ -50,10 +50,12 @@ public class Player : MonoBehaviour
             if(arrow != null) { arrow.GetComponent<Arrow>().Team = value; }
         }
     }
+    /// <summary>Grid, in which the snake moves. Has to be set, before the snake starts.</summary>
+    public Grid Grid { get; set; }
 
     public Player() { BodyPositions = new Queue<Point>(); }
 
-    /// <summary>Sets the starting position for this snake. Has to be called, bevore the GameObject is started.</summary>
+    /// <summary>Sets the starting position for this snake. Has to be called, before the GameObject is started.</summary>
     /// <param name="position"></param>
     public void SetInitialPosition(Point position, Directions direction = Directions.North)
     {
@@ -86,6 +88,10 @@ public class Player : MonoBehaviour
         for (int i = 0; i < amount; ++i)
         {
             Position += Direction.Movement();
+            if (Position.X < 0) { Position = new Point(Position.X + Grid.width, Position.Y); }
+            if (Position.X >= Grid.width) { Position = new Point(Position.X - Grid.width, Position.Y); }
+            if (Position.Y < 0) { Position = new Point(Position.X, Position.Y + Grid.height); }
+            if (Position.Y >= Grid.height) { Position = new Point(Position.X, Position.Y - Grid.height); }
             BodyPositions.Enqueue(Position);
             headAnimation.Enqueue(Position);
             if (grow > 0) { --grow; ++animationHasToGrow; }
