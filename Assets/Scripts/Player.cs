@@ -11,14 +11,17 @@ public class Player : MonoBehaviour
     public const float MovementSpeed = 2f;
     /// <summary>Coordinate offset for head and body sprites.</summary>
     public readonly Vector3 PlayerOffset = new Vector3(0.5f, 0.5f);
-    public readonly Vector3 BodyScale = new Vector3(0.5f, 0.5f, 0.5f);
+    public readonly Vector3 ArrowScale = new Vector3(0.5f, 0.5f, 0.5f);
     public readonly Vector3 HeadScale = new Vector3(0.7f, 0.7f, 0.7f);
+    public readonly Vector3 BodyScale = new Vector3(0.5f, 0.5f, 0.5f);
 
+    public GameObject arrowPrefab;
     public GameObject playerHeadPrefab;
     public GameObject playerBodyPrefab;
     public Sprite[] playerSprites;
 
-    //Cached GameObjects for head and body
+    //Cached GameObjects for arrow, head and body
+    private GameObject arrow = null;
     private GameObject head;
     private readonly List<GameObject> body = new List<GameObject>();
     /// <summary>Determines, how many body elements have to be grown on the next move.</summary>
@@ -28,11 +31,25 @@ public class Player : MonoBehaviour
     private readonly List<Vector3> bodyAnimation = new List<Vector3>();
     private int animationHasToGrow = 0;
     private Vector3 previousHeadAnimation;
+    private Teams team;
 
+    /// <summary>The direction, in which the snake is currently heading.</summary>
     public Directions Direction { get; private set; }
+    /// <summary>The position of the snake head, which is relevant for the game logic. (The animation may not be that far yet.)</summary>
     public Point Position { get; private set; }
+    /// <summary>The position of all body elements of the snake, which are relevant for the game logic.</summary>
     public Queue<Point> BodyPositions { get; private set; }
+    /// <summary>Count of all body parts of the snakes, which already exist or will be grown on the next moves.</summary>
     public int SnakeLength { get { return BodyPositions.Count + grow; } }
+    public Teams Team
+    {
+        get { return team; }
+        set
+        {
+            team = value;
+            if(arrow != null) { arrow.GetComponent<Arrow>().Team = value; }
+        }
+    }
 
     public Player() { BodyPositions = new Queue<Point>(); }
 
@@ -77,6 +94,7 @@ public class Player : MonoBehaviour
         if (startMovement) { StartHeadMovement(); }
     }
 
+    /// <summary>Called whenever the snake head starts to move away from the center of a tile. Only relevant for the snake animation / visualisation.</summary>
     private void StartHeadMovement()
     {
         if (animationHasToGrow > 0)
@@ -113,15 +131,30 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void TurnLeft() { Direction = Direction.TurnLeft(); }
-    public void TurnRight() { Direction = Direction.TurnRight(); }
+    public void TurnLeft()
+    {
+        Direction = Direction.TurnLeft();
+        arrow.GetComponent<Arrow>().TurnTo(Direction.Angle());
+    }
+
+    public void TurnRight()
+    {
+        Direction = Direction.TurnRight();
+        arrow.GetComponent<Arrow>().TurnTo(Direction.Angle());
+    }
 
     void Start()
     {
+        //Spawn head
         head = Instantiate(playerHeadPrefab);
         head.transform.parent = transform;
         head.transform.localPosition = Position.ToVector() + PlayerOffset;
         head.transform.localScale = HeadScale; //Local scaling is not set correctly by unity when spawning (fixed with this)
+        //Spawn arrow
+        arrow = Instantiate(arrowPrefab);
+        arrow.transform.parent = head.transform;
+        arrow.transform.localPosition = new Vector3(0f, 0f, -1f);
+        arrow.GetComponent<Arrow>().Turn(Direction.Angle(), Direction.Angle());
         //TODO: Generalize
         head.GetComponent<SpriteRenderer>().sprite = playerSprites[0];
     }
