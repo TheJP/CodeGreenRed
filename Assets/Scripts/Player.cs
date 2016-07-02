@@ -20,6 +20,9 @@ public class Player : MonoBehaviour
     public GameObject playerBodyPrefab;
     public Sprite[] playerSprites;
 
+    public event Action<MoveEventArguments> BeforeMove;
+    public event Action<Player> AfterDeath;
+
     //Cached GameObjects for arrow, head and body
     private GameObject arrow = null;
     private GameObject head;
@@ -50,10 +53,14 @@ public class Player : MonoBehaviour
             if(arrow != null) { arrow.GetComponent<Arrow>().Team = value; }
         }
     }
+    /// <summary>Grid, in which the snake moves. Has to be set, before the snake starts.</summary>
+    public Grid Grid { get; set; }
+    /// <summary>Determines, if the player is dead.</summary>
+    public bool Dead { get; private set; }
 
     public Player() { BodyPositions = new Queue<Point>(); }
 
-    /// <summary>Sets the starting position for this snake. Has to be called, bevore the GameObject is started.</summary>
+    /// <summary>Sets the starting position for this snake. Has to be called, before the GameObject is started.</summary>
     /// <param name="position"></param>
     public void SetInitialPosition(Point position, Directions direction = Directions.North)
     {
@@ -82,16 +89,36 @@ public class Player : MonoBehaviour
     public void Move(int amount = 1)
     {
         var startMovement = !headAnimation.Any() && amount > 0;
-        if (startMovement) { previousHeadAnimation = Position.ToVector() + PlayerOffset; }
+        var previousHeadAnimation = Position.ToVector() + PlayerOffset;
+        var canceled = 0;
         for (int i = 0; i < amount; ++i)
         {
+            if (Dead) { return; } //Can happen after a move
+            //Trigger movement event
+            if(BeforeMove != null)
+            {
+                var targetPosition = Position + Direction.Movement();
+                var arguments = new MoveEventArguments(this, targetPosition);
+                BeforeMove(arguments);
+                if (arguments.Canceled) { ++canceled; continue; }
+            }
+            //Move player
             Position += Direction.Movement();
+            //Wrap around the edges of the grid
+            if (Position.X < 0) { Position = new Point(Position.X + Grid.width, Position.Y); }
+            if (Position.X >= Grid.width) { Position = new Point(Position.X - Grid.width, Position.Y); }
+            if (Position.Y < 0) { Position = new Point(Position.X, Position.Y + Grid.height); }
+            if (Position.Y >= Grid.height) { Position = new Point(Position.X, Position.Y - Grid.height); }
             BodyPositions.Enqueue(Position);
             headAnimation.Enqueue(Position);
             if (grow > 0) { --grow; ++animationHasToGrow; }
             else { BodyPositions.Dequeue(); }
         }
-        if (startMovement) { StartHeadMovement(); }
+        if (startMovement && canceled < amount)
+        {
+            this.previousHeadAnimation = previousHeadAnimation;
+            StartHeadMovement();
+        }
     }
 
     /// <summary>Called whenever the snake head starts to move away from the center of a tile. Only relevant for the snake animation / visualisation.</summary>
@@ -108,10 +135,12 @@ public class Player : MonoBehaviour
             {
                 bodyAnimation[i] = bodyAnimation[i - BodyElementsPerTile];
             }
-            var distance = ((headAnimation.Peek().ToVector() + PlayerOffset) - head.transform.localPosition) / BodyElementsPerTile;
+            var distance = ((headAnimation.Peek().ToVector() + PlayerOffset) - head.transform.localPosition);
+            var distribution = distance.normalized / BodyElementsPerTile;
+            if(distance.magnitude > 2) { distribution = -distribution; } //Change direction for warpping around edges
             for (int i = 0; i < BodyElementsPerTile; ++i)
             {
-                bodyAnimation[i] = (headAnimation.Peek().ToVector() + PlayerOffset) - (i + 1) * distance;
+                bodyAnimation[i] = (headAnimation.Peek().ToVector() + PlayerOffset) - (i + 1) * distribution;
             }
         }
     }
@@ -143,6 +172,22 @@ public class Player : MonoBehaviour
         arrow.GetComponent<Arrow>().TurnTo(Direction.Angle());
     }
 
+    /// <summary>Kills this snake.</summary>
+    public void Die()
+    {
+        Destroy(head);
+        foreach(var bodyPart in body.ToList()) { Destroy(bodyPart); }
+        arrow = null;
+        head = null;
+        body.Clear();
+        headAnimation.Clear();
+        bodyAnimation.Clear();
+        grow = 0;
+        animationHasToGrow = 0;
+        BodyPositions.Clear();
+        if(AfterDeath != null) { AfterDeath(this); }
+    }
+
     void Start()
     {
         //Spawn head
@@ -155,8 +200,25 @@ public class Player : MonoBehaviour
         arrow.transform.parent = head.transform;
         arrow.transform.localPosition = new Vector3(0f, 0f, -1f);
         arrow.GetComponent<Arrow>().Turn(Direction.Angle(), Direction.Angle());
+        arrow.GetComponent<Arrow>().Team = Team;
         //TODO: Generalize
         head.GetComponent<SpriteRenderer>().sprite = playerSprites[0];
+    }
+
+    /// <summary>Apply a position update on the given transform in the given direction. This does in clude border wrapping.</summary>
+    /// <param name="transform"></param>
+    /// <param name="direction"></param>
+    private void UpdatePosition(Transform transform, Vector3 direction, Vector3 target)
+    {
+        //Wrap around the edges of the grid
+        if (direction.magnitude > 2f)
+        {
+            if (target.x + 2f < transform.localPosition.x) { transform.Translate(-Grid.width, 0f, 0f, Space.Self); }
+            if (target.x - 2f > transform.localPosition.x) { transform.Translate(Grid.width, 0f, 0f, Space.Self); }
+            if (target.y + 2f < transform.localPosition.y) { transform.Translate(0f, -Grid.height, 0f, Space.Self); }
+            if (target.y - 2f > transform.localPosition.y) { transform.Translate(0f, Grid.height, 0f, Space.Self); }
+        }
+        transform.Translate(direction.normalized * Time.deltaTime * MovementSpeed, Space.Self);
     }
 
     void Update()
@@ -173,7 +235,7 @@ public class Player : MonoBehaviour
             }
             else
             {
-                head.transform.Translate(direction.normalized * Time.deltaTime * MovementSpeed, Space.Self);
+                UpdatePosition(head.transform, direction, headAnimation.Peek().ToVector());
             }
         }
 
@@ -187,7 +249,7 @@ public class Player : MonoBehaviour
             }
             else
             {
-                body[i].transform.Translate(direction.normalized * Time.deltaTime * MovementSpeed, Space.Self);
+                UpdatePosition(body[i].transform, direction, bodyAnimation[i]);
             }
         }
     }
