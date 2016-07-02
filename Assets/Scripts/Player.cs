@@ -175,10 +175,10 @@ public class Player : MonoBehaviour
     /// <summary>Kills this snake.</summary>
     public void Die()
     {
-        Destroy(head);
-        foreach(var bodyPart in body.ToList()) { Destroy(bodyPart); }
+        Destroy(head, 0.2f);
         arrow = null;
         head = null;
+        foreach(var bodyPart in body.ToList()) { Destroy(bodyPart, 0.2f); }
         body.Clear();
         headAnimation.Clear();
         bodyAnimation.Clear();
