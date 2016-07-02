@@ -5,18 +5,25 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    /// <summary>Determines, how many body elements are created per tile.</summary>
     public const int BodyElementsPerTile = 3;
+    /// <summary>Animation movement speed.</summary>
     public const float MovementSpeed = 2f;
-    private const float Epsilon = 0.001f;
+    /// <summary>Coordinate offset for head and body sprites.</summary>
     public readonly Vector3 PlayerOffset = new Vector3(0.5f, 0.5f);
+    public readonly Vector3 BodyScale = new Vector3(0.5f, 0.5f, 0.5f);
+    public readonly Vector3 HeadScale = new Vector3(0.7f, 0.7f, 0.7f);
 
     public GameObject playerHeadPrefab;
     public GameObject playerBodyPrefab;
     public Sprite[] playerSprites;
 
+    //Cached GameObjects for head and body
     private GameObject head;
     private readonly List<GameObject> body = new List<GameObject>();
+    /// <summary>Determines, how many body elements have to be grown on the next move.</summary>
     private int grow = 0;
+    //Animation states of the snake
     private readonly Queue<Point> headAnimation = new Queue<Point>();
     private readonly List<Vector3> bodyAnimation = new List<Vector3>();
     private int animationHasToGrow = 0;
@@ -98,6 +105,7 @@ public class Player : MonoBehaviour
             var bodyPart = Instantiate(playerBodyPrefab);
             bodyPart.transform.parent = transform;
             bodyPart.transform.localPosition = bodyAnimation.Count > 0 ? bodyAnimation.Last() : previousHeadAnimation;
+            bodyPart.transform.localScale = BodyScale; //Local scaling is not set correctly by unity when spawning (fixed with this)
             //TODO: Generalize
             bodyPart.GetComponent<SpriteRenderer>().sprite = playerSprites[0];
             body.Add(bodyPart);
@@ -113,6 +121,7 @@ public class Player : MonoBehaviour
         head = Instantiate(playerHeadPrefab);
         head.transform.parent = transform;
         head.transform.localPosition = Position.ToVector() + PlayerOffset;
+        head.transform.localScale = HeadScale; //Local scaling is not set correctly by unity when spawning (fixed with this)
         //TODO: Generalize
         head.GetComponent<SpriteRenderer>().sprite = playerSprites[0];
     }
