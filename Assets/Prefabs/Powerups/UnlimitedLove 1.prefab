@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 481104}
   - 114: {fileID: 11471746}
   m_Layer: 0
-  m_Name: UnlimitedLove
+  m_Name: UnlimitedLove 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
