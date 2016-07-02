@@ -88,6 +88,7 @@ public class Player : MonoBehaviour
         for (int i = 0; i < amount; ++i)
         {
             Position += Direction.Movement();
+            //Wrap around the edges of the grid
             if (Position.X < 0) { Position = new Point(Position.X + Grid.width, Position.Y); }
             if (Position.X >= Grid.width) { Position = new Point(Position.X - Grid.width, Position.Y); }
             if (Position.Y < 0) { Position = new Point(Position.X, Position.Y + Grid.height); }
@@ -114,10 +115,12 @@ public class Player : MonoBehaviour
             {
                 bodyAnimation[i] = bodyAnimation[i - BodyElementsPerTile];
             }
-            var distance = ((headAnimation.Peek().ToVector() + PlayerOffset) - head.transform.localPosition) / BodyElementsPerTile;
+            var distance = ((headAnimation.Peek().ToVector() + PlayerOffset) - head.transform.localPosition);
+            var distribution = distance.normalized / BodyElementsPerTile;
+            if(distance.magnitude > 2) { distribution = -distribution; } //Change direction for warpping around edges
             for (int i = 0; i < BodyElementsPerTile; ++i)
             {
-                bodyAnimation[i] = (headAnimation.Peek().ToVector() + PlayerOffset) - (i + 1) * distance;
+                bodyAnimation[i] = (headAnimation.Peek().ToVector() + PlayerOffset) - (i + 1) * distribution;
             }
         }
     }
@@ -165,6 +168,22 @@ public class Player : MonoBehaviour
         head.GetComponent<SpriteRenderer>().sprite = playerSprites[0];
     }
 
+    /// <summary>Apply a position update on the given transform in the given direction. This does in clude border wrapping.</summary>
+    /// <param name="transform"></param>
+    /// <param name="direction"></param>
+    private void UpdatePosition(Transform transform, Vector3 direction, Vector3 target)
+    {
+        //Wrap around the edges of the grid
+        if (direction.magnitude > 2f)
+        {
+            if (target.x + 2f < transform.position.x) { transform.Translate(-Grid.width, 0f, 0f); }
+            if (target.x - 2f > transform.position.x) { transform.Translate(Grid.width, 0f, 0f); }
+            if (target.y + 2f < transform.position.y) { transform.Translate(0f, -Grid.height, 0f); }
+            if (target.y - 2f > transform.position.y) { transform.Translate(0f, Grid.height, 0f); }
+        }
+        transform.Translate(direction.normalized * Time.deltaTime * MovementSpeed, Space.Self);
+    }
+
     void Update()
     {
         //Head animation
@@ -179,7 +198,7 @@ public class Player : MonoBehaviour
             }
             else
             {
-                head.transform.Translate(direction.normalized * Time.deltaTime * MovementSpeed, Space.Self);
+                UpdatePosition(head.transform, direction, headAnimation.Peek().ToVector());
             }
         }
 
@@ -193,7 +212,7 @@ public class Player : MonoBehaviour
             }
             else
             {
-                body[i].transform.Translate(direction.normalized * Time.deltaTime * MovementSpeed, Space.Self);
+                UpdatePosition(body[i].transform, direction, bodyAnimation[i]);
             }
         }
     }
