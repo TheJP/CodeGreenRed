@@ -14,8 +14,8 @@ public class GameState : MonoBehaviour {
     void Awake()
     {
         Players = new List<PlayerInfo>();
-        State = Mode.FinishedRound;
+        State = Mode.Menu;
     }
 }
-public enum Mode { OpenPack, Choosing, Playing, FinishedRound };
+public enum Mode { OpenPack, Choosing, Playing, FinishedRound, Menu, AboutToStart };
 
