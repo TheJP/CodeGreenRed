@@ -34,7 +34,7 @@ public class DraftManager : MonoBehaviour
 
     private CardEffectParamerters effectParams;
     private DraftResult draftResult;
-    
+
 
     // Use this for initialization
     void Start()
@@ -63,7 +63,7 @@ public class DraftManager : MonoBehaviour
     {
         if (gamestate.State == Mode.Open)
         {
-            if(toOpen.Count > 0)
+            if (toOpen.Count > 0)
             {
                 //open booster and let them users choose some cards
                 var booster = toOpen.Dequeue();
@@ -80,7 +80,7 @@ public class DraftManager : MonoBehaviour
 
         }
 
-        if( gamestate.State == Mode.Choosing)
+        if (gamestate.State == Mode.Choosing)
         {
             //we're in control
             TimeLeft -= Time.deltaTime;
@@ -133,7 +133,8 @@ public class DraftManager : MonoBehaviour
                 {
                     //if he did, highlight it
                     Debug.Log("You selected the " + selected.name); // ensure you picked right object
-                    selected.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
+                    //selected.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true; //This is very hacky
+                    selected.GetComponent<Card>().Highlight(true);
 
                 }
             }
@@ -175,7 +176,8 @@ public class DraftManager : MonoBehaviour
     private void OnDeselectCard()
     {
         //remove outline
-        selected.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
+        //selected.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
+        selected.GetComponent<Card>().Highlight(false);
 
         //if mouse pointer is still on the card, user chose it
         RaycastHit hit;
@@ -212,11 +214,11 @@ public class DraftManager : MonoBehaviour
             effectParams.CastingPlayer.Move();
         }
     }
-    private void DebugTestDraft()
-    {
-        var cardpool = GetComponent<CardPool>();
-        StartDraft(cardpool.BasicBoosterBox(), new CardEffectParamerters());
-    }
+    //private void DebugTestDraft()
+    //{
+    //    var cardpool = GetComponent<CardPool>();
+    //    StartDraft(cardpool.BasicBoosterBox(), new CardEffectParamerters());
+    //}
 
     //initialize new Cards here and in Dictionary below
     private void addFactories()
@@ -227,22 +229,24 @@ public class DraftManager : MonoBehaviour
         cardEffectFactory.addFactoryMethod<DebugEffect>(DebugEffect.GetFactory());
         cardEffectFactory.addFactoryMethod<TurnLeftEffect>(TurnLeftEffect.GetFactory());
         cardEffectFactory.addFactoryMethod<TurnRightEffect>(TurnRightEffect.GetFactory());
+        cardEffectFactory.addFactoryMethod<CheeseEffect>(CheeseEffect.GetFactory());
     }
 }
 
-public enum CardType { MOVE, RIGHT, LEFT, DEBUG, Cheese }
+public enum CardType { Move, Right, Left, Debug, Cheese }
 /// <summary>
 /// Enables us to select cardtype in unity Editor
 /// </summary>
 public static class CardTypeExtension
 {
     static Dictionary<CardType, Type> cardEffectDictionary = new Dictionary<CardType, Type>()
-        {
-            {CardType.MOVE,typeof(MoveEffect) },
-            {CardType.DEBUG,typeof(DebugEffect) },
-            {CardType.LEFT,typeof(TurnLeftEffect)},
-            {CardType.RIGHT,typeof(TurnRightEffect) }
-        };
+    {
+        { CardType.Move, typeof(MoveEffect) },
+        { CardType.Debug, typeof(DebugEffect) },
+        { CardType.Left, typeof(TurnLeftEffect) },
+        { CardType.Right, typeof(TurnRightEffect) },
+        { CardType.Cheese, typeof(CheeseEffect) }
+    };
     public static Type GetEffectType(this CardType cardType)
     {
         return cardEffectDictionary[cardType];

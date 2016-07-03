@@ -44,6 +44,7 @@ MonoBehaviour:
   wallPrefab: {fileID: 105590, guid: d515d5c8952411d488d49461f19a72f7, type: 2}
   powerupPrefabs:
   - {fileID: 172102, guid: bc8bc1992bf4d26499a6f0ef7dbdce2a, type: 2}
+  - {fileID: 156894, guid: 05230db008d22c04c98a9e0e0efb54ae, type: 2}
   width: 15
   height: 15
 --- !u!1001 &100100000

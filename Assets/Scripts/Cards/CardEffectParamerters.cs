@@ -8,11 +8,13 @@ namespace Assets.Scripts.CardEffects
 {
     public class CardEffectParamerters
     {
-        public GameObject Caster { get; set; }
-        public GameObject[] players; //all except caster
-        public Player CastingPlayer { get; set; }
+        public Player CastingPlayer { get; private set; }
+        public Grid Grid { get; private set; }
 
-
-
+        public CardEffectParamerters(Player castingPlayer, Grid grid)
+        {
+            this.CastingPlayer = castingPlayer;
+            this.Grid = grid;
+        }
     }
 }
