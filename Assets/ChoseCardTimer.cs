@@ -18,9 +18,7 @@ public class ChoseCardTimer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         text.text = "Timeleft: " + string.Format("{0:00}:{1:00}" ,0, draftManager.TimeLeft);
-
     }
 
 }

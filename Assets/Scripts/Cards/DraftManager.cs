@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿﻿using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.CardEffects;
 using Assets.Scripts.Cards.CardEffects;
@@ -107,8 +107,6 @@ public class DraftManager : MonoBehaviour
     /// </summary>
     public void TimeIsUp()
     {
-        //TODO: choose card at random.
-
         var selected = cards[0];
 
         //save effect of selected Card
@@ -146,6 +144,8 @@ public class DraftManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            
+            
             //if the user pressed mouse check if he selected a card
             var mouse = Input.mousePosition;
             dragStartPos = Camera.main.ScreenToWorldPoint(mouse);
@@ -275,7 +275,7 @@ public class DraftManager : MonoBehaviour
     }
 }
 
-public enum CardType { Move, Right, Left, Debug, Cheese, Obama }
+public enum CardType { Move, Right, Left, Debug, Cheese }
 /// <summary>
 /// Enables us to select cardtype in unity Editor
 /// </summary>
@@ -287,8 +287,7 @@ public static class CardTypeExtension
         { CardType.Debug, typeof(DebugEffect) },
         { CardType.Left, typeof(TurnLeftEffect) },
         { CardType.Right, typeof(TurnRightEffect) },
-        { CardType.Cheese, typeof(CheeseEffect) },
-        { CardType.Obama, typeof(ObamaEffect) }
+        { CardType.Cheese, typeof(CheeseEffect) }
     };
     public static Type GetEffectType(this CardType cardType)
     {
