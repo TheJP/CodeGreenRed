@@ -18,6 +18,8 @@ public class Player : MonoBehaviour
     public GameObject arrowPrefab;
     public GameObject playerHeadPrefab;
     public GameObject playerBodyPrefab;
+    public Material greenMaterial;
+    public Material redMaterial;
     public Sprite[] playerSprites;
 
     public event Action<MoveEventArguments> BeforeMove;
@@ -170,6 +172,7 @@ public class Player : MonoBehaviour
             bodyPart.transform.parent = transform;
             bodyPart.transform.localPosition = bodyAnimation.Count > 0 ? bodyAnimation.Last() : previousHeadAnimation;
             bodyPart.transform.localScale = BodyScale; //Local scaling is not set correctly by unity when spawning (fixed with this)
+            bodyPart.GetComponent<SpriteRenderer>().material = Team == Teams.Green ? greenMaterial : redMaterial;
             //TODO: Generalize
             bodyPart.GetComponent<SpriteRenderer>().sprite = playerSprites[0];
             body.Add(bodyPart);
@@ -214,6 +217,7 @@ public class Player : MonoBehaviour
         head.transform.parent = transform;
         head.transform.localPosition = Position.ToVector() + PlayerOffset;
         head.transform.localScale = HeadScale; //Local scaling is not set correctly by unity when spawning (fixed with this)
+        head.GetComponent<SpriteRenderer>().material = Team == Teams.Green ? greenMaterial : redMaterial;
         //Spawn arrow
         arrow = Instantiate(arrowPrefab);
         arrow.transform.parent = head.transform;

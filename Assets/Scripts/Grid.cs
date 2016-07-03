@@ -156,8 +156,9 @@ public class Grid : MonoBehaviour
     public bool PowerupCanSpawn(Point position)
     {
         return (walls == null || !walls[position.Y, position.X]) &&
-            !players.SelectMany(p => p.BodyPositions).Any(pos => pos.X == position.X && pos.Y == position.Y) &&
             position.X >= 0 && position.Y >= 0 &&
-            position.X < width && position.Y < height;
+            position.X < width && position.Y < height &&
+            !players.SelectMany(p => p.BodyPositions).Any(pos => pos.X == position.X && pos.Y == position.Y) &&
+            !powerups.Any(powerup => powerup.Position.X == position.X && powerup.Position.Y == position.Y);
     }
 }

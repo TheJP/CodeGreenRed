@@ -199,7 +199,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridPrefab: {fileID: 127458, guid: e588f0ec1c692c74385dbf0d96c26b77, type: 2}
-  cheesePrefab: {fileID: 156894, guid: 05230db008d22c04c98a9e0e0efb54ae, type: 2}
 --- !u!4 &127538783
 Transform:
   m_ObjectHideFlags: 0
