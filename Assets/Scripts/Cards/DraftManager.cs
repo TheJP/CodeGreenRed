@@ -78,19 +78,17 @@ public class DraftManager : MonoBehaviour
                 var booster = toOpen.Dequeue();
                 OpenPackAnimation(booster);
                 gamestate.State = Mode.Choosing;
+                ResetTimer();
             }
             else
             {
                 //we're done with drafting, time to play
-                cards.ForEach(c => Destroy(c));
-                cards.Clear();
                 GetComponent<PlayingStateController>().DraftResult = draftResult;
                 gamestate.State = Mode.Playing;
                 draftResult = new DraftResult();
             }
 
         }
-
         if (gamestate.State == Mode.Choosing)
         {
             //we're in control
@@ -122,7 +120,7 @@ public class DraftManager : MonoBehaviour
         //then destroy it
         Destroy(selected);
         selected = null;
-        CheckDraftDone();
+        //CheckDraftDone();
         ResetTimer();
     }
 
@@ -145,7 +143,6 @@ public class DraftManager : MonoBehaviour
     private void OpenPackAnimation(BoosterPack pack)
     {
         Debug.Assert(CardSpawnPositions.Length >= pack.cardsInBooster.Count);
-        Debug.Log(pack.cardsInBooster.Count);
         //open pack
         for (int i = 0; i < pack.cardsInBooster.Count; i++)
         {
@@ -159,8 +156,7 @@ public class DraftManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            
-            
+                        
             //if the user pressed mouse check if he selected a card
             var mouse = Input.mousePosition;
             dragStartPos = Camera.main.ScreenToWorldPoint(mouse);
@@ -190,8 +186,7 @@ public class DraftManager : MonoBehaviour
             }
         }
     }
-
-
+    
     private void HearthStoneDragRotationTrollolol()
     {
         if (selected != null && Input.mousePosition != mouseLast) // user is holding mousebutton down and card is selected

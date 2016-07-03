@@ -52,7 +52,7 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
-        if (gamestate.State == Mode.FinishedRound && !GameOver)
+        if (gamestate.State == Mode.FinishedRound && GameOver == false)
         {
             //if round is over and at least one snake has died
             var greenTeamDead = gamestate.Players.Where(p => p.Snake.Team == Teams.Green).All(p => p.Snake.Dead);
@@ -63,7 +63,6 @@ public class GameController : MonoBehaviour
  
                 //go to mainmenu screen
                 playerInfoCanvas.gameObject.SetActive(false);
-                var survior = gamestate.Players.Find(p => p.Snake.Dead == false);
                 if (greenTeamDead) { menu.incRedScore(); }
                 else { menu.incGreenScore(); } //red team dead
                 Invoke("BackToMainMenu", waitSecondsUnitMainMenu);
