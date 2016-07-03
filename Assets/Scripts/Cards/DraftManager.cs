@@ -290,10 +290,11 @@ public class DraftManager : MonoBehaviour
         cardEffectFactory.addFactoryMethod<SpoilerEffect>(SpoilerEffect.GetFactory());
         cardEffectFactory.addFactoryMethod<HamsterEffect>(HamsterEffect.GetFactory());
         cardEffectFactory.addFactoryMethod<TeddyEffect>(TeddyEffect.GetFactory());
+        cardEffectFactory.addFactoryMethod<MaccaroniEffect>(MaccaroniEffect.GetFactory());
     }
 }
 
-public enum CardType { Move, Right, Left, Debug, Cheese, Obama, Spoiler, Hamster, Teddy }
+public enum CardType { Move, Right, Left, Debug, Cheese, Obama, Spoiler, Hamster, Teddy, Maccaroni }
 /// <summary>
 /// Enables us to select cardtype in unity Editor
 /// </summary>
@@ -309,7 +310,8 @@ public static class CardTypeExtension
         { CardType.Obama, typeof(ObamaEffect) },
         { CardType.Spoiler, typeof(SpoilerEffect) },
         { CardType.Hamster, typeof(HamsterEffect) },
-        { CardType.Teddy, typeof(TeddyEffect) }
+        { CardType.Teddy, typeof(TeddyEffect) },
+        { CardType.Maccaroni, typeof(MaccaroniEffect) }
     };
     public static Type GetEffectType(this CardType cardType)
     {
