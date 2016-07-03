@@ -120,7 +120,7 @@ public class DraftManager : MonoBehaviour
         //then destroy it
         Destroy(selected);
         selected = null;
-        //CheckDraftDone();
+        CheckDraftDone();
         ResetTimer();
     }
 
