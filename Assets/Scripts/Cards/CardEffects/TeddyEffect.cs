@@ -7,23 +7,24 @@ using UnityEngine;
 
 namespace Assets.Scripts.Cards.CardEffects
 {
-    class CheeseEffect : CardEffect
+    class TeddyEffect : CardEffect
     {
         public const int AmountOfCheese = 3;
         private Grid grid;
-        public CheeseEffect(Grid grid)
+        public TeddyEffect(Grid grid)
         {
             this.grid = grid;
         }
 
         public override void Execute()
         {
-            for (int i = 0; i < AmountOfCheese; ++i) { grid.SpawnPowerup<Cheese>(); }
+            var player = grid.Players.Shuffle(new System.Random()).Where(p => !p.Dead).FirstOrDefault();
+            if (player != null) { player.Shrink(); }
         }
 
         public static Instantiate<CardEffect> GetFactory()
         {
-            return (p => new CheeseEffect(p.Grid));
+            return (p => new TeddyEffect(p.Grid));
         }
     }
 }

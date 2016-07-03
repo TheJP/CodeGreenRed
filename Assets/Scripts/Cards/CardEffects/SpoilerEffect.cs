@@ -7,23 +7,22 @@ using UnityEngine;
 
 namespace Assets.Scripts.Cards.CardEffects
 {
-    class CheeseEffect : CardEffect
+    class SpoilerEffect : CardEffect
     {
-        public const int AmountOfCheese = 3;
-        private Grid grid;
-        public CheeseEffect(Grid grid)
+        private Player castingSnake;
+        public SpoilerEffect(Player castingSnake)
         {
-            this.grid = grid;
+            this.castingSnake = castingSnake;
         }
 
         public override void Execute()
         {
-            for (int i = 0; i < AmountOfCheese; ++i) { grid.SpawnPowerup<Cheese>(); }
+            castingSnake.Move();
         }
 
         public static Instantiate<CardEffect> GetFactory()
         {
-            return (p => new CheeseEffect(p.Grid));
+            return (p => new SpoilerEffect(p.CastingSnake));
         }
     }
 }

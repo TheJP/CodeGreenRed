@@ -7,23 +7,26 @@ using UnityEngine;
 
 namespace Assets.Scripts.Cards.CardEffects
 {
-    class CheeseEffect : CardEffect
+    class HamsterEffect : CardEffect
     {
-        public const int AmountOfCheese = 3;
         private Grid grid;
-        public CheeseEffect(Grid grid)
+        public HamsterEffect(Grid grid)
         {
             this.grid = grid;
         }
 
         public override void Execute()
         {
-            for (int i = 0; i < AmountOfCheese; ++i) { grid.SpawnPowerup<Cheese>(); }
+            var random = new System.Random();
+            foreach (var player in grid.Players.Shuffle(random))
+            {
+                player.Move();
+            }
         }
 
         public static Instantiate<CardEffect> GetFactory()
         {
-            return (p => new CheeseEffect(p.Grid));
+            return (p => new HamsterEffect(p.Grid));
         }
     }
 }
