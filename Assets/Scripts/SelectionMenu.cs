@@ -34,6 +34,7 @@ public class SelectionMenu : MonoBehaviour
     private WallLayouts currentMap = WallLayouts.NoWalls;
     private int players = 2;
     private Animator mainCameraAnimator;
+    private Animator guiCameraAnimator;
 
     private bool muted = false;
     private bool rg = true;
@@ -56,7 +57,19 @@ public class SelectionMenu : MonoBehaviour
     public void incGreenScore()
     {
         greenScore++;
-        GreenScoreObject.GetComponent<TextMesh>().text = ("G:" + greenScore);
+        GreenScoreObject.GetComponent<TextMesh>().text = ("G:"+greenScore);
+    }
+
+    public void enableScript() {
+        guiCameraAnimator.Play("GuiCameraReward");
+        mainCameraAnimator.Play("myCameraReward");
+
+        StartCoroutine(waitUntilEnable());
+    }
+
+    IEnumerator waitUntilEnable() {
+        yield return new WaitForSeconds(5);
+        gamestate.State = Mode.Menu;
     }
 
     void Start()
@@ -65,7 +78,7 @@ public class SelectionMenu : MonoBehaviour
         spawnHeartsNew();
         mainCameraAnimator = mainCamera.GetComponent<Animator>();
 
-
+        guiCameraAnimator = guiCamera.GetComponent<Animator>();
 
 
 
@@ -310,6 +323,7 @@ public class SelectionMenu : MonoBehaviour
 
 
                 mainCameraAnimator.Play("myCameraForward");
+                guiCameraAnimator.Play("GuiCameraForward");
 
                 //mainCameraAnimator.Play("myCameraReward");
 

@@ -40,8 +40,17 @@ public class CardPool : MonoBehaviour
             if (rand.Next(0, 2) > 0) { cards.Add(rand.Next(0, 1) > 0 ? turnLeftPrefab : turnRightPrefab); }
             else { cards.Add(commonCardsPrefabs[rand.Next(0, commonCardsPrefabs.Length)]); }
             //either a common or a rare card
-            if (rand.Next(0, 3) > 1) { cards.Add(rareCardsPrefab[rand.Next(0, rareCardsPrefab.Length)]); }
-            else { cards.Add(commonCardsPrefabs[rand.Next(0, commonCardsPrefabs.Length)]); }
+            if(rareCardsPrefab.Length != 0)
+            {
+                if (rand.Next(0, 3) > 1) { cards.Add(rareCardsPrefab[rand.Next(0, rareCardsPrefab.Length)]); }
+                else { cards.Add(commonCardsPrefabs[rand.Next(0, commonCardsPrefabs.Length)]); }
+            }
+            else
+            {
+                Debug.Log("no rare cards!");
+                cards.Add(commonCardsPrefabs[rand.Next(0, commonCardsPrefabs.Length)]);
+            }
+
 
             cards.Shuffle();
             boosterPacks.Add(new BoosterPack(cards));
