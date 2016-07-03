@@ -47,7 +47,7 @@ public class CardPool : MonoBehaviour
             }
             else
             {
-                Debug.Log("no rare cards!");
+                //Debug.Log("no rare cards!");
                 cards.Add(commonCardsPrefabs[rand.Next(0, commonCardsPrefabs.Length)]);
             }
 
