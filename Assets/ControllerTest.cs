@@ -10,7 +10,7 @@ public class ControllerTest : MonoBehaviour
     void Start()
     {
         grid = Instantiate(gridPrefab).GetComponent<Grid>();
-        grid.SetWallLayout(WallLayouts.Border.CreateArray(grid.width, grid.height));
+        grid.SetWallLayout(WallLayouts.Corners.CreateArray(grid.width, grid.height));
         player = grid.AddPlayer(new Point(5, 5), Directions.North, Teams.Red);
         grid.AddPlayer(new Point(10, 5), Directions.North, Teams.Red);
         grid.AddPlayer(new Point(5, 10), Directions.South, Teams.Green);
