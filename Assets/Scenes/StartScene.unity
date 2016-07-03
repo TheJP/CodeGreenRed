@@ -461,6 +461,7 @@ GameObject:
   - 124: {fileID: 551804227}
   - 81: {fileID: 551804226}
   - 95: {fileID: 551804231}
+  - 82: {fileID: 551804232}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -552,6 +553,80 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!82 &551804232
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 551804225}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: be21b676e5e0cad4dad553908aca8954, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!1 &576621448
 GameObject:
   m_ObjectHideFlags: 0
@@ -1588,12 +1663,11 @@ MonoBehaviour:
   - {fileID: 178104, guid: 269f2e5ebca6ab244a6c74af4cc1460d, type: 2}
   - {fileID: 185356, guid: 95ad98381377136469531deccaadab7e, type: 2}
   rareCardsPrefab:
-  - {fileID: 123600, guid: 8affc52daba984e4aafcdf4bcfe0dd03, type: 2}
+  - {fileID: 149606, guid: 786dcea0a17603342b428348c2802c15, type: 2}
   - {fileID: 114866, guid: 0eb4434057c035c469e8a48c50165ab7, type: 2}
   - {fileID: 121326, guid: 30e6c1e3bd6c3074aa9ac50220559723, type: 2}
   - {fileID: 199778, guid: f0b34374f90e7c74ab81bd65dd686dae, type: 2}
   - {fileID: 113202, guid: 7bd635e149e2fe144902c6e70a4cca9c, type: 2}
-  - {fileID: 149606, guid: 786dcea0a17603342b428348c2802c15, type: 2}
   cardsInBooster: 5
   nRounds: 4
 --- !u!114 &1555403809

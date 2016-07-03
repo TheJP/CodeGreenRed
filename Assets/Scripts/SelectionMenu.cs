@@ -192,7 +192,7 @@ public class SelectionMenu : MonoBehaviour
             muted = false;
             //Turn on sound
 
-            myAudioListener.enabled = false;
+            myAudioListener.enabled = true;
 
             sound = (GameObject)Instantiate(soundOn, myVec, myQuack);
             sound.GetComponent<Animator>().runtimeAnimatorController = soundRAC;
@@ -204,7 +204,7 @@ public class SelectionMenu : MonoBehaviour
             muted = true;
             //Turn off sound
 
-            myAudioListener.enabled = true;
+            myAudioListener.enabled = false;
 
             sound = (GameObject)Instantiate(soundOff, myVec, myQuack);
             sound.GetComponent<Animator>().runtimeAnimatorController = soundRAC;
