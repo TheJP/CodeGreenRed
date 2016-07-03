@@ -14,7 +14,7 @@ public class MoveEffect : CardEffect {
 
     public static Instantiate<CardEffect> GetFactory()
     {
-        return (p => new MoveEffect(p.CastingPlayer));
+        return (p => new MoveEffect(p.CastingSnake));
     }
 
     public MoveEffect(Player caster)

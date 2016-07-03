@@ -8,13 +8,15 @@ namespace Assets.Scripts.CardEffects
 {
     public class CardEffectParamerters
     {
-        public Player CastingPlayer { get; private set; }
+        public Player CastingSnake { get; private set; }
         public Grid Grid { get; private set; }
+        public PlayerInfo CastingPlayer { get; private set; }
 
-        public CardEffectParamerters(Player castingPlayer, Grid grid)
+        public CardEffectParamerters(PlayerInfo castingPlayer, Grid grid)
         {
-            this.CastingPlayer = castingPlayer;
+            this.CastingSnake = castingPlayer.Snake;
             this.Grid = grid;
+            this.CastingPlayer = castingPlayer;
         }
     }
 }

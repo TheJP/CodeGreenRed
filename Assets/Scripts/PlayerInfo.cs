@@ -10,6 +10,7 @@ namespace Assets.Scripts
     {
         public uint PlayerID { get; private set; }
         public Player Snake{ get; set; }
+        public Queue<CardEffect> ChosenCards { get; set; }
 
         public PlayerInfo(uint number)
         {
