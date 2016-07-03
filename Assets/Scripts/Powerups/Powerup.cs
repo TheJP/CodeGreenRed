@@ -22,7 +22,7 @@ public abstract class Powerup : MonoBehaviour
 
     public virtual void Consumed()
     {
-        Destroy(this.gameObject, 0.3f);
+        Destroy(gameObject, 0.3f);
     }
 }
 

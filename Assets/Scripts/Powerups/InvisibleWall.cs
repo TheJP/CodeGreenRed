@@ -11,4 +11,9 @@ public class InvisibleWall : Powerup
         parameters.MoveEventArguments.Cancel();
         if(text != null) { text.SetActive(true); }
     }
+
+    public override void Consumed()
+    {
+        Destroy(gameObject, 2f);
+    }
 }
