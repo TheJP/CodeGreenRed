@@ -96,11 +96,10 @@ public class DraftManager : MonoBehaviour
             if (TimeLeft <= 0) { TimeIsUp(); }
 
             CheckMouseSelection();
+            //DebugExecuteOnKeyPress();
         }
-
-
         //HearthStoneDragRotationTrollolol();
-        DebugExecuteOnKeyPress();
+        
     }
 
     /// <summary>
@@ -108,8 +107,6 @@ public class DraftManager : MonoBehaviour
     /// </summary>
     public void TimeIsUp()
     {
-        //TODO: choose card at random.
-
         var selected = cards[0];
 
         //save effect of selected Card
@@ -244,6 +241,7 @@ public class DraftManager : MonoBehaviour
     //debugging routines
     private void DebugExecuteOnKeyPress()
     {
+        Debug.Log(gamestate.Players.Count);
         var player = gamestate.Players[currentPlayer];
         if (Input.GetKeyDown(KeyCode.Space))
         {

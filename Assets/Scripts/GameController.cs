@@ -16,13 +16,15 @@ public class GameController : MonoBehaviour
     private CardPool cardPoolManager;
     public bool GameOver { get; set; }
 
+    void Start()
+    {
+        gamestate = GetComponent<GameState>();
+        Debug.Assert(gamestate != null);
+    }
+
     public void StartGame(int nPlayers, Grid grid)
     {
         this.Grid = grid;
-        gamestate = GetComponent<GameState>();
-        Debug.Assert(gamestate != null);
-
-
         //let's do this here for now
         for (uint i = 1; i <= nPlayers; i++)
         {
