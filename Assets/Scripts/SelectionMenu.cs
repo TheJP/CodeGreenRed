@@ -7,7 +7,8 @@ public class SelectionMenu : MonoBehaviour {
     public GameObject heart;
     public GameObject soundOn;
     public GameObject soundOff;
-    public GameObject myCamera;
+    public GameObject mainCamera;
+    public GameObject guiCamera;
     public RuntimeAnimatorController rAC;
 
     public GameObject GreenScoreObject;
@@ -16,7 +17,7 @@ public class SelectionMenu : MonoBehaviour {
     public GameObject gridHolder;
 
     public string[] maps;
-
+    private GameObject gridGameObject;
     private GameObject heartLeft;
     private GameObject heartRight;
     private GameObject heartSecondLeft;
@@ -29,6 +30,7 @@ public class SelectionMenu : MonoBehaviour {
     private int newPosition = 0;
     private int currentMap = 0;
     private int players = 2;
+    private Animator mainCameraAnimator;
 
     private bool muted = false;
     private bool rg = true;
@@ -37,6 +39,10 @@ public class SelectionMenu : MonoBehaviour {
 
     private int redScore = 0;
     private int greenScore = 0;
+
+    private Vector3 myGridHolderVec;
+
+    private bool forward = true;
 
 
     //Should be handled in another script
@@ -62,12 +68,24 @@ public class SelectionMenu : MonoBehaviour {
     void Start() {
         spawnHeartsNew();
 
+        myGridHolderVec = gridHolder.GetComponent<Transform>().position;
+
+        mainCameraAnimator = mainCamera.GetComponent<Animator>();
+
+
+
+
+
+
         foreach (GameObject obj in selectedObject){
             if (obj.name.Contains("Count")) {
                     obj.GetComponent<TextMesh>().text = ("Player: " + players);
             }
             else if(obj.name.Contains("Map")){
                 obj.GetComponent<TextMesh>().text = ("Map: " + maps[currentMap]);
+
+                //TODO: display map.
+                TestMapInstance();
             }
             else if(obj.name.Contains("Sound")){
                 //Turn sound on.
@@ -75,7 +93,7 @@ public class SelectionMenu : MonoBehaviour {
                 sound = (GameObject)Instantiate(soundOn, mySoundVec, Quaternion.LookRotation(new Vector3(0, 1)));
 
                 sound.layer = 8;
-                myAudioListener = (AudioListener)myCamera.GetComponent<AudioListener>();
+                myAudioListener = (AudioListener)mainCamera.GetComponent<AudioListener>();
 
             }
             
@@ -193,103 +211,130 @@ public class SelectionMenu : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update () {
-        if (isEnableScript) { 
+    void Update() {
 
-        if (Input.GetKeyDown("up")||Input.GetKeyDown("w")) {
-            if (currentPosition == 0)
-            {
-                newPosition = selectedObject.Length - 1;
-            }
-            else {
-                newPosition--;
-            }
-        }
-
-        if (Input.GetKeyDown("down") || Input.GetKeyDown("s"))
+        if (isEnableScript)
         {
-            if (currentPosition == selectedObject.Length - 1)
-            {
-                newPosition = 0;
-            }
-            else {
-                newPosition++;
-            }
-        }
 
-        if (Input.GetKeyDown("a") || Input.GetKeyDown("left")) {
-            //Increase/dec player count change maps
-            if (selectedObject[currentPosition].name.Contains("Count")) {
-                togglePlayers();
-            }
-            else if (selectedObject[currentPosition].name.Contains("Map")) { 
-                if (currentMap == 0) {
-                    currentMap = maps.Length - 1;
-                }
-                else { currentMap--; }
-                selectedObject[currentPosition].GetComponent<TextMesh>().text = ("Map: " + maps[currentMap]);
-                }
+            if (Input.GetKeyDown("up") || Input.GetKeyDown("w"))
+            {
 
-            else if (selectedObject[currentPosition].name.Contains("Sound")){
-                toggleSound();
-            }
-            else if (selectedObject[currentPosition].name.Contains("Blind")) {
-                toggleBlind();                
-            }
-        }
-        if (Input.GetKeyDown("d") || Input.GetKeyDown("right") || Input.GetKeyDown("return")) {
-            if (selectedObject[currentPosition].name.Contains("Count"))
-            {
-                togglePlayers();
-            }
-            else if (selectedObject[currentPosition].name.Contains("Map"))
-            {
-                if (currentMap == maps.Length-1)
+                if (currentPosition == 0)
                 {
-                    currentMap = 0;
+                    newPosition = selectedObject.Length - 1;
                 }
-                else { currentMap++; }
-                selectedObject[currentPosition].GetComponent<TextMesh>().text = ("Map: " + maps[currentMap]);
-                
-
+                else {
+                    newPosition--;
+                }
             }
-            else if (selectedObject[currentPosition].name.Contains("Sound"))
+
+            if (Input.GetKeyDown("down") || Input.GetKeyDown("s"))
             {
-                toggleSound();
+                if (currentPosition == selectedObject.Length - 1)
+                {
+                    newPosition = 0;
+                }
+                else {
+                    newPosition++;
+                }
             }
-            else if (selectedObject[currentPosition].name.Contains("Blind"))
+
+            if (Input.GetKeyDown("a") || Input.GetKeyDown("left"))
             {
-                toggleBlind();
+
+                //Increase/dec player count change maps
+                if (selectedObject[currentPosition].name.Contains("Count"))
+                {
+                    togglePlayers();
+                }
+                else if (selectedObject[currentPosition].name.Contains("Map"))
+                {
+                    if (currentMap == 0)
+                    {
+                        currentMap = maps.Length - 1;
+                    }
+                    else { currentMap--; }
+                    selectedObject[currentPosition].GetComponent<TextMesh>().text = ("Map: " + maps[currentMap]);
+
+                    //TODO: create Map with options (player and what specific map?)
+                    Destroy(gridGameObject);
+                    TestMapInstance();
+                }
+
+                else if (selectedObject[currentPosition].name.Contains("Sound"))
+                {
+                    toggleSound();
+                }
+                else if (selectedObject[currentPosition].name.Contains("Blind"))
+                {
+                    toggleBlind();
+                }
+            }
+            if (Input.GetKeyDown("d") || Input.GetKeyDown("right") || Input.GetKeyDown("return"))
+            {
+                if (selectedObject[currentPosition].name.Contains("Count"))
+                {
+                    togglePlayers();
+                }
+                else if (selectedObject[currentPosition].name.Contains("Map"))
+                {
+                    if (currentMap == maps.Length - 1)
+                    {
+                        currentMap = 0;
+                    }
+                    else { currentMap++; }
+                    selectedObject[currentPosition].GetComponent<TextMesh>().text = ("Map: " + maps[currentMap]);
+
+                    //TODO: create Map with options (player and what specific map?)
+                    Destroy(gridGameObject);
+                    TestMapInstance();
+
+
+
+                }
+                else if (selectedObject[currentPosition].name.Contains("Sound"))
+                {
+                    toggleSound();
+                }
+                else if (selectedObject[currentPosition].name.Contains("Blind"))
+                {
+                    toggleBlind();
+                }
+
             }
 
-        }
 
-        if (Input.GetKeyDown("return") && selectedObject[currentPosition].name.Contains("Start")) {
+            if (Input.GetKeyDown("return") && selectedObject[currentPosition].name.Contains("Start")) {
+                //Starting game!:
+                isEnableScript = false;
+                mainCameraAnimator.Play("myCameraForward");
 
-            isEnableScript = false;
+                //mainCameraAnimator.Play("myCameraReward");
 
-                //Disabling when returning to start scene!
-                // Send information about players and map.
-                //Prepare game.
-                //Camera animated to game
-
-                grid = Instantiate(gridPrefab).GetComponent<Grid>();
-                grid.SetWallLayout(WallLayouts.Border.CreateArray(grid.width, grid.height));
-                player = grid.AddPlayer(new Point(5, 5), Directions.North, Teams.Red);
-                grid.AddPlayer(new Point(10, 5), Directions.North, Teams.Red);
-                grid.AddPlayer(new Point(5, 10), Directions.South, Teams.Green);
-                grid.AddPlayer(new Point(10, 10), Directions.South, Teams.Green);
+            }
 
 
-                Debug.Log("start found");
-        }
 
-        if (currentPosition != newPosition) {
+            if (currentPosition != newPosition) {
             currentPosition = newPosition;
             moveHearts();
         }
         }
 
     }
+
+
+        public void TestMapInstance()
+{
+        gridGameObject = Instantiate(gridPrefab);
+    grid = gridGameObject.GetComponent<Grid>();
+    grid.SetWallLayout(WallLayouts.Border.CreateArray(grid.width, grid.height));
+    player = grid.AddPlayer(new Point(5, 5), Directions.North, Teams.Red);
+    grid.AddPlayer(new Point(10, 5), Directions.North, Teams.Red);
+    grid.AddPlayer(new Point(5, 10), Directions.South, Teams.Green);
+    grid.AddPlayer(new Point(10, 10), Directions.South, Teams.Green);
+    grid.GetComponent<Transform>().position = myGridHolderVec;
+
+}
 
 }
