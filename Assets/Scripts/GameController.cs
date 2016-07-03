@@ -13,9 +13,11 @@ public class GameController : MonoBehaviour
 
     public GameObject gridPrefab;
 
-    private Grid grid;
-    private DraftManager cardManager;
-    private List<PlayerInfo> players = new List<PlayerInfo>();
+    public Grid Grid { get; private set; }
+    private DraftManager draftManager;
+    private CardPool cardPoolManager;
+    private CardEffectParamerters effectParams;
+    public bool GameOver { get; set; }
 
     void Start()
     {
@@ -26,28 +28,38 @@ public class GameController : MonoBehaviour
         int nPlayers = 4;
         for(uint i = 1; i <= nPlayers; i++)
         {
-            players.Add(new PlayerInfo(i));
+            gamestate.Players.Add(new PlayerInfo(i));
         }
 
         //initialize grid and add Player references to playerinfo
-        grid = Instantiate(gridPrefab).GetComponent<Grid>();
-        grid.SetWallLayout(WallLayouts.Border.CreateArray(grid.width, grid.height));
-        players[0].Snake = grid.AddPlayer(new Point(5, 5), Directions.North, Teams.Red);
-        players[1].Snake = grid.AddPlayer(new Point(10, 5), Directions.North, Teams.Red);
-        players[2].Snake = grid.AddPlayer(new Point(5, 10), Directions.South, Teams.Green);
-        players[3].Snake = grid.AddPlayer(new Point(10, 10), Directions.South, Teams.Green);
+        Grid = Instantiate(gridPrefab).GetComponent<Grid>();
+        Grid.SetWallLayout(WallLayouts.Border.CreateArray(Grid.width, Grid.height));
+        gamestate.Players[0].Snake = Grid.AddPlayer(new Point(5, 5), Directions.North, Teams.Red);
+        gamestate.Players[1].Snake = Grid.AddPlayer(new Point(10, 5), Directions.North, Teams.Red);
+        gamestate.Players[2].Snake = Grid.AddPlayer(new Point(5, 10), Directions.South, Teams.Green);
+        gamestate.Players[3].Snake = Grid.AddPlayer(new Point(10, 10), Directions.South, Teams.Green);
 
+        cardPoolManager = GetComponent<CardPool>();
+        draftManager = GetComponent<DraftManager>();
 
-        var effectParams = new CardEffectParamerters(players[0].Snake, grid);
-        
-        var boosters = GetComponent<CardPool>().BasicBoosterBox();
-        var draftManager = GetComponent<DraftManager>();
-        draftManager.StartDraft(boosters, effectParams);
-
+        StartRound();
     }
 
     void Update()
     {
+        if(gamestate.State == Mode.FinishedRound)
+        {
+            if (GameOver)
+            {
+                //go to mainmenu screen
+            } else { StartRound(); }
+        }
+    }
+
+    private void StartRound()
+    {
+        draftManager.StartDraft(cardPoolManager.FillBoosterBox(), Grid);
+        gamestate.State = Mode.OpenPack;
     }
 
 
