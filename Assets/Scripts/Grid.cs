@@ -19,6 +19,7 @@ public class Grid : MonoBehaviour
     private bool[,] walls = null;
     private readonly List<Player> players = new List<Player>();
     private readonly List<Powerup> powerups = new List<Powerup>();
+    private readonly Dictionary<System.Type, GameObject> powerupPrefabByType = new Dictionary<System.Type, GameObject>();
 
     /// <summary>Readonly, duplicate list of the contained players.</summary>
     public IList<Player> Players { get { return players.ToList().AsReadOnly(); } }
@@ -37,6 +38,8 @@ public class Grid : MonoBehaviour
         powerupContainer.name = "Powerups";
         powerupContainer.transform.parent = transform;
         powerupContainer.transform.localPosition = new Vector3(0, 0, -2); //Render all powerups in front of the grid
+        //Initialise powerup dictionary
+        foreach (var prefab in powerupPrefabs) { powerupPrefabByType.Add(prefab.GetComponent<Powerup>().GetType(), prefab); }
         //Create grid (rectangles)
         for (int y = 0; y < height; ++y)
         {
@@ -123,6 +126,12 @@ public class Grid : MonoBehaviour
         SpawnPowerup(powerupPrefabs[Random.Range(0, powerupPrefabs.Length)]);
     }
 
+    public bool SpawnPowerup<T>(Point? position = null) where T : Powerup
+    {
+        if (!powerupPrefabByType.ContainsKey(typeof(T))) { return false; }
+        return SpawnPowerup(powerupPrefabByType[typeof(T)], position);
+    }
+
     public bool SpawnPowerup(GameObject powerupPrefab, Point? position = null)
     {
         //Find spawn location
@@ -147,8 +156,9 @@ public class Grid : MonoBehaviour
     public bool PowerupCanSpawn(Point position)
     {
         return (walls == null || !walls[position.Y, position.X]) &&
-            !players.SelectMany(p => p.BodyPositions).Any(pos => pos.X == position.X && pos.Y == position.Y) &&
             position.X >= 0 && position.Y >= 0 &&
-            position.X < width && position.Y < height;
+            position.X < width && position.Y < height &&
+            !players.SelectMany(p => p.BodyPositions).Any(pos => pos.X == position.X && pos.Y == position.Y) &&
+            !powerups.Any(powerup => powerup.Position.X == position.X && powerup.Position.Y == position.Y);
     }
 }

@@ -38,8 +38,7 @@ public class GameController : MonoBehaviour
         players[3].Snake = grid.AddPlayer(new Point(10, 10), Directions.South, Teams.Green);
 
 
-        var effectParams = new CardEffectParamerters();
-        effectParams.CastingPlayer = players[0].Snake;
+        var effectParams = new CardEffectParamerters(players[0].Snake, grid);
         
         var boosters = GetComponent<CardPool>().BasicBoosterBox();
         var draftManager = GetComponent<DraftManager>();

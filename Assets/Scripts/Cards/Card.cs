@@ -3,10 +3,13 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets.Scripts.Cards
+public class Card : MonoBehaviour
 {
-    class Card : MonoBehaviour
+    public CardType type;
+    public GameObject highlightBorder;
+
+    public void Highlight(bool value)
     {
-        public CardType type;
+        highlightBorder.SetActive(value);
     }
 }

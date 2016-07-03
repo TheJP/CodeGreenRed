@@ -18,6 +18,8 @@ public class Player : MonoBehaviour
     public GameObject arrowPrefab;
     public GameObject playerHeadPrefab;
     public GameObject playerBodyPrefab;
+    public Material greenMaterial;
+    public Material redMaterial;
     public Sprite[] playerSprites;
 
     public event Action<MoveEventArguments> BeforeMove;
@@ -104,18 +106,19 @@ public class Player : MonoBehaviour
     /// <param name="amount">Amount that the snake will move meassured in tiles.</param>
     public void Move(int amount = 1)
     {
+        if (Dead) { return; }
         var startMovement = !headAnimation.Any() && amount > 0;
         var previousHeadAnimation = Position.ToVector() + PlayerOffset;
         var canceled = 0;
         for (int i = 0; i < amount; ++i)
         {
-            if (Dead) { return; } //Can happen after a move
             //Trigger movement event
             if(BeforeMove != null)
             {
                 var targetPosition = Position + Direction.Movement();
                 var arguments = new MoveEventArguments(this, targetPosition);
                 BeforeMove(arguments);
+                if (Dead) { return; }
                 if (arguments.Canceled) { ++canceled; continue; }
             }
             //Move player
@@ -169,6 +172,7 @@ public class Player : MonoBehaviour
             bodyPart.transform.parent = transform;
             bodyPart.transform.localPosition = bodyAnimation.Count > 0 ? bodyAnimation.Last() : previousHeadAnimation;
             bodyPart.transform.localScale = BodyScale; //Local scaling is not set correctly by unity when spawning (fixed with this)
+            bodyPart.GetComponent<SpriteRenderer>().material = Team == Teams.Green ? greenMaterial : redMaterial;
             //TODO: Generalize
             bodyPart.GetComponent<SpriteRenderer>().sprite = playerSprites[0];
             body.Add(bodyPart);
@@ -213,6 +217,7 @@ public class Player : MonoBehaviour
         head.transform.parent = transform;
         head.transform.localPosition = Position.ToVector() + PlayerOffset;
         head.transform.localScale = HeadScale; //Local scaling is not set correctly by unity when spawning (fixed with this)
+        head.GetComponent<SpriteRenderer>().material = Team == Teams.Green ? greenMaterial : redMaterial;
         //Spawn arrow
         arrow = Instantiate(arrowPrefab);
         arrow.transform.parent = head.transform;
@@ -242,7 +247,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         //Head animation
-        if (headAnimation.Any())
+        if (headAnimation.Any() && head != null)
         {
             var direction = (headAnimation.Peek().ToVector() + PlayerOffset) - head.transform.localPosition;
             if (direction.magnitude < Time.deltaTime * MovementSpeed)

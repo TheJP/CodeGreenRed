@@ -6,7 +6,9 @@ using System.Text;
 public enum WallLayouts
 {
     NoWalls,
-    Border
+    Border,
+    /// <summary>Should used for maps that are at least 10 by 10.</summary>
+    Corners
 }
 
 public static class WallLayoutsExtension
@@ -30,6 +32,22 @@ public static class WallLayoutsExtension
                     walls[i, width - 1] = true;
                 }
                 return walls;
+            case WallLayouts.Corners:
+                var corners = new bool[height, width];
+                for(int i = 0; i < 4; ++i)
+                {
+                    //Horizontals
+                    corners[3, i] = true;
+                    corners[3, width - 1 - i] = true;
+                    corners[height - 4, i] = true;
+                    corners[height - 4, width - 1 - i] = true;
+                    //Verticals
+                    corners[i, 3] = true;
+                    corners[height - 1 - i, 3] = true;
+                    corners[i, width - 4] = true;
+                    corners[height - 1 - i, width - 4] = true;
+                }
+                return corners;
             default:
                 throw new ArgumentException("Unkown or unimplemented wall layout: " + layout.ToString());
         }
