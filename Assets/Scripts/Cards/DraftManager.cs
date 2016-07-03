@@ -251,7 +251,7 @@ public class DraftManager : MonoBehaviour
     }
 }
 
-public enum CardType { Move, Right, Left, Debug, Cheese }
+public enum CardType { Move, Right, Left, Debug, Cheese, Obama }
 /// <summary>
 /// Enables us to select cardtype in unity Editor
 /// </summary>
@@ -263,7 +263,8 @@ public static class CardTypeExtension
         { CardType.Debug, typeof(DebugEffect) },
         { CardType.Left, typeof(TurnLeftEffect) },
         { CardType.Right, typeof(TurnRightEffect) },
-        { CardType.Cheese, typeof(CheeseEffect) }
+        { CardType.Cheese, typeof(CheeseEffect) },
+        { CardType.Obama, typeof(ObamaEffect) }
     };
     public static Type GetEffectType(this CardType cardType)
     {

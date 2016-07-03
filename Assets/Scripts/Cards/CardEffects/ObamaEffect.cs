@@ -7,18 +7,17 @@ using UnityEngine;
 
 namespace Assets.Scripts.Cards.CardEffects
 {
-    class CheeseEffect : CardEffect
+    class ObamaEffect : CardEffect
     {
-        public const int AmountOfCheese = 3;
         private Grid grid;
-        public CheeseEffect(Grid grid)
+        public ObamaEffect(Grid grid)
         {
             this.grid = grid;
         }
 
         public override void Execute()
         {
-            for (int i = 0; i < AmountOfCheese; ++i) { grid.SpawnPowerup<Cheese>(); }
+            grid.SpawnRandomPowerup();
         }
 
         public static Instantiate<CardEffect> GetFactory()
