@@ -7,7 +7,12 @@ using Assets.Scripts;
 /// Keeps track of whether we are in draftmode(player choosing cards), ready to open mode, playing mode
 /// </summary>
 public class GameState : MonoBehaviour {
-    public Mode State;
+
+    private Mode state = Mode.Menu;
+    public Mode State {
+        get { return state; }
+        set { state = value; }
+        }
     public List<PlayerInfo> Players { get; set; }
     
 

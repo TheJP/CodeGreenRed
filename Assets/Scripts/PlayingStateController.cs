@@ -11,6 +11,7 @@ public class PlayingStateController : MonoBehaviour {
     private float lastEffectTime;
     private int currentPlayer = 0;
     public int delayAfterPlay = 5;
+    bool changing = false;
 
     // Use this for initialization
     void Start () {
@@ -24,11 +25,12 @@ public class PlayingStateController : MonoBehaviour {
             lastEffectTime -= Time.deltaTime;
             if (lastEffectTime < 0) { lastEffectTime = 0; }
 
-            if(DraftResult.chosenCards.Count == 0)
+            if(DraftResult.chosenCards.Count == 0 && !changing)
             {
                 //there are no more effects to play
                 currentPlayer = 0;
                 Invoke("ChangeToFinishedState", delayAfterPlay);
+                changing = true;
             }
             else if(lastEffectTime <= 0)
             {
@@ -51,5 +53,6 @@ public class PlayingStateController : MonoBehaviour {
     private void ChangeToFinishedState()
     {
         gamestate.State = Mode.FinishedRound;
+        changing = false;
     }
 }
