@@ -65,10 +65,13 @@ public class SelectionMenu : MonoBehaviour
         mainCameraAnimator.Play("myCameraReward");
 
         StartCoroutine(waitUntilEnable());
+
+        Destroy(grid.gameObject);
+        InizializeMap();
     }
 
     IEnumerator waitUntilEnable() {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(2);
         gamestate.State = Mode.Menu;
     }
 

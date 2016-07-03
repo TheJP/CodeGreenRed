@@ -20,12 +20,12 @@ public class PlayingStateController : MonoBehaviour {
     
     // Update is called once per frame
     void Update () {
-        if(gamestate.State == Mode.Playing)
+        if(gamestate.State == Mode.Playing && !changing)
         {
             lastEffectTime -= Time.deltaTime;
             if (lastEffectTime < 0) { lastEffectTime = 0; }
 
-            if(DraftResult.chosenCards.Count == 0 && !changing)
+            if(DraftResult.chosenCards.Count == 0)
             {
                 //there are no more effects to play
                 currentPlayer = 0;

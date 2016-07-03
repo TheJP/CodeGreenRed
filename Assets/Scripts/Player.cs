@@ -198,6 +198,7 @@ public class Player : MonoBehaviour
     /// <summary>Kills this snake.</summary>
     public void Die()
     {
+        Dead = true;
         Destroy(head, 0.2f);
         arrow = null;
         head = null;
