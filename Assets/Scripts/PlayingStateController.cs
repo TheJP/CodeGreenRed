@@ -40,7 +40,6 @@ public class PlayingStateController : MonoBehaviour {
                 lastEffectTime = WaitForAnimationSeconds;
             }
         }
-    
     }
     private PlayerInfo NextPlayer()
     {

@@ -84,8 +84,8 @@ public class DraftManager : MonoBehaviour
                 //we're done with drafting, time to play
                 cards.ForEach(c => Destroy(c));
                 cards.Clear();
-                gamestate.State = Mode.Playing;
                 GetComponent<PlayingStateController>().DraftResult = draftResult;
+                gamestate.State = Mode.Playing;
                 draftResult = new DraftResult();
             }
 
@@ -145,6 +145,7 @@ public class DraftManager : MonoBehaviour
     private void OpenPackAnimation(BoosterPack pack)
     {
         Debug.Assert(CardSpawnPositions.Length >= pack.cardsInBooster.Count);
+        Debug.Log(pack.cardsInBooster.Count);
         //open pack
         for (int i = 0; i < pack.cardsInBooster.Count; i++)
         {
