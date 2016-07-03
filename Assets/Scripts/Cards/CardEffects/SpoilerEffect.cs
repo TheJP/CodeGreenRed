@@ -7,22 +7,22 @@ using UnityEngine;
 
 namespace Assets.Scripts.Cards.CardEffects
 {
-    class ObamaEffect : CardEffect
+    class SpoilerEffect : CardEffect
     {
-        private Grid grid;
-        public ObamaEffect(Grid grid)
+        private Player castingSnake;
+        public SpoilerEffect(Player castingSnake)
         {
-            this.grid = grid;
+            this.castingSnake = castingSnake;
         }
 
         public override void Execute()
         {
-            grid.SpawnRandomPowerup();
+            castingSnake.Move();
         }
 
         public static Instantiate<CardEffect> GetFactory()
         {
-            return (p => new ObamaEffect(p.Grid));
+            return (p => new SpoilerEffect(p.CastingSnake));
         }
     }
 }
