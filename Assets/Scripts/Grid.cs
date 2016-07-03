@@ -115,7 +115,7 @@ public class Grid : MonoBehaviour
         //Pickup all powerups on the target field
         foreach(var powerup in powerups.Where(up => up.Position.X == arguments.TargetPosition.X && up.Position.Y == arguments.TargetPosition.Y).ToList())
         {
-            powerup.PickedUp(new PickupParameters(arguments.Player, this));
+            powerup.PickedUp(new PickupParameters(arguments, this));
             powerups.Remove(powerup);
             powerup.Consumed();
         }
