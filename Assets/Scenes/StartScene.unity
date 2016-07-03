@@ -140,7 +140,7 @@ RectTransform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 1801925739}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0.69000053, y: -7.559998}
@@ -222,7 +222,7 @@ RectTransform:
   m_Children:
   - {fileID: 1537432315}
   m_Father: {fileID: 1801925739}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 17.55, y: -11.31}
@@ -350,7 +350,7 @@ RectTransform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 1801925739}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -0.0000004172325, y: 4.74}
@@ -551,7 +551,7 @@ RectTransform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 1801925739}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 41.2, y: -7.56}
@@ -667,87 +667,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
---- !u!1 &1233557076
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 224: {fileID: 1233557077}
-  - 23: {fileID: 1233557079}
-  - 102: {fileID: 1233557078}
-  m_Layer: 8
-  m_Name: RG Blind
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1233557077
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1233557076}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
-  m_Children: []
-  m_Father: {fileID: 1801925739}
-  m_RootOrder: 2
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -5.26}
-  m_SizeDelta: {x: 6.56, y: 10}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!102 &1233557078
-TextMesh:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1233557076}
-  m_Text: YB
-  m_OffsetZ: 0
-  m_CharacterSize: 1
-  m_LineSpacing: 1
-  m_Anchor: 4
-  m_Alignment: 1
-  m_TabSize: 4
-  m_FontSize: 110
-  m_FontStyle: 0
-  m_RichText: 1
-  m_Font: {fileID: 12800000, guid: c1b9cc298b9c72c4eb7744d6cbe13957, type: 3}
-  m_Color:
-    serializedVersion: 2
-    rgba: 4278255360
---- !u!23 &1233557079
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1233557076}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_Materials:
-  - {fileID: 2100000, guid: c1b9cc298b9c72c4eb7744d6cbe13957, type: 3}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 1
-  m_ReflectionProbeUsage: 1
-  m_ProbeAnchor: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
 --- !u!1 &1420206874
 GameObject:
   m_ObjectHideFlags: 0
@@ -1002,7 +921,6 @@ RectTransform:
   m_Children:
   - {fileID: 678128619}
   - {fileID: 2063451324}
-  - {fileID: 1233557077}
   - {fileID: 1959578136}
   - {fileID: 510209772}
   - {fileID: 1814306133}
@@ -1031,7 +949,6 @@ MonoBehaviour:
   - {fileID: 678128618}
   - {fileID: 510209769}
   - {fileID: 2063451323}
-  - {fileID: 1233557076}
   - {fileID: 1814306130}
   heart: {fileID: 193978, guid: 9dc0647a58a2956438b46d2c0fc49dd4, type: 2}
   soundOn: {fileID: 152212, guid: 9654fe001bbafff4e9ce55c1b9a78981, type: 2}
@@ -1040,6 +957,7 @@ MonoBehaviour:
   rAC: {fileID: 9100000, guid: 5dd117ce475370a4ea75b659c15523f1, type: 2}
   GreenScoreObject: {fileID: 719879675}
   RedScoreObject: {fileID: 206245569}
+  gridHolder: {fileID: 146997298}
   maps:
   - Freerider
   - Boarder
@@ -1099,10 +1017,10 @@ RectTransform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 1801925739}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -10.26}
+  m_AnchoredPosition: {x: 0, y: -5.26}
   m_SizeDelta: {x: 4, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1959578135
@@ -1133,7 +1051,7 @@ RectTransform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 1801925739}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 25, y: -3.31}
