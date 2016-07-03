@@ -60,7 +60,10 @@ public class Grid : MonoBehaviour
         this.walls = walls;
         if(wallContainer == null) { return; }
         //Remove all old walls
-        while (wallContainer.transform.childCount > 0) { Destroy(wallContainer.transform.GetChild(0)); }
+        for (int i = wallContainer.transform.childCount - 1; i >= 0; --i)
+        {
+            Destroy(wallContainer.transform.GetChild(i).gameObject);
+        }
         //Add new walls
         for (int y = 0; y < height; ++y)
         {
@@ -115,7 +118,7 @@ public class Grid : MonoBehaviour
         //Pickup all powerups on the target field
         foreach(var powerup in powerups.Where(up => up.Position.X == arguments.TargetPosition.X && up.Position.Y == arguments.TargetPosition.Y).ToList())
         {
-            powerup.PickedUp(new PickupParameters(arguments.Player, this));
+            powerup.PickedUp(new PickupParameters(arguments, this));
             powerups.Remove(powerup);
             powerup.Consumed();
         }

@@ -22,17 +22,18 @@ public abstract class Powerup : MonoBehaviour
 
     public virtual void Consumed()
     {
-        Destroy(this.gameObject, 0.3f);
+        Destroy(gameObject, 0.3f);
     }
 }
 
 public class PickupParameters
 {
-    public Player PickedUpBy { get; private set; }
+    public Player PickedUpBy { get { return MoveEventArguments.Player; } }
     public Grid Grid { get; private set; }
-    public PickupParameters(Player player, Grid grid)
+    public MoveEventArguments MoveEventArguments { get; private set; }
+    public PickupParameters(MoveEventArguments arguments, Grid grid)
     {
-        this.PickedUpBy = player;
+        this.MoveEventArguments = arguments;
         this.Grid = grid;
     }
 }

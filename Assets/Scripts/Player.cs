@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     public const int BodyElementsPerTile = 3;
     /// <summary>Animation movement speed.</summary>
     public const float MovementSpeed = 2f;
+    public const int StartingLength = 3;
     /// <summary>Coordinate offset for head and body sprites.</summary>
     public readonly Vector3 PlayerOffset = new Vector3(0.5f, 0.5f);
     public readonly Vector3 ArrowScale = new Vector3(0.5f, 0.5f, 0.5f);
@@ -30,7 +31,7 @@ public class Player : MonoBehaviour
     private GameObject head;
     private readonly List<GameObject> body = new List<GameObject>();
     /// <summary>Determines, how many body elements have to be grown on the next move.</summary>
-    private int grow = 0;
+    private int grow = StartingLength;
     //Animation states of the snake
     private readonly Queue<Point> headAnimation = new Queue<Point>();
     private readonly List<Vector3> bodyAnimation = new List<Vector3>();

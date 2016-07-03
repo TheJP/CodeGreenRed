@@ -11,48 +11,48 @@ public class GameController : MonoBehaviour
 
     private GameState gamestate;
 
-    public GameObject gridPrefab;
-
     public Grid Grid { get; private set; }
     private DraftManager draftManager;
     private CardPool cardPoolManager;
-    private CardEffectParamerters effectParams;
     public bool GameOver { get; set; }
 
-    void Start()
+    public void StartGame(int nPlayers, Grid grid)
     {
+        this.Grid = grid;
         gamestate = GetComponent<GameState>();
         Debug.Assert(gamestate != null);
 
+
         //let's do this here for now
-        int nPlayers = 4;
-        for(uint i = 1; i <= nPlayers; i++)
+        for (uint i = 1; i <= nPlayers; i++)
         {
             gamestate.Players.Add(new PlayerInfo(i));
         }
 
         //initialize grid and add Player references to playerinfo
-        Grid = Instantiate(gridPrefab).GetComponent<Grid>();
-        Grid.SetWallLayout(WallLayouts.Border.CreateArray(Grid.width, Grid.height));
-        gamestate.Players[0].Snake = Grid.AddPlayer(new Point(5, 5), Directions.North, Teams.Red);
-        gamestate.Players[1].Snake = Grid.AddPlayer(new Point(10, 5), Directions.North, Teams.Red);
-        gamestate.Players[2].Snake = Grid.AddPlayer(new Point(5, 10), Directions.South, Teams.Green);
-        gamestate.Players[3].Snake = Grid.AddPlayer(new Point(10, 10), Directions.South, Teams.Green);
+        gamestate.Players[0].Snake = Grid.AddPlayer(new Point(7, 2), Directions.North, Teams.Red);
+        gamestate.Players[1].Snake = Grid.AddPlayer(new Point(7, 12), Directions.South, Teams.Green);
+        if (nPlayers == 4)
+        {
+            gamestate.Players[2].Snake = Grid.AddPlayer(new Point(2, 7), Directions.East, Teams.Red);
+            gamestate.Players[3].Snake = Grid.AddPlayer(new Point(12, 7), Directions.West, Teams.Green);
+        }
 
         cardPoolManager = GetComponent<CardPool>();
         draftManager = GetComponent<DraftManager>();
 
-        StartRound();
+        Invoke("StartRound", 5); //wait seconds before starting draft
     }
 
     void Update()
     {
-        if(gamestate.State == Mode.FinishedRound)
+        if (gamestate.State == Mode.FinishedRound)
         {
             if (GameOver)
             {
                 //go to mainmenu screen
-            } else { StartRound(); }
+            }
+            else { StartRound(); }
         }
     }
 
@@ -60,8 +60,6 @@ public class GameController : MonoBehaviour
     {
         draftManager.StartDraft(cardPoolManager.FillBoosterBox(), Grid);
         gamestate.State = Mode.OpenPack;
+
     }
-
-
-
 }

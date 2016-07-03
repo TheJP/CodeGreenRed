@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
-public class SelectionMenu : MonoBehaviour {
+public class SelectionMenu : MonoBehaviour
+{
 
     public GameObject[] selectedObject;
     public GameObject heart;
@@ -10,14 +12,14 @@ public class SelectionMenu : MonoBehaviour {
     public GameObject mainCamera;
     public GameObject guiCamera;
     public RuntimeAnimatorController rAC;
-
     public GameObject GreenScoreObject;
     public GameObject RedScoreObject;
 
     public GameObject gridHolder;
+    public GameObject gridPrefab;
+    public GameState gamestate;
+    public GameController gameController;
 
-    public string[] maps;
-    private GameObject gridGameObject;
     private GameObject heartLeft;
     private GameObject heartRight;
     private GameObject heartSecondLeft;
@@ -25,10 +27,11 @@ public class SelectionMenu : MonoBehaviour {
     private GameObject sound;
 
 
+
     private AudioListener myAudioListener;
     private int currentPosition = 0;
     private int newPosition = 0;
-    private int currentMap = 0;
+    private WallLayouts currentMap = WallLayouts.NoWalls;
     private int players = 2;
     private Animator mainCameraAnimator;
     private Animator guiCameraAnimator;
@@ -36,28 +39,23 @@ public class SelectionMenu : MonoBehaviour {
     private bool muted = false;
     private bool rg = true;
 
-    private bool isEnableScript = true;
-
     private int redScore = 0;
     private int greenScore = 0;
-
-    private Vector3 myGridHolderVec;
-
     private bool forward = true;
 
 
     //Should be handled in another script
-    public GameObject gridPrefab;
 
-    private Player player;
     private Grid grid;
 
-    public void incRedScore() {
+    public void incRedScore()
+    {
         redScore++;
-        RedScoreObject.GetComponent<TextMesh>().text = ("R:"+redScore);
+        RedScoreObject.GetComponent<TextMesh>().text = ("R:" + redScore);
     }
 
-    public void incGreenScore() {
+    public void incGreenScore()
+    {
         greenScore++;
         GreenScoreObject.GetComponent<TextMesh>().text = ("G:"+greenScore);
     }
@@ -71,14 +69,13 @@ public class SelectionMenu : MonoBehaviour {
 
     IEnumerator waitUntilEnable() {
         yield return new WaitForSeconds(5);
-        isEnableScript = true;
+        gamestate.State = Mode.Menu;
     }
 
-    void Start() {
+    void Start()
+    {
+        InizializeMap();
         spawnHeartsNew();
-
-        myGridHolderVec = gridHolder.GetComponent<Transform>().position;
-
         mainCameraAnimator = mainCamera.GetComponent<Animator>();
 
         guiCameraAnimator = guiCamera.GetComponent<Animator>();
@@ -86,17 +83,19 @@ public class SelectionMenu : MonoBehaviour {
 
 
 
-        foreach (GameObject obj in selectedObject){
-            if (obj.name.Contains("Count")) {
-                    obj.GetComponent<TextMesh>().text = ("Player: " + players);
+        foreach (GameObject obj in selectedObject)
+        {
+            if (obj.name.Contains("Count"))
+            {
+                obj.GetComponent<TextMesh>().text = ("Player: " + players);
             }
-            else if(obj.name.Contains("Map")){
-                obj.GetComponent<TextMesh>().text = ("Map: " + maps[currentMap]);
+            else if (obj.name.Contains("Map"))
+            {
+                obj.GetComponent<TextMesh>().text = ("Map: " + currentMap.ToString());
 
-                //TODO: display map.
-                TestMapInstance();
             }
-            else if(obj.name.Contains("Sound")){
+            else if (obj.name.Contains("Sound"))
+            {
                 //Turn sound on.
                 Vector3 mySoundVec = obj.GetComponent<RectTransform>().localPosition;
                 sound = (GameObject)Instantiate(soundOn, mySoundVec, Quaternion.LookRotation(new Vector3(0, 1)));
@@ -105,20 +104,21 @@ public class SelectionMenu : MonoBehaviour {
                 myAudioListener = (AudioListener)mainCamera.GetComponent<AudioListener>();
 
             }
-            
+
         }
-        
+
     }
 
 
-    void spawnHeartsNew() {
+    void spawnHeartsNew()
+    {
 
         RectTransform myRecTran = selectedObject[currentPosition].GetComponent<RectTransform>();
         Vector3 myVec = myRecTran.localPosition;
         float myWidth = myRecTran.rect.width;
 
-        heartLeft = (GameObject)Instantiate(heart, new Vector3(myVec.x + (myWidth / 4)+5, myVec.y), Quaternion.identity);
-        heartRight = (GameObject)Instantiate(heart, new Vector3(myVec.x - (myWidth / 4)-5, myVec.y), Quaternion.identity);
+        heartLeft = (GameObject)Instantiate(heart, new Vector3(myVec.x + (myWidth / 4) + 5, myVec.y), Quaternion.identity);
+        heartRight = (GameObject)Instantiate(heart, new Vector3(myVec.x - (myWidth / 4) - 5, myVec.y), Quaternion.identity);
 
         heartLeft.layer = 8;
         heartRight.layer = 8;
@@ -139,17 +139,20 @@ public class SelectionMenu : MonoBehaviour {
     }
 
 
-    void deactivateAdditionalHearts() {
+    void deactivateAdditionalHearts()
+    {
         heartSecondLeft.SetActive(false);
         heartSecondRight.SetActive(false);
     }
 
-    void activateAdditionalHearts() {
+    void activateAdditionalHearts()
+    {
         heartSecondLeft.SetActive(true);
         heartSecondRight.SetActive(true);
     }
 
-    void moveHearts() {
+    void moveHearts()
+    {
         RectTransform myRecTran = selectedObject[currentPosition].GetComponent<RectTransform>();
         Vector3 myVec = myRecTran.localPosition;
         float myWidth = myRecTran.rect.width;
@@ -157,7 +160,7 @@ public class SelectionMenu : MonoBehaviour {
 
         heartRight.transform.position = (new Vector3(myVec.x + (myWidth / 4) + 5, myVec.y));
 
-        heartSecondLeft.transform.position = (new Vector3(myVec.x - (myWidth / 4) - 5 -3, myVec.y));
+        heartSecondLeft.transform.position = (new Vector3(myVec.x - (myWidth / 4) - 5 - 3, myVec.y));
 
         heartSecondRight.transform.position = (new Vector3(myVec.x + (myWidth / 4) + 5 + 3, myVec.y));
     }
@@ -169,14 +172,16 @@ public class SelectionMenu : MonoBehaviour {
             players = 4;
             activateAdditionalHearts();
         }
-        else {
+        else
+        {
             players = 2;
             deactivateAdditionalHearts();
         }
         selectedObject[currentPosition].GetComponent<TextMesh>().text = ("Player: " + players);
     }
 
-    void toggleSound() {
+    void toggleSound()
+    {
 
         Quaternion myQuack = sound.GetComponent<Transform>().rotation;
         Vector3 myVec = sound.GetComponent<Transform>().position;
@@ -194,7 +199,8 @@ public class SelectionMenu : MonoBehaviour {
 
             sound.layer = 8;
         }
-        else {
+        else
+        {
             muted = true;
             //Turn off sound
 
@@ -207,22 +213,25 @@ public class SelectionMenu : MonoBehaviour {
         }
     }
 
-    void toggleBlind() {
+    void toggleBlind()
+    {
 
         if (rg)
         {
             selectedObject[currentPosition].GetComponent<TextMesh>().text = "YB";
         }
-        else {
+        else
+        {
             selectedObject[currentPosition].GetComponent<TextMesh>().text = "RG";
         }
 
     }
 
     // Update is called once per frame
-    void Update() {
+    void Update()
+    {
 
-        if (isEnableScript)
+        if (gamestate.State == Mode.Menu)
         {
 
             if (Input.GetKeyDown("up") || Input.GetKeyDown("w"))
@@ -232,7 +241,8 @@ public class SelectionMenu : MonoBehaviour {
                 {
                     newPosition = selectedObject.Length - 1;
                 }
-                else {
+                else
+                {
                     newPosition--;
                 }
             }
@@ -243,7 +253,8 @@ public class SelectionMenu : MonoBehaviour {
                 {
                     newPosition = 0;
                 }
-                else {
+                else
+                {
                     newPosition++;
                 }
             }
@@ -258,16 +269,11 @@ public class SelectionMenu : MonoBehaviour {
                 }
                 else if (selectedObject[currentPosition].name.Contains("Map"))
                 {
-                    if (currentMap == 0)
-                    {
-                        currentMap = maps.Length - 1;
-                    }
-                    else { currentMap--; }
-                    selectedObject[currentPosition].GetComponent<TextMesh>().text = ("Map: " + maps[currentMap]);
+                    currentMap = currentMap == WallLayouts.NoWalls ? WallLayouts.Corners : currentMap - 1;
+                    selectedObject[currentPosition].GetComponent<TextMesh>().text = ("Map: " + currentMap.ToString());
 
                     //TODO: create Map with options (player and what specific map?)
-                    Destroy(gridGameObject);
-                    TestMapInstance();
+                    ChangeMapLayout();
                 }
 
                 else if (selectedObject[currentPosition].name.Contains("Sound"))
@@ -287,16 +293,11 @@ public class SelectionMenu : MonoBehaviour {
                 }
                 else if (selectedObject[currentPosition].name.Contains("Map"))
                 {
-                    if (currentMap == maps.Length - 1)
-                    {
-                        currentMap = 0;
-                    }
-                    else { currentMap++; }
-                    selectedObject[currentPosition].GetComponent<TextMesh>().text = ("Map: " + maps[currentMap]);
+                    currentMap = currentMap == WallLayouts.Corners ? WallLayouts.NoWalls : currentMap + 1;
+                    selectedObject[currentPosition].GetComponent<TextMesh>().text = ("Map: " + currentMap.ToString());
 
                     //TODO: create Map with options (player and what specific map?)
-                    Destroy(gridGameObject);
-                    TestMapInstance();
+                    ChangeMapLayout();
 
 
 
@@ -313,9 +314,14 @@ public class SelectionMenu : MonoBehaviour {
             }
 
 
-            if (Input.GetKeyDown("return") && selectedObject[currentPosition].name.Contains("Start")) {
+            if (Input.GetKeyDown("return") && selectedObject[currentPosition].name.Contains("Start"))
+            {
                 //Starting game!:
-                isEnableScript = false;
+                gameController.StartGame(players, grid);
+                gamestate.State = Mode.AboutToStart;
+
+
+
                 mainCameraAnimator.Play("myCameraForward");
                 guiCameraAnimator.Play("GuiCameraForward");
 
@@ -325,26 +331,26 @@ public class SelectionMenu : MonoBehaviour {
 
 
 
-            if (currentPosition != newPosition) {
-            currentPosition = newPosition;
-            moveHearts();
-        }
+            if (currentPosition != newPosition)
+            {
+                currentPosition = newPosition;
+                moveHearts();
+            }
         }
 
     }
 
 
-        public void TestMapInstance()
-{
-        gridGameObject = Instantiate(gridPrefab);
-    grid = gridGameObject.GetComponent<Grid>();
-    grid.SetWallLayout(WallLayouts.Border.CreateArray(grid.width, grid.height));
-    player = grid.AddPlayer(new Point(5, 5), Directions.North, Teams.Red);
-    grid.AddPlayer(new Point(10, 5), Directions.North, Teams.Red);
-    grid.AddPlayer(new Point(5, 10), Directions.South, Teams.Green);
-    grid.AddPlayer(new Point(10, 10), Directions.South, Teams.Green);
-    grid.GetComponent<Transform>().position = myGridHolderVec;
+    public void ChangeMapLayout()
+    {
+        grid.SetWallLayout(currentMap.CreateArray(grid.width, grid.height));
+    }
 
-}
+    private void InizializeMap()
+    {
+        grid = Instantiate(gridPrefab).GetComponent<Grid>();
+        ChangeMapLayout();
+    }
+
 
 }
