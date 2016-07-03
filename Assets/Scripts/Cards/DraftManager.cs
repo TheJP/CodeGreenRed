@@ -12,6 +12,8 @@ public class DraftManager : MonoBehaviour
     //unity editor dependencies
     public List<GameObject> cards;
     public Transform SpawnPositionsParent;
+    //how long before chosing card at random
+    public int thinkingTime = 6;
     private Transform[] CardSpawnPositions;
 
     public GameObject playerText;
@@ -41,7 +43,7 @@ public class DraftManager : MonoBehaviour
     /// <summary>
     /// after minCards is reached, every player has chosen a card in the current draft
     /// </summary>
-    private int minCards = 1; //it's a hack for now
+    private const int cardsPerPack = 5;
 
 
     // Use this for initialization
@@ -50,7 +52,7 @@ public class DraftManager : MonoBehaviour
         addFactories();
         gamestate = GetComponent<GameState>();
         Debug.Assert(gamestate != null);
-        TimeLeft = 4;
+        ResetTimer();
         playerText.GetComponent<Text>().text = "Player : " + (currentPlayer + 1) + " 's turn ";
         CardSpawnPositions = SpawnPositionsParent.GetComponentsInChildren<Transform>();
 
@@ -120,13 +122,25 @@ public class DraftManager : MonoBehaviour
         //then destroy it
         Destroy(selected);
         selected = null;
-        if (cards.Count <= minCards) { gamestate.State = Mode.OpenPack; }
-        
-
+        CheckDraftDone();
         ResetTimer();
     }
 
-    private void ResetTimer() { TimeLeft = 4; }
+    /// <summary>
+    /// if every player has chosen a card, destroy the remaining
+    /// </summary>
+    private void CheckDraftDone()
+    {
+        if (cards.Count <= cardsPerPack - gamestate.Players.Count)
+        {
+            //done choosing cards
+            cards.ForEach(c => Destroy(c));
+            cards.Clear();
+            gamestate.State = Mode.OpenPack;
+        }
+    }
+
+    private void ResetTimer() { TimeLeft = thinkingTime; }
 
     private void OpenPackAnimation(BoosterPack pack)
     {
@@ -223,7 +237,7 @@ public class DraftManager : MonoBehaviour
                 //then destroy it
                 Destroy(selected);
                 selected = null;
-                if (cards.Count <= minCards) { gamestate.State = Mode.OpenPack; }
+                CheckDraftDone();
                 ResetTimer();
             }
         }

@@ -10,6 +10,7 @@ public class GameController : MonoBehaviour
 {
 
     private GameState gamestate;
+    public Canvas playerInfoCanvas;
 
     public Grid Grid { get; private set; }
     private DraftManager draftManager;
@@ -53,6 +54,7 @@ public class GameController : MonoBehaviour
             if (GameOver)
             {
                 //go to mainmenu screen
+                playerInfoCanvas.gameObject.SetActive(false);
             }
             else { StartRound(); }
         }
@@ -62,6 +64,7 @@ public class GameController : MonoBehaviour
     {
         draftManager.StartDraft(cardPoolManager.FillBoosterBox(), Grid);
         gamestate.State = Mode.OpenPack;
+        playerInfoCanvas.gameObject.SetActive(true);
 
     }
 }
