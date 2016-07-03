@@ -49,10 +49,10 @@
 				// sample the texture
 				fixed4 col = tex2D(_MainTex, i.uv);
 
-				float cx = i.uv[0] + .5 * sin(_Time[2]);
-				float cy = i.uv[1] + .5 * cos(_Time[3]);
+				float cx = i.uv[0] + .5 * sin(_Time[1]);
+				float cy = i.uv[1] + .5 * cos(_Time[2]);
 
-				float v = sin(sqrt(500 * (cx * cx + cy * cy) + 1 + _Time[1]));
+				float v = sin(sqrt(250 * (cx * cx + cy * cy) + 1 + _Time[0]));
 
 				col.r = v;
 
