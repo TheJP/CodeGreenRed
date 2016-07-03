@@ -51,8 +51,8 @@
 
 				float v = sin(10 * (i.uv[0] * sin(_Time / 2.0) + i.uv[1] * cos(_Time / 3.0)) + _Time[1]);  
 
-				float cx = i.uv[0] + .5 * sin(_Time[1]);
-				float cy = i.uv[1] + .5 * cos(_Time[2]);
+				float cx = i.uv[0] + .5 * sin(_Time[0]);
+				float cy = i.uv[1] + .5 * cos(_Time[0]);
 
 				v += sin(sqrt(100 * (cx * cx + cy * cy) + 1 + _Time[0]));
 
@@ -74,8 +74,9 @@
     	//		v += sin((c.y + _Time[1])/2.0);
     	//		v += sin((c.x + c.y + _Time[1])/2.0);
 
-				col.r = sin(v * 3.1418) / 3;
-				col.g = cos(v * 3.1418) / 3;
+				col.r = sin(v * 3.1418) / (2 * (2.0 + sin(_Time[3])) /5);
+				col.g = cos(v * 3.1418) / (2 * (2.0 + sin(_Time[3])) /5);
+				col *= 0.3;
 
 				// apply fog
 				UNITY_APPLY_FOG(i.fogCoord, col);
