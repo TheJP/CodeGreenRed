@@ -81,7 +81,23 @@ public class Player : MonoBehaviour
     /// <param name="amount">Amount that the snake will shrink meassured in tiles.</param>
     public void Shrink(int amount = 1)
     {
-        throw new System.NotImplementedException();
+        if (Dead) { return; }
+        if (grow > 0) { --grow; }
+        else if (BodyPositions.Count <= 1) { Die(); }
+        else
+        {
+            BodyPositions.Dequeue();
+            if (animationHasToGrow > 0) { --animationHasToGrow; }
+            else
+            {
+                for (int i = 0; i < BodyElementsPerTile; ++i)
+                {
+                    Destroy(body[body.Count - 1], 0.2f);
+                    body.RemoveAt(body.Count - 1);
+                    bodyAnimation.RemoveAt(bodyAnimation.Count - 1);
+                }
+            }
+        }
     }
 
     /// <summary>Makes the snake move by the given amount.</summary>
@@ -162,12 +178,14 @@ public class Player : MonoBehaviour
 
     public void TurnLeft()
     {
+        if (Dead) { return; }
         Direction = Direction.TurnLeft();
         arrow.GetComponent<Arrow>().TurnTo(Direction.Angle());
     }
 
     public void TurnRight()
     {
+        if (Dead) { return; }
         Direction = Direction.TurnRight();
         arrow.GetComponent<Arrow>().TurnTo(Direction.Angle());
     }
