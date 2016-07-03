@@ -1186,17 +1186,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1997401176}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4983252be81debc4984d8cbb01cb7909, type: 3}
+  m_Script: {fileID: 11500000, guid: 949076a79ce3bc34aa62e4251c920c3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cards: []
-  cardPrefab: {fileID: 180368, guid: a8b6a23d9513c38428a57e22759b6419, type: 2}
-  CardSpawnPositions:
-  - {fileID: 1422519572}
-  - {fileID: 822790140}
-  - {fileID: 1715977821}
-  - {fileID: 252274988}
-  - {fileID: 1630569172}
+  SpawnPositionsParent: {fileID: 1625747329}
   minCards: 1
 --- !u!4 &1997401178
 Transform:
@@ -1221,7 +1215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cedbec1047f4c9438860c82396b9e42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turnLeftPrefab: {fileID: 193092, guid: 5c2cd71c5c78a424db0934e28abb6b87, type: 2}
+  turnLeftPrefab: {fileID: 131218, guid: 774f3313b37fbe64b8c6a996b4faa50b, type: 2}
   turnRightPrefab: {fileID: 107208, guid: 4df0993ca910da74cabaaf61bb57f874, type: 2}
   commonCardsPrefabs: []
   rareCardsPrefab: []

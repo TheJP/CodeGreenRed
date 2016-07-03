@@ -9,8 +9,8 @@ using Assets.Scripts;
 public class DraftManager : MonoBehaviour
 {
     public List<GameObject> cards;
-    public GameObject cardPrefab;
-    public Transform[] CardSpawnPositions;
+    public Transform SpawnPositionsParent;
+    private Transform[] CardSpawnPositions;
     /// <summary>
     /// after minCards is reached, every player has chosen a card in the current draft
     /// </summary>
@@ -44,7 +44,9 @@ public class DraftManager : MonoBehaviour
         Debug.Assert(gamestate != null);
         gamestate.State = Mode.OPEN;
         TimeLeft = 4;
-        
+
+        CardSpawnPositions = SpawnPositionsParent.GetComponentsInChildren<Transform>();
+
         //DebugTestDraft();
     }
 
