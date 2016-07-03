@@ -134,7 +134,7 @@ public class CardManager : MonoBehaviour
     }
 }
 
-public enum CardType { MOVE, RIGHT, LEFT, DEBUG }
+public enum CardType { MOVE, RIGHT, LEFT, DEBUG, Cheese }
 /// <summary>
 /// Enables us to select cardtype in unity Editor
 /// </summary>
