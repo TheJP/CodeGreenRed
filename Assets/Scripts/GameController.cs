@@ -62,9 +62,4 @@ public class GameController : MonoBehaviour
         gamestate.State = Mode.OpenPack;
 
     }
-
-
-
-
-
 }
