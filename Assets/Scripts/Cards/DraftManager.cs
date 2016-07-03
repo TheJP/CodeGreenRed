@@ -8,32 +8,37 @@ using Assets.Scripts;
 
 public class DraftManager : MonoBehaviour
 {
+    //unity editor dependencies
     public List<GameObject> cards;
     public Transform SpawnPositionsParent;
     private Transform[] CardSpawnPositions;
-    /// <summary>
-    /// after minCards is reached, every player has chosen a card in the current draft
-    /// </summary>
-    public int minCards = 1;
 
 
-    private GameObject selected = null;
-    private Vector2 dragStartPos; //point in world coordinates where the mouse was originally clicked
-    private Vector3 mouseLast = Vector3.zero;
-    private CardEffectFactory cardEffectFactory = new CardEffectFactory();
+    //stuff for sharing gamestate infos
     /// <summary>
     /// time left for the user to chose a card
     /// </summary>
     public float TimeLeft { get; private set; }
 
+    private GameObject selected = null;
+    private Vector2 dragStartPos; //point in world coordinates where the mouse was originally clicked
+    private Vector3 mouseLast = Vector3.zero;
+    private CardEffectFactory cardEffectFactory = new CardEffectFactory();
+    private int currentPlayer = 0;
+    /// <summary>
+    /// boosterpacks which must be opened during this draft round, if 0 => switch to playing mode
+    /// </summary>
     private Queue<BoosterPack> toOpen;
     /// <summary>
     /// while are choosing their cards from the booster or playing they should not be disturbed ; OPEN => we are in control :)
     /// </summary>
     private GameState gamestate;
-
-    private CardEffectParamerters effectParams;
+    private Grid grid;
     private DraftResult draftResult;
+    /// <summary>
+    /// after minCards is reached, every player has chosen a card in the current draft
+    /// </summary>
+    private int minCards = 1; //it's a hack for now
 
 
     // Use this for initialization
@@ -42,7 +47,6 @@ public class DraftManager : MonoBehaviour
         addFactories();
         gamestate = GetComponent<GameState>();
         Debug.Assert(gamestate != null);
-        gamestate.State = Mode.Open;
         TimeLeft = 4;
 
         CardSpawnPositions = SpawnPositionsParent.GetComponentsInChildren<Transform>();
@@ -50,10 +54,10 @@ public class DraftManager : MonoBehaviour
         //DebugTestDraft();
     }
 
-    public void StartDraft(List<BoosterPack> packs, CardEffectParamerters cardEffectParams)
+    public void StartDraft(List<BoosterPack> packs, Grid grid)
     {
         toOpen = new Queue<BoosterPack>(packs);
-        this.effectParams = cardEffectParams;
+        this.grid = grid;
         draftResult = new DraftResult();
     }
 
@@ -61,7 +65,7 @@ public class DraftManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gamestate.State == Mode.Open)
+        if (gamestate.State == Mode.OpenPack)
         {
             if (toOpen.Count > 0)
             {
@@ -76,6 +80,8 @@ public class DraftManager : MonoBehaviour
                 cards.ForEach(c => Destroy(c));
                 cards.Clear();
                 gamestate.State = Mode.Playing;
+                GetComponent<PlayingStateController>().DraftResult = draftResult;
+                draftResult = new DraftResult();
             }
 
         }
@@ -133,7 +139,6 @@ public class DraftManager : MonoBehaviour
                 {
                     //if he did, highlight it
                     Debug.Log("You selected the " + selected.name); // ensure you picked right object
-                    //selected.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true; //This is very hacky
                     selected.GetComponent<Card>().Highlight(true);
 
                 }
@@ -141,7 +146,7 @@ public class DraftManager : MonoBehaviour
         }
         if (Input.GetMouseButtonUp(0))
         {
-            //if selected, deselect card
+            //if selected, deselect card and add it to chosencards if necessary
             if (selected != null)
             {
                 OnDeselectCard();
@@ -176,7 +181,6 @@ public class DraftManager : MonoBehaviour
     private void OnDeselectCard()
     {
         //remove outline
-        //selected.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
         selected.GetComponent<Card>().Highlight(false);
 
         //if mouse pointer is still on the card, user chose it
@@ -187,15 +191,17 @@ public class DraftManager : MonoBehaviour
             if (hit.transform == selected.transform)
             {
                 //save effect of selected Card
+                var castingPlayer = NextPlayer();
+                var cardeffectParams = new CardEffectParamerters(castingPlayer, grid);
                 var effect = selected.GetComponent<Card>().type.GetEffectType();
-                draftResult.chosenCards.Enqueue(cardEffectFactory.create(effect, effectParams));
+                draftResult.chosenCards.Enqueue(cardEffectFactory.create(effect, cardeffectParams));
                 selectedCardChosenAnimation();
                 //remove it from cached list
                 cards.Remove(selected);
                 //then destroy it
                 Destroy(selected);
                 selected = null;
-                if (cards.Count <= minCards) { gamestate.State = Mode.Open; }
+                if (cards.Count <= minCards) { gamestate.State = Mode.OpenPack; }
                 ResetTimer();
             }
         }
@@ -203,15 +209,27 @@ public class DraftManager : MonoBehaviour
         selected = null;
     }
 
+    private PlayerInfo NextPlayer()
+    {
+        var info = gamestate.Players[currentPlayer];
+        currentPlayer = (currentPlayer + 1) % gamestate.Players.Count;
+        return info;
+    }
+
     //debugging routines
     private void DebugExecuteOnKeyPress()
     {
+        var player = gamestate.Players[currentPlayer];
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            draftResult.chosenCards.Dequeue().Execute();
-            effectParams.CastingPlayer.Grow();
-
-            effectParams.CastingPlayer.Move();
+            player.ChosenCards.Dequeue().Execute();
+            player.Snake.Grow();
+            player.Snake.Move();
+        }
+        if (Input.GetKeyDown(KeyCode.N))
+        {   
+            //switch player
+            NextPlayer();
         }
     }
     //private void DebugTestDraft()

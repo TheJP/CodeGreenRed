@@ -22,7 +22,7 @@ namespace Assets.Scripts.Cards.CardEffects
 
         public static Instantiate<CardEffect> GetFactory()
         {
-            return (p => new TurnRightEffect(p.CastingPlayer));
+            return (p => new TurnRightEffect(p.CastingSnake));
         }
     }
 }

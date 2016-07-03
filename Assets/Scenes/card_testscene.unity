@@ -1075,6 +1075,7 @@ GameObject:
   - 114: {fileID: 1997401179}
   - 114: {fileID: 1997401180}
   - 114: {fileID: 1997401181}
+  - 114: {fileID: 1997401182}
   m_Layer: 0
   m_Name: Controller
   m_TagString: Untagged
@@ -1095,7 +1096,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cards: []
   SpawnPositionsParent: {fileID: 1625747329}
-  minCards: 1
 --- !u!4 &1997401178
 Transform:
   m_ObjectHideFlags: 0
@@ -1120,7 +1120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   turnLeftPrefab: {fileID: 190026, guid: 5c2cd71c5c78a424db0934e28abb6b87, type: 2}
-  turnRightPrefab: {fileID: 131218, guid: 774f3313b37fbe64b8c6a996b4faa50b, type: 2}
+  turnRightPrefab: {fileID: 133756, guid: 4df0993ca910da74cabaaf61bb57f874, type: 2}
   commonCardsPrefabs:
   - {fileID: 131218, guid: 774f3313b37fbe64b8c6a996b4faa50b, type: 2}
   rareCardsPrefab:
@@ -1150,3 +1150,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4a300e5715c009408f3bb8c6a1586bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  State: 0
+--- !u!114 &1997401182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1997401176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b9cd9a547ac673419cd42f0664f2653, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WaitForAnimationSeconds: 0.5

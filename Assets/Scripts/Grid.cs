@@ -60,7 +60,10 @@ public class Grid : MonoBehaviour
         this.walls = walls;
         if(wallContainer == null) { return; }
         //Remove all old walls
-        while (wallContainer.transform.childCount > 0) { Destroy(wallContainer.transform.GetChild(0)); }
+        for (int i = wallContainer.transform.childCount - 1; i >= 0; --i)
+        {
+            Destroy(wallContainer.transform.GetChild(i).gameObject);
+        }
         //Add new walls
         for (int y = 0; y < height; ++y)
         {
