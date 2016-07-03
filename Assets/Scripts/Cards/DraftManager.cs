@@ -9,8 +9,8 @@ using Assets.Scripts;
 public class DraftManager : MonoBehaviour
 {
     public List<GameObject> cards;
-    public GameObject cardPrefab;
-    public Transform[] CardSpawnPositions;
+    public Transform SpawnPositionsParent;
+    private Transform[] CardSpawnPositions;
     /// <summary>
     /// after minCards is reached, every player has chosen a card in the current draft
     /// </summary>
@@ -21,6 +21,10 @@ public class DraftManager : MonoBehaviour
     private Vector2 dragStartPos; //point in world coordinates where the mouse was originally clicked
     private Vector3 mouseLast = Vector3.zero;
     private CardEffectFactory cardEffectFactory = new CardEffectFactory();
+    /// <summary>
+    /// time left for the user to chose a card
+    /// </summary>
+    public float TimeLeft { get; private set; }
 
     private Queue<BoosterPack> toOpen;
     /// <summary>
@@ -38,6 +42,11 @@ public class DraftManager : MonoBehaviour
         addFactories();
         gamestate = GetComponent<GameState>();
         Debug.Assert(gamestate != null);
+        gamestate.State = Mode.Open;
+        TimeLeft = 4;
+
+        CardSpawnPositions = SpawnPositionsParent.GetComponentsInChildren<Transform>();
+
         //DebugTestDraft();
     }
 
@@ -52,30 +61,48 @@ public class DraftManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gamestate.State == GameState.Mode.OPEN)
+        if (gamestate.State == Mode.Open)
         {
-            //we're in control
             if(toOpen.Count > 0)
             {
                 //open booster and let them users choose some cards
-                Debug.Log(toOpen.Count);
                 var booster = toOpen.Dequeue();
                 OpenPackAnimation(booster);
-                gamestate.State = GameState.Mode.CHOOSING;
+                gamestate.State = Mode.Choosing;
             }
             else
             {
                 //we're done with drafting, time to play
-                gamestate.State = GameState.Mode.PLAYING;
+                cards.ForEach(c => Destroy(c));
+                cards.Clear();
+                gamestate.State = Mode.Playing;
             }
 
         }
-       
 
-        CheckMouseSelection();
+        if( gamestate.State == Mode.Choosing)
+        {
+            //we're in control
+            TimeLeft -= Time.deltaTime;
+            if (TimeLeft <= 0) { TimeIsUp(); }
+
+            CheckMouseSelection();
+        }
+
+
         //HearthStoneDragRotationTrollolol();
         DebugExecuteOnKeyPress();
     }
+
+    /// <summary>
+    /// user exceeded time limit for chosing a card, chose one at random
+    /// </summary>
+    public void TimeIsUp()
+    {
+        ResetTimer();
+    }
+
+    private void ResetTimer() { TimeLeft = 4; }
 
     private void OpenPackAnimation(BoosterPack pack)
     {
@@ -166,9 +193,8 @@ public class DraftManager : MonoBehaviour
                 //then destroy it
                 Destroy(selected);
                 selected = null;
-                Debug.Log("type " + effect);
-
-                if (cards.Count <= minCards) { gamestate.State = GameState.Mode.OPEN; }
+                if (cards.Count <= minCards) { gamestate.State = Mode.Open; }
+                ResetTimer();
             }
         }
 
