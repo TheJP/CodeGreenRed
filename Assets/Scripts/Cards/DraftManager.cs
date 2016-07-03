@@ -12,6 +12,8 @@ public class DraftManager : MonoBehaviour
     //unity editor dependencies
     public List<GameObject> cards;
     public Transform SpawnPositionsParent;
+    //how long before chosing card at random
+    public int thinkingTime = 6;
     private Transform[] CardSpawnPositions;
 
     public GameObject playerText;
@@ -50,7 +52,7 @@ public class DraftManager : MonoBehaviour
         addFactories();
         gamestate = GetComponent<GameState>();
         Debug.Assert(gamestate != null);
-        TimeLeft = 4;
+        ResetTimer();
         playerText.GetComponent<Text>().text = "Player : " + (currentPlayer + 1) + " 's turn ";
         CardSpawnPositions = SpawnPositionsParent.GetComponentsInChildren<Transform>();
 
@@ -138,7 +140,7 @@ public class DraftManager : MonoBehaviour
         }
     }
 
-    private void ResetTimer() { TimeLeft = 4; }
+    private void ResetTimer() { TimeLeft = thinkingTime; }
 
     private void OpenPackAnimation(BoosterPack pack)
     {
