@@ -5,6 +5,7 @@ using Assets.Scripts.Cards.CardEffects;
 using Assets.Scripts.Cards;
 using System;
 using Assets.Scripts;
+using UnityEngine.UI;
 
 public class DraftManager : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class DraftManager : MonoBehaviour
     public List<GameObject> cards;
     public Transform SpawnPositionsParent;
     private Transform[] CardSpawnPositions;
+
+    public GameObject playerText;
 
 
     //stuff for sharing gamestate infos
@@ -48,7 +51,7 @@ public class DraftManager : MonoBehaviour
         gamestate = GetComponent<GameState>();
         Debug.Assert(gamestate != null);
         TimeLeft = 4;
-
+        playerText.GetComponent<Text>().text = "Player : " + (currentPlayer + 1) + " 's turn ";
         CardSpawnPositions = SpawnPositionsParent.GetComponentsInChildren<Transform>();
 
         //DebugTestDraft();
@@ -105,6 +108,24 @@ public class DraftManager : MonoBehaviour
     /// </summary>
     public void TimeIsUp()
     {
+        //TODO: choose card at random.
+
+        var selected = cards[0];
+
+        //save effect of selected Card
+        var castingPlayer = NextPlayer();
+        var cardeffectParams = new CardEffectParamerters(castingPlayer, grid);
+        var effect = selected.GetComponent<Card>().type.GetEffectType();
+        draftResult.chosenCards.Enqueue(cardEffectFactory.create(effect, cardeffectParams));
+        selectedCardChosenAnimation();
+        //remove it from cached list
+        cards.Remove(selected);
+        //then destroy it
+        Destroy(selected);
+        selected = null;
+        if (cards.Count <= minCards) { gamestate.State = Mode.OpenPack; }
+        
+
         ResetTimer();
     }
 
@@ -126,6 +147,8 @@ public class DraftManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            
+            
             //if the user pressed mouse check if he selected a card
             var mouse = Input.mousePosition;
             dragStartPos = Camera.main.ScreenToWorldPoint(mouse);
@@ -150,6 +173,8 @@ public class DraftManager : MonoBehaviour
             if (selected != null)
             {
                 OnDeselectCard();
+
+                playerText.GetComponent<Text>().text = "Player : " + (currentPlayer + 1) + " 's turn ";
             }
         }
     }
@@ -230,6 +255,7 @@ public class DraftManager : MonoBehaviour
         {   
             //switch player
             NextPlayer();
+
         }
     }
     //private void DebugTestDraft()
