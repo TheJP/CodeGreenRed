@@ -113,22 +113,22 @@ public class Player : MonoBehaviour
         var canceled = 0;
         for (int i = 0; i < amount; ++i)
         {
+            var targetPosition = Position + Direction.Movement();
+            //Wrap around the edges of the grid
+            if (targetPosition.X < 0) { targetPosition = new Point(targetPosition.X + Grid.width, targetPosition.Y); }
+            if (targetPosition.X >= Grid.width) { targetPosition = new Point(targetPosition.X - Grid.width, targetPosition.Y); }
+            if (targetPosition.Y < 0) { targetPosition = new Point(targetPosition.X, targetPosition.Y + Grid.height); }
+            if (targetPosition.Y >= Grid.height) { targetPosition = new Point(targetPosition.X, targetPosition.Y - Grid.height); }
             //Trigger movement event
-            if(BeforeMove != null)
+            if (BeforeMove != null)
             {
-                var targetPosition = Position + Direction.Movement();
                 var arguments = new MoveEventArguments(this, targetPosition);
                 BeforeMove(arguments);
                 if (Dead) { return; }
                 if (arguments.Canceled) { ++canceled; continue; }
             }
             //Move player
-            Position += Direction.Movement();
-            //Wrap around the edges of the grid
-            if (Position.X < 0) { Position = new Point(Position.X + Grid.width, Position.Y); }
-            if (Position.X >= Grid.width) { Position = new Point(Position.X - Grid.width, Position.Y); }
-            if (Position.Y < 0) { Position = new Point(Position.X, Position.Y + Grid.height); }
-            if (Position.Y >= Grid.height) { Position = new Point(Position.X, Position.Y - Grid.height); }
+            Position = targetPosition;
             BodyPositions.Enqueue(Position);
             headAnimation.Enqueue(Position);
             if (grow > 0) { --grow; ++animationHasToGrow; }
