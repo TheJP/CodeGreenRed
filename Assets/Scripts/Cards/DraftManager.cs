@@ -107,8 +107,6 @@ public class DraftManager : MonoBehaviour
     /// </summary>
     public void TimeIsUp()
     {
-        //TODO: choose card at random.
-
         var selected = cards[0];
 
         //save effect of selected Card
