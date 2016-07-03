@@ -146,8 +146,6 @@ public class DraftManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            
-            
             //if the user pressed mouse check if he selected a card
             var mouse = Input.mousePosition;
             dragStartPos = Camera.main.ScreenToWorldPoint(mouse);
