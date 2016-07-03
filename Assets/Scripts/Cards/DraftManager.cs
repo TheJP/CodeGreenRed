@@ -42,7 +42,7 @@ public class DraftManager : MonoBehaviour
         addFactories();
         gamestate = GetComponent<GameState>();
         Debug.Assert(gamestate != null);
-        gamestate.State = Mode.OPEN;
+        gamestate.State = Mode.Open;
         TimeLeft = 4;
 
         CardSpawnPositions = SpawnPositionsParent.GetComponentsInChildren<Transform>();
@@ -61,27 +61,26 @@ public class DraftManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gamestate.State == Mode.OPEN)
+        if (gamestate.State == Mode.Open)
         {
             if(toOpen.Count > 0)
             {
                 //open booster and let them users choose some cards
-                Debug.Log(toOpen.Count);
                 var booster = toOpen.Dequeue();
                 OpenPackAnimation(booster);
-                gamestate.State = Mode.CHOOSING;
+                gamestate.State = Mode.Choosing;
             }
             else
             {
                 //we're done with drafting, time to play
                 cards.ForEach(c => Destroy(c));
                 cards.Clear();
-                gamestate.State = Mode.PLAYING;
+                gamestate.State = Mode.Playing;
             }
 
         }
 
-        if( gamestate.State == Mode.CHOOSING)
+        if( gamestate.State == Mode.Choosing)
         {
             //we're in control
             TimeLeft -= Time.deltaTime;
@@ -194,7 +193,7 @@ public class DraftManager : MonoBehaviour
                 //then destroy it
                 Destroy(selected);
                 selected = null;
-                if (cards.Count <= minCards) { gamestate.State = Mode.OPEN; }
+                if (cards.Count <= minCards) { gamestate.State = Mode.Open; }
                 ResetTimer();
             }
         }

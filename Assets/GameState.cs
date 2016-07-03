@@ -7,5 +7,5 @@ using System.Collections;
 public class GameState : MonoBehaviour {
     public Mode State { get; set; }
 }
-public enum Mode { OPEN, CHOOSING, PLAYING };
+public enum Mode { Open, Choosing, Playing };
 
