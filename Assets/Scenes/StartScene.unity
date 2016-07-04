@@ -774,7 +774,7 @@ Transform:
   m_LocalScale: {x: 187.36609, y: 126.04613, z: 90.84417}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
 --- !u!1 &678128618
 GameObject:
   m_ObjectHideFlags: 0
@@ -961,7 +961,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 731039700}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -18.4, y: 4.8, z: 0}
+  m_LocalPosition: {x: -3, y: 5.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1399450148}
@@ -1015,7 +1015,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1046129225}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -18.4, y: -0.29999995, z: 0}
+  m_LocalPosition: {x: -3, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1399450148}
@@ -1173,52 +1173,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
---- !u!1001 &1352170866
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 449206, guid: e588f0ec1c692c74385dbf0d96c26b77, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 449206, guid: e588f0ec1c692c74385dbf0d96c26b77, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 449206, guid: e588f0ec1c692c74385dbf0d96c26b77, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 449206, guid: e588f0ec1c692c74385dbf0d96c26b77, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 449206, guid: e588f0ec1c692c74385dbf0d96c26b77, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 449206, guid: e588f0ec1c692c74385dbf0d96c26b77, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 449206, guid: e588f0ec1c692c74385dbf0d96c26b77, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 449206, guid: e588f0ec1c692c74385dbf0d96c26b77, type: 2}
-      propertyPath: m_RootOrder
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 127458, guid: e588f0ec1c692c74385dbf0d96c26b77, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: e588f0ec1c692c74385dbf0d96c26b77, type: 2}
-  m_IsPrefabParent: 0
 --- !u!1 &1399450147
 GameObject:
   m_ObjectHideFlags: 0
@@ -1241,7 +1195,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1399450147}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 16.5, y: 2.6, z: -20}
+  m_LocalPosition: {x: -1.5, y: 2, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 948574106}
@@ -1249,7 +1203,7 @@ Transform:
   - {fileID: 731039701}
   - {fileID: 1046129226}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
 --- !u!1 &1420206874
 GameObject:
   m_ObjectHideFlags: 0
@@ -1433,7 +1387,7 @@ RectTransform:
   - {fileID: 248036995}
   - {fileID: 1158131466}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -1618,7 +1572,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4a300e5715c009408f3bb8c6a1586bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  State: 4
 --- !u!114 &1555403806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1631,7 +1584,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WaitForAnimationSeconds: 0.5
-  delayAfterPlay: 5
+  delayAfterPlay: 3
 --- !u!4 &1555403807
 Transform:
   m_ObjectHideFlags: 0
@@ -1683,7 +1636,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cards: []
   SpawnPositionsParent: {fileID: 1399450148}
-  thinkingTime: 6
+  thinkingTime: 16
   playerText: {fileID: 576621448}
 --- !u!114 &1555403810
 MonoBehaviour:
@@ -1698,7 +1651,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerInfoCanvas: {fileID: 1509336408}
   menu: {fileID: 1801925740}
-  waitSecondsUnitMainMenu: 2
+  waitSecondsUnitMainMenu: 1
 --- !u!1 &1801925738
 GameObject:
   m_ObjectHideFlags: 0
