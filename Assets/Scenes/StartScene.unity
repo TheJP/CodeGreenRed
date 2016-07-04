@@ -1584,7 +1584,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WaitForAnimationSeconds: 0.5
-  delayAfterPlay: 5
+  delayAfterPlay: 3
 --- !u!4 &1555403807
 Transform:
   m_ObjectHideFlags: 0
@@ -1636,7 +1636,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cards: []
   SpawnPositionsParent: {fileID: 1399450148}
-  thinkingTime: 15
+  thinkingTime: 16
   playerText: {fileID: 576621448}
 --- !u!114 &1555403810
 MonoBehaviour:
@@ -1651,7 +1651,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerInfoCanvas: {fileID: 1509336408}
   menu: {fileID: 1801925740}
-  waitSecondsUnitMainMenu: 2
+  waitSecondsUnitMainMenu: 1
 --- !u!1 &1801925738
 GameObject:
   m_ObjectHideFlags: 0
