@@ -212,6 +212,17 @@ public class Player : MonoBehaviour
         if(AfterDeath != null) { AfterDeath(this); }
     }
 
+    /// <summary>Controls, if this snake is selected or not.</summary>
+    /// <param name="value"></param>
+    public void Select(bool value)
+    {
+        foreach(var particle in body.Select(b => b.GetComponent<ParticleSystem>()))
+        {
+            if (value) { particle.Play(); }
+            else { particle.Stop(); }
+        }
+    }
+
     void Start()
     {
         //Spawn head

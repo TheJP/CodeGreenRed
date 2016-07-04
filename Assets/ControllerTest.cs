@@ -26,5 +26,7 @@ public class ControllerTest : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2)) { player.Move(2); }
         if (Input.GetKeyDown(KeyCode.U)) { grid.SpawnRandomPowerup(); }
         if (Input.GetKeyDown(KeyCode.S)) { player.Shrink(); }
+        if (Input.GetKeyDown(KeyCode.Y)) { player.Select(true); }
+        if (Input.GetKeyDown(KeyCode.X)) { player.Select(false); }
     }
 }
