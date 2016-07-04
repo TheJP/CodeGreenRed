@@ -42,6 +42,8 @@ MonoBehaviour:
   arrowPrefab: {fileID: 131464, guid: 367d4c35c3ab8b347aea0953e9bfc162, type: 2}
   playerHeadPrefab: {fileID: 187962, guid: 026a2861cd79e9b41a0b325675857ebc, type: 2}
   playerBodyPrefab: {fileID: 177182, guid: eae566db28e762e40aacd906d57fad4f, type: 2}
+  explodeParticlesPrefab: {fileID: 142752, guid: 7206f21f74ce12249ac2f168da164147,
+    type: 2}
   greenMaterial: {fileID: 2100000, guid: c2412de803048704ab68d05e6d795700, type: 2}
   redMaterial: {fileID: 2100000, guid: ce62d55563def1d4383d34eedc2a0d5d, type: 2}
   playerSprites:

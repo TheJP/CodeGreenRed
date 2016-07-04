@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     public GameObject arrowPrefab;
     public GameObject playerHeadPrefab;
     public GameObject playerBodyPrefab;
+    public GameObject explodeParticlesPrefab;
     public Material greenMaterial;
     public Material redMaterial;
     public Sprite[] playerSprites;
@@ -95,7 +96,14 @@ public class Player : MonoBehaviour
             {
                 for (int i = 0; i < BodyElementsPerTile; ++i)
                 {
-                    Destroy(body[body.Count - 1], 0.2f);
+                    var bodyPart = body[body.Count - 1];
+                    //Create explosion
+                    var explosion = (GameObject)Instantiate(explodeParticlesPrefab, bodyPart.transform.position, Quaternion.identity);
+                    explosion.transform.parent = bodyPart.transform;
+                    explosion.GetComponent<ParticleSystem>().startColor = Team == Teams.Green ? greenMaterial.color : redMaterial.color;
+                    //Destroy body
+                    bodyPart.GetComponent<SpriteRenderer>().sprite = null;
+                    Destroy(bodyPart, 1f);
                     body.RemoveAt(body.Count - 1);
                     bodyAnimation.RemoveAt(bodyAnimation.Count - 1);
                 }
