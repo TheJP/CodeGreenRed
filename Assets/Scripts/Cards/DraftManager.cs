@@ -290,10 +290,11 @@ public class DraftManager : MonoBehaviour
         cardEffectFactory.addFactoryMethod<WeddingEffect>(WeddingEffect.GetFactory());
         cardEffectFactory.addFactoryMethod<NukeEffect>(NukeEffect.GetFactory());
         cardEffectFactory.addFactoryMethod<FishEffect>(FishEffect.GetFactory());
+        cardEffectFactory.addFactoryMethod<UnicornEffect>(UnicornEffect.GetFactory());
     }
 }
 
-public enum CardType { Move, Right, Left, Debug, Cheese, Obama, Spoiler, Hamster, Teddy, Maccaroni, Wedding, Nuke, Fish }
+public enum CardType { Move, Right, Left, Debug, Cheese, Obama, Spoiler, Hamster, Teddy, Maccaroni, Wedding, Nuke, Fish, Unicorn }
 /// <summary>
 /// Enables us to select cardtype in unity Editor
 /// </summary>
@@ -313,7 +314,8 @@ public static class CardTypeExtension
         { CardType.Maccaroni, typeof(MaccaroniEffect) },
         { CardType.Wedding, typeof(WeddingEffect) },
         { CardType.Nuke, typeof(NukeEffect) },
-        { CardType.Fish, typeof(FishEffect) }
+        { CardType.Fish, typeof(FishEffect) },
+        { CardType.Unicorn, typeof(UnicornEffect) }
     };
     public static Type GetEffectType(this CardType cardType)
     {

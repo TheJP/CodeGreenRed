@@ -1621,6 +1621,7 @@ MonoBehaviour:
   - {fileID: 121326, guid: 30e6c1e3bd6c3074aa9ac50220559723, type: 2}
   - {fileID: 199778, guid: f0b34374f90e7c74ab81bd65dd686dae, type: 2}
   - {fileID: 113202, guid: 7bd635e149e2fe144902c6e70a4cca9c, type: 2}
+  - {fileID: 184374, guid: 305829b87b8e7174e828dd089d966d23, type: 2}
   cardsInBooster: 5
   nRounds: 4
 --- !u!114 &1555403809
