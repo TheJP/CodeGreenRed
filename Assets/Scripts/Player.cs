@@ -216,7 +216,7 @@ public class Player : MonoBehaviour
     /// <param name="value"></param>
     public void Select(bool value)
     {
-        foreach(var particle in body.Select(b => b.GetComponent<ParticleSystem>()))
+        foreach (var particle in body.Concat(new[] { head }).Select(b => b.GetComponent<ParticleSystem>()))
         {
             if (value) { particle.Play(); }
             else { particle.Stop(); }
