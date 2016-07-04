@@ -87,7 +87,7 @@ public class Player : MonoBehaviour
     {
         if (Dead) { return; }
         if (grow > 0) { --grow; }
-        else if (BodyPositions.Count <= 1) { Die(); }
+        else if (BodyPositions.Count <= 1) { Dead = true; Die(); }
         else
         {
             BodyPositions.Dequeue();
@@ -206,14 +206,12 @@ public class Player : MonoBehaviour
     /// <summary>Kills this snake.</summary>
     public void Die()
     {
+        while(BodyPositions.Count > 1) { Shrink(); }
         Dead = true;
         Destroy(head, 0.2f);
         arrow = null;
         head = null;
-        foreach(var bodyPart in body.ToList()) { Destroy(bodyPart, 0.2f); }
-        body.Clear();
         headAnimation.Clear();
-        bodyAnimation.Clear();
         grow = 0;
         animationHasToGrow = 0;
         BodyPositions.Clear();
