@@ -82,8 +82,7 @@ public class Player : MonoBehaviour
     }
 
     /// <summary>Makes the snake shorter by the given amount.</summary>
-    /// <param name="amount">Amount that the snake will shrink meassured in tiles.</param>
-    public void Shrink(int amount = 1)
+    public void Shrink()
     {
         if (Dead) { return; }
         if (grow > 0) { --grow; }
@@ -98,17 +97,24 @@ public class Player : MonoBehaviour
                 {
                     var bodyPart = body[body.Count - 1];
                     //Create explosion
-                    var explosion = (GameObject)Instantiate(explodeParticlesPrefab, bodyPart.transform.position, Quaternion.identity);
-                    explosion.transform.parent = bodyPart.transform;
-                    explosion.GetComponent<ParticleSystem>().startColor = Team == Teams.Green ? greenMaterial.color : redMaterial.color;
+                    ExplodeSprite(bodyPart);
                     //Destroy body
-                    bodyPart.GetComponent<SpriteRenderer>().sprite = null;
-                    Destroy(bodyPart, 1f);
                     body.RemoveAt(body.Count - 1);
                     bodyAnimation.RemoveAt(bodyAnimation.Count - 1);
                 }
             }
         }
+    }
+
+    /// <summary>Explodes a GameObject, which has a SpireteRenderer attached.</summary>
+    /// <param name="sprite"></param>
+    private void ExplodeSprite(GameObject sprite)
+    {
+        var explosion = (GameObject)Instantiate(explodeParticlesPrefab, sprite.transform.position, Quaternion.identity);
+        explosion.transform.parent = sprite.transform;
+        explosion.GetComponent<ParticleSystem>().startColor = Team == Teams.Green ? greenMaterial.color : redMaterial.color;
+        sprite.GetComponent<SpriteRenderer>().sprite = null;
+        Destroy(sprite, 1f);
     }
 
     /// <summary>Makes the snake move by the given amount.</summary>
@@ -208,7 +214,8 @@ public class Player : MonoBehaviour
     {
         while(BodyPositions.Count > 1) { Shrink(); }
         Dead = true;
-        Destroy(head, 0.2f);
+        ExplodeSprite(head);
+        Destroy(arrow);
         arrow = null;
         head = null;
         headAnimation.Clear();
