@@ -1638,7 +1638,7 @@ MonoBehaviour:
   cards: []
   SpawnPositionsParent: {fileID: 1399450148}
   thinkingTime: 16
-  playerText: {fileID: 576621448}
+  playerText: {fileID: 576621450}
 --- !u!114 &1555403810
 MonoBehaviour:
   m_ObjectHideFlags: 0

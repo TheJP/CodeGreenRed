@@ -14,10 +14,8 @@ public class DraftManager : MonoBehaviour
     public Transform SpawnPositionsParent;
     //how long before chosing card at random
     public int thinkingTime = 6;
-    private Transform[] CardSpawnPositions;
-
-    public GameObject playerText;
-
+    //UI text that indicates which is the current player
+    public Text playerText;
 
     //stuff for sharing gamestate infos
     /// <summary>
@@ -25,6 +23,7 @@ public class DraftManager : MonoBehaviour
     /// </summary>
     public float TimeLeft { get; private set; }
 
+    private Transform[] CardSpawnPositions;
     private GameObject selected = null;
     private Vector2 dragStartPos; //point in world coordinates where the mouse was originally clicked
     private Vector3 mouseLast = Vector3.zero;
@@ -53,7 +52,7 @@ public class DraftManager : MonoBehaviour
         gamestate = GetComponent<GameState>();
         Debug.Assert(gamestate != null);
         ResetTimer();
-        playerText.GetComponent<Text>().text = "Player : " + (currentPlayer + 1) + " 's turn ";
+        playerText.text = "Player : " + (currentPlayer + 1) + " 's turn ";
         CardSpawnPositions = SpawnPositionsParent.GetComponentsInChildren<Transform>();
 
         //DebugTestDraft();
@@ -64,6 +63,9 @@ public class DraftManager : MonoBehaviour
         toOpen = new Queue<BoosterPack>(packs);
         this.grid = grid;
         draftResult = new DraftResult();
+        currentPlayer = 0;
+        gamestate.CurrPlayer = gamestate.Players[currentPlayer];
+        OnCurrentPlayerChange();        
     }
 
 
@@ -84,11 +86,12 @@ public class DraftManager : MonoBehaviour
             {
                 //we're done with drafting, time to play
                 GetComponent<PlayingStateController>().DraftResult = draftResult;
+                gamestate.CurrPlayer.Snake.Select(false);
                 gamestate.State = Mode.Playing;
                 draftResult = new DraftResult();
             }
 
-        }
+        } else
         if (gamestate.State == Mode.Choosing)
         {
             //we're in control
@@ -108,20 +111,8 @@ public class DraftManager : MonoBehaviour
     public void TimeIsUp()
     {
         var selected = cards[0];
-
         //save effect of selected Card
-        var castingPlayer = NextPlayer();
-        var cardeffectParams = new CardEffectParamerters(castingPlayer, grid);
-        var effect = selected.GetComponent<Card>().type.GetEffectType();
-        draftResult.chosenCards.Enqueue(cardEffectFactory.create(effect, cardeffectParams));
-        selectedCardChosenAnimation();
-        //remove it from cached list
-        cards.Remove(selected);
-        //then destroy it
-        Destroy(selected);
-        selected = null;
-        CheckDraftDone();
-        ResetTimer();
+        CreateAndAddChosenCard();
     }
 
     /// <summary>
@@ -138,6 +129,12 @@ public class DraftManager : MonoBehaviour
         }
     }
 
+    private void OnCurrentPlayerChange()
+    {
+        gamestate.PrevPlayer.Snake.Select(false);
+        gamestate.CurrPlayer.Snake.Select(true);
+        playerText.text = "Player : " + (currentPlayer + 1) + " 's turn ";
+    }
     private void ResetTimer() { TimeLeft = thinkingTime; }
 
     private void OpenPackAnimation(BoosterPack pack)
@@ -150,6 +147,7 @@ public class DraftManager : MonoBehaviour
             card.transform.position = CardSpawnPositions[i].position;
             cards.Add(card);
         }
+
     }
 
     private void CheckMouseSelection()
@@ -181,8 +179,6 @@ public class DraftManager : MonoBehaviour
             if (selected != null)
             {
                 OnDeselectCard();
-
-                playerText.GetComponent<Text>().text = "Player : " + (currentPlayer + 1) + " 's turn ";
             }
         }
     }
@@ -222,32 +218,37 @@ public class DraftManager : MonoBehaviour
         {
             if (hit.transform == selected.transform)
             {
-                //save effect of selected Card
-                var castingPlayer = NextPlayer();
-                var cardeffectParams = new CardEffectParamerters(castingPlayer, grid);
-                var effect = selected.GetComponent<Card>().type.GetEffectType();
-                draftResult.chosenCards.Enqueue(cardEffectFactory.create(effect, cardeffectParams));
-                selectedCardChosenAnimation();
-                //remove it from cached list
-                cards.Remove(selected);
-                //then destroy it
-                Destroy(selected);
-                selected = null;
-                CheckDraftDone();
-                ResetTimer();
+                CreateAndAddChosenCard();
             }
         }
-
         selected = null;
     }
 
-    private PlayerInfo NextPlayer()
+    private void CreateAndAddChosenCard()
     {
-        var info = gamestate.Players[currentPlayer];
-        currentPlayer = (currentPlayer + 1) % gamestate.Players.Count;
-        return info;
+        //save effect of selected Card
+        var castingPlayer = gamestate.CurrPlayer;
+        var cardeffectParams = new CardEffectParamerters(castingPlayer, grid);
+        var effect = selected.GetComponent<Card>().type.GetEffectType();
+        draftResult.chosenCards.Enqueue(cardEffectFactory.create(effect, cardeffectParams));
+        selectedCardChosenAnimation();
+        //remove it from cached list
+        cards.Remove(selected);
+        //then destroy it
+        Destroy(selected);
+        selected = null;
+        NextPlayer();
+
+        CheckDraftDone();
+        ResetTimer();
     }
 
+    private void NextPlayer()
+    {
+        currentPlayer = (currentPlayer + 1) % gamestate.Players.Count;
+        gamestate.CurrPlayer = gamestate.Players[currentPlayer];
+        OnCurrentPlayerChange();
+    }
     //debugging routines
     private void DebugExecuteOnKeyPress()
     {

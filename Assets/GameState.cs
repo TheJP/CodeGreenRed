@@ -14,7 +14,9 @@ public class GameState : MonoBehaviour {
         set { state = value; }
         }
     public List<PlayerInfo> Players { get; set; }
-    
+    public PlayerInfo CurrPlayer { get { return currPlayerField; } set { PrevPlayer = currPlayerField; currPlayerField = value; } }
+    private PlayerInfo currPlayerField;
+    public PlayerInfo PrevPlayer { get; private set; }
 
     void Awake()
     {
