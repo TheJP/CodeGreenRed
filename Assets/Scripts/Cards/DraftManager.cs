@@ -1,10 +1,11 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using Assets.Scripts;
 using Assets.Scripts.CardEffects;
-using Assets.Scripts.Cards.CardEffects;
 using Assets.Scripts.Cards;
+using Assets.Scripts.Cards.CardEffects;
 using System;
-using Assets.Scripts;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(GameState))]
@@ -111,7 +112,7 @@ public class DraftManager : MonoBehaviour
     /// </summary>
     public void TimeIsUp()
     {
-        selected = cards[0];
+        selected = cards.Shuffle(new System.Random()).First();
         //save effect of selected Card
         CreateAndAddChosenCard();
     }
