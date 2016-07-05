@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using UnityEngine;
 
 namespace Assets.Scripts.Cards.CardEffects
 {
@@ -12,7 +11,10 @@ namespace Assets.Scripts.Cards.CardEffects
         public const int AmountOfCheese = 3;
         public override void Execute()
         {
-            var player = grid.Players.Shuffle(new System.Random()).Where(p => !p.Dead).FirstOrDefault();
+            var player = Grid.Players
+                .Where(p => !p.Dead)
+                .Shuffle(new Random())
+                .FirstOrDefault();
             if (player != null) { player.Shrink(); }
         }
     }

@@ -10,19 +10,9 @@ namespace Assets.Scripts.Cards.CardEffects
     class CheeseEffect : CardEffect
     {
         public const int AmountOfCheese = 3;
-        public CheeseEffect(Grid grid)
-        {
-            this.grid = grid;
-        }
-
         public override void Execute()
         {
-            for (int i = 0; i < AmountOfCheese; ++i) { grid.SpawnPowerup<Cheese>(); }
-        }
-
-        public override void Initialize(CardEffectParamerters effectParams)
-        {
-            grid = effectParams.Grid;
+            for (int i = 0; i < AmountOfCheese; ++i) { Grid.SpawnPowerup<Cheese>(); }
         }
     }
 }

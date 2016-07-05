@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using UnityEngine;
 
 namespace Assets.Scripts.Cards.CardEffects
 {
@@ -11,8 +10,7 @@ namespace Assets.Scripts.Cards.CardEffects
     {
         public override void Execute()
         {
-            var random = new System.Random();
-            foreach (var player in grid.Players.Shuffle(random))
+            foreach (var player in Grid.Players.Shuffle(new Random()))
             {
                 player.Move();
             }

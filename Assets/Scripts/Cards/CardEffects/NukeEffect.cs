@@ -9,19 +9,12 @@ namespace Assets.Scripts.Cards.CardEffects
 {
     class NukeEffect : CardEffect
     {
-        private Teams ourTeam;
         public override void Execute()
         {
-            foreach(var enemy in grid.Players.Where(p => p.Team != ourTeam))
+            foreach(var enemy in Grid.Players.Where(p => p.Team != OurTeam))
             {
                 enemy.Shrink();
             }
-        }
-
-        public override void Initialize(CardEffectParamerters p)
-        {
-            base.Initialize(p);
-            ourTeam = castingPlayer.Snake.Team;
         }
     }
 }

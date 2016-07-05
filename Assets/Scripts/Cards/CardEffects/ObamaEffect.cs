@@ -11,8 +11,7 @@ namespace Assets.Scripts.Cards.CardEffects
     {
         public override void Execute()
         {
-            grid.SpawnRandomPowerup();
+            Grid.SpawnRandomPowerup();
         }
-
     }
 }

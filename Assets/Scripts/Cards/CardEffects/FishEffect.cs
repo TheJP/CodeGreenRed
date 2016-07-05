@@ -9,18 +9,12 @@ namespace Assets.Scripts.Cards.CardEffects
 {
     class FishEffect : CardEffect
     {
-        private Teams ourTeam;
         public override void Execute()
         {
-            foreach (var friend in grid.Players.Where(p => p.Team == ourTeam))
+            foreach (var friend in Grid.Players.Where(p => p.Team == OurTeam))
             {
                 friend.Grow();
             }
-        }
-        public override void Initialize(CardEffectParamerters p)
-        {
-            this.grid = p.Grid;
-            this.ourTeam = p.CastingSnake.Team;
         }
     }
 }
