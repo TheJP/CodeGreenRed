@@ -47,19 +47,19 @@ public class SelectionMenu : MonoBehaviour
 
     private Grid grid;
 
-    public void incRedScore()
+    public void IncrementRedScore()
     {
         redScore++;
         RedScoreObject.GetComponent<TextMesh>().text = ("R:" + redScore);
     }
 
-    public void incGreenScore()
+    public void IncrementGreenScore()
     {
         greenScore++;
         GreenScoreObject.GetComponent<TextMesh>().text = ("G:"+greenScore);
     }
 
-    public void enableScript() {
+    public void EnableScript() {
         guiCameraAnimator.Play("GuiCameraReward");
         mainCameraAnimator.Play("myCameraReward");
 

@@ -7,6 +7,7 @@ using System;
 using Assets.Scripts;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(GameState))]
 public class DraftManager : MonoBehaviour
 {
     //unity editor dependencies

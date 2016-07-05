@@ -6,13 +6,14 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
+[RequireComponent(typeof(GameState))]
 public class GameController : MonoBehaviour
 {
 
     private GameState gamestate;
     public Canvas playerInfoCanvas;
     public SelectionMenu menu;
-    public int waitSecondsUnitMainMenu = 2; //on finished game
+    public int WaitSecondsUntilMainMenu = 2; //on finished game
 
     public Grid Grid { get; private set; }
     private DraftManager draftManager;
@@ -28,6 +29,7 @@ public class GameController : MonoBehaviour
     public void StartGame(int nPlayers, Grid grid)
     {
         GameOver = false;
+        gamestate.ResetState();
         this.Grid = grid;
         //let's do this here for now
         for (uint i = 1; i <= nPlayers; i++)
@@ -62,12 +64,11 @@ public class GameController : MonoBehaviour
             GameOver = greenTeamDead || redTeamDead;
             if (GameOver)
             {
- 
                 //go to mainmenu screen
                 playerInfoCanvas.gameObject.SetActive(false);
-                if (greenTeamDead) { menu.incRedScore(); }
-                else { menu.incGreenScore(); } //red team dead
-                Invoke("BackToMainMenu", waitSecondsUnitMainMenu);
+                if (greenTeamDead) { menu.IncrementRedScore(); }
+                else { menu.IncrementGreenScore(); } //red team dead
+                Invoke("BackToMainMenu", WaitSecondsUntilMainMenu);
             }
             else { StartRound(); }
         }
@@ -82,6 +83,6 @@ public class GameController : MonoBehaviour
 
     private void BackToMainMenu()
     {
-        menu.enableScript();
+        menu.EnableScript();
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections;
 using Assets.Scripts;
 
+[RequireComponent(typeof(GameState))]
 public class PlayingStateController : MonoBehaviour {
     public float WaitForAnimationSeconds = 0.5f;
 
