@@ -122,7 +122,7 @@ public class DraftManager : MonoBehaviour
         if (cards.Count <= cardsPerPack - gamestate.Players.Count)
         {
             //done choosing cards
-            cards.ForEach(c => Destroy(c));
+            cards.ForEach(c => { c.gameObject.SetActive(false); Destroy(c); });
             cards.Clear();
             gamestate.State = Mode.OpenPack;
         }
@@ -228,7 +228,7 @@ public class DraftManager : MonoBehaviour
         var castingPlayer = gamestate.CurrPlayer;
         var cardeffectParams = new CardEffectParamerters(castingPlayer, grid);
         var effect = selected.GetComponent<CardEffect>();
-        effect.enabled = false;
+        selected.gameObject.SetActive(false);
         effect.Initialize(cardeffectParams);
         draftResult.chosenCards.Enqueue(effect);
         selectedCardChosenAnimation();

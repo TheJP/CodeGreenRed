@@ -1608,12 +1608,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cedbec1047f4c9438860c82396b9e42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turnLeftPrefab: {fileID: 0}
-  turnRightPrefab: {fileID: 0}
+  turnLeftPrefab: {fileID: 11479834, guid: 5c2cd71c5c78a424db0934e28abb6b87, type: 2}
+  turnRightPrefab: {fileID: 11481158, guid: 4df0993ca910da74cabaaf61bb57f874, type: 2}
   commonCardsPrefabs:
   - {fileID: 11443816, guid: 774f3313b37fbe64b8c6a996b4faa50b, type: 2}
   rareCardsPrefab:
-  - {fileID: 0}
+  - {fileID: 11432632, guid: 30e6c1e3bd6c3074aa9ac50220559723, type: 2}
   cardsInBooster: 5
   nRounds: 4
 --- !u!114 &1555403809

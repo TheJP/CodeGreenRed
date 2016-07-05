@@ -35,11 +35,16 @@ public class PlayingStateController : MonoBehaviour {
             else if(lastEffectTime <= 0)
             {
                 //play effect
-                DraftResult.chosenCards.Dequeue().Execute();
+                var cardeffect = DraftResult.chosenCards.Dequeue();
+                cardeffect.Execute();
+                Destroy(cardeffect);
+
+                //always move after effect
                 var snake = NextPlayer().Snake;
                 snake.Move();
                 //wait a bit for the effect animation
                 lastEffectTime = WaitForAnimationSeconds;
+
             }
         }
     }
