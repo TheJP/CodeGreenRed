@@ -13,7 +13,7 @@ public class GameController : MonoBehaviour
     private GameState gamestate;
     public Canvas playerInfoCanvas;
     public SelectionMenu menu;
-    public int WaitSecondsUntilMainMenu = 2; //on finished game
+    public float waitSecondsUntilMainMenu = 2f; //on finished game
 
     public Grid Grid { get; private set; }
     private DraftManager draftManager;
@@ -67,7 +67,7 @@ public class GameController : MonoBehaviour
                 playerInfoCanvas.gameObject.SetActive(false);
                 if (greenTeamDead) { menu.IncrementRedScore(); }
                 else { menu.IncrementGreenScore(); } //red team dead
-                Invoke("BackToMainMenu", WaitSecondsUntilMainMenu);
+                Invoke("BackToMainMenu", waitSecondsUntilMainMenu);
             }
             else { StartRound(); }
         }

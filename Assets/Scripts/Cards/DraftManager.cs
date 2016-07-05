@@ -103,10 +103,7 @@ public class DraftManager : MonoBehaviour
                 NextPlayer();
                 ResetTimer();
             }
-            //DebugExecuteOnKeyPress();
         }
-        //HearthStoneDragRotationTrollolol();
-
     }
 
     /// <summary>
@@ -173,7 +170,6 @@ public class DraftManager : MonoBehaviour
                 if (selected != null)
                 {
                     //if he did, highlight it
-                    Debug.Log("You selected the " + selected.name); // ensure you picked right object
                     selected.GetComponent<Card>().Highlight(true);
 
                 }
@@ -208,10 +204,11 @@ public class DraftManager : MonoBehaviour
         mouseLast = Input.mousePosition;
     }
 
-    private void selectedCardChosenAnimation()
+    private void SelectedCardChosenAnimation()
     {
         //some animation
     }
+
     private void OnDeselectCard()
     {
         //remove outline
@@ -239,7 +236,7 @@ public class DraftManager : MonoBehaviour
         selected.gameObject.SetActive(false);
         effect.Initialize(cardeffectParams);
         draftResult.chosenCards.Enqueue(effect);
-        selectedCardChosenAnimation();
+        SelectedCardChosenAnimation();
         //remove it from cached list
         cards.Remove(selected);
         selected = null;
@@ -260,29 +257,4 @@ public class DraftManager : MonoBehaviour
             ResetTimer();
         }
     }
-    //debugging routines
-    private void DebugExecuteOnKeyPress()
-    {
-        Debug.Log(gamestate.Players.Count);
-        var player = gamestate.Players[currentPlayer];
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            player.ChosenCards.Dequeue().Execute();
-            player.Snake.Grow();
-            player.Snake.Move();
-        }
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            //switch player
-            NextPlayer();
-
-        }
-    }
-    //private void DebugTestDraft()
-    //{
-    //    var cardpool = GetComponent<CardPool>();
-    //    StartDraft(cardpool.BasicBoosterBox(), new CardEffectParamerters());
-    //}
-
-    //initialize new Cards here and in Dictionary below
 }

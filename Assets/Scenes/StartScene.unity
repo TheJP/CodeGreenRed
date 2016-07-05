@@ -1583,7 +1583,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b9cd9a547ac673419cd42f0664f2653, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WaitForAnimationSeconds: 0.5
+  waitForAnimationSeconds: 1
   delayAfterPlay: 3
 --- !u!4 &1555403807
 Transform:
@@ -1652,7 +1652,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerInfoCanvas: {fileID: 1509336408}
   menu: {fileID: 1801925740}
-  waitSecondsUnitMainMenu: 1
+  waitSecondsUntilMainMenu: 1
 --- !u!1001 &1710396471
 Prefab:
   m_ObjectHideFlags: 0

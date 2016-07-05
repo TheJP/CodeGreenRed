@@ -24,7 +24,7 @@ namespace Assets.Scripts
     /// </summary>
     public class DraftResult
     {
-        public Queue<CardEffect> chosenCards = new Queue<CardEffect>(30);
+        public readonly Queue<CardEffect> chosenCards = new Queue<CardEffect>();
     }
 
     

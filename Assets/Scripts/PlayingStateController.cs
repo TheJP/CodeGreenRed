@@ -3,37 +3,40 @@ using System.Collections;
 using Assets.Scripts;
 
 [RequireComponent(typeof(GameState))]
-public class PlayingStateController : MonoBehaviour {
-    public float WaitForAnimationSeconds = 0.5f;
+public class PlayingStateController : MonoBehaviour
+{
+    public float waitForAnimationSeconds = 0.5f;
+    public float delayAfterPlay = 5f;
 
     //gamestate chache
     private GameState gamestate;
     public DraftResult DraftResult { get; set; }
     private float lastEffectTime;
     private int currentPlayer = 0;
-    public int delayAfterPlay = 5;
-    bool changing = false;
+    private bool changing = false;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         gamestate = GetComponent<GameState>();
     }
-    
+
     // Update is called once per frame
-    void Update () {
-        if(gamestate.State == Mode.Playing && !changing)
+    void Update()
+    {
+        if (gamestate.State == Mode.Playing && !changing)
         {
             lastEffectTime -= Time.deltaTime;
             if (lastEffectTime < 0) { lastEffectTime = 0; }
 
-            if(DraftResult.chosenCards.Count == 0)
+            if (DraftResult.chosenCards.Count == 0)
             {
                 //there are no more effects to play
                 currentPlayer = 0;
                 Invoke("ChangeToFinishedState", delayAfterPlay);
                 changing = true;
             }
-            else if(lastEffectTime <= 0)
+            else if (lastEffectTime <= 0)
             {
                 //play effect
                 var cardeffect = DraftResult.chosenCards.Dequeue();
@@ -41,10 +44,9 @@ public class PlayingStateController : MonoBehaviour {
                 Destroy(cardeffect.gameObject);
 
                 //always move after effect
-                var snake = NextPlayer().Snake;
-                snake.Move();
+                NextPlayer().Snake.Move();
                 //wait a bit for the effect animation
-                lastEffectTime = WaitForAnimationSeconds;
+                lastEffectTime = waitForAnimationSeconds;
 
             }
         }
