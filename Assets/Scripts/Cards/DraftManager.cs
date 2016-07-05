@@ -55,8 +55,6 @@ public class DraftManager : MonoBehaviour
         ResetTimer();
         playerText.GetComponent<Text>().text = "Player : " + (currentPlayer + 1) + " 's turn ";
         CardSpawnPositions = SpawnPositionsParent.GetComponentsInChildren<Transform>();
-
-        //DebugTestDraft();
     }
 
     public void StartDraft(List<BoosterPack> packs, Grid grid)

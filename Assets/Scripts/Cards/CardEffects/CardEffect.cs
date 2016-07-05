@@ -5,7 +5,7 @@ using Assets.Scripts;
 
 public abstract class CardEffect : Card
 {
-    protected PlayerInfo CastingPlayer { get; private set; }
+    public PlayerInfo CastingPlayer { get; private set; }
     protected Grid Grid { get; private set; }
     protected Player Snake { get { return CastingPlayer.Snake; } }
     protected Teams OurTeam { get { return CastingPlayer.Snake.Team; } }

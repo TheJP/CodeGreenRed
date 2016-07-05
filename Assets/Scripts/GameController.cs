@@ -7,6 +7,8 @@ using System.Text;
 using UnityEngine;
 
 [RequireComponent(typeof(GameState))]
+[RequireComponent(typeof(CardPool))]
+[RequireComponent(typeof(DraftManager))]
 public class GameController : MonoBehaviour
 {
 

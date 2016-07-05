@@ -12,16 +12,13 @@ public class PlayingStateController : MonoBehaviour
     private GameState gamestate;
     public DraftResult DraftResult { get; set; }
     private float lastEffectTime;
-    private int currentPlayer = 0;
     private bool changing = false;
 
-    // Use this for initialization
     void Start()
     {
         gamestate = GetComponent<GameState>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (gamestate.State == Mode.Playing && !changing)
@@ -32,7 +29,6 @@ public class PlayingStateController : MonoBehaviour
             if (DraftResult.chosenCards.Count == 0)
             {
                 //there are no more effects to play
-                currentPlayer = 0;
                 Invoke("ChangeToFinishedState", delayAfterPlay);
                 changing = true;
             }
@@ -41,21 +37,14 @@ public class PlayingStateController : MonoBehaviour
                 //play effect
                 var cardeffect = DraftResult.chosenCards.Dequeue();
                 cardeffect.Execute();
+                //always move after effect
+                cardeffect.CastingPlayer.Snake.Move();
                 Destroy(cardeffect.gameObject);
 
-                //always move after effect
-                NextPlayer().Snake.Move();
                 //wait a bit for the effect animation
                 lastEffectTime = waitForAnimationSeconds;
-
             }
         }
-    }
-    private PlayerInfo NextPlayer()
-    {
-        var info = gamestate.Players[currentPlayer];
-        currentPlayer = (currentPlayer + 1) % gamestate.Players.Count;
-        return info;
     }
 
     private void ChangeToFinishedState()
