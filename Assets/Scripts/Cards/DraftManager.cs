@@ -62,9 +62,7 @@ public class DraftManager : MonoBehaviour
         toOpen = new Queue<BoosterPack>(packs);
         this.grid = grid;
         draftResult = new DraftResult();
-        currentPlayer = 0;
-        gamestate.CurrPlayer = gamestate.Players[currentPlayer];
-        OnCurrentPlayerChange();
+        currentPlayer = -1; //openpacks will increment and then change player
     }
 
 
@@ -154,7 +152,6 @@ public class DraftManager : MonoBehaviour
             cards.Add(card);
         }
 
-        currentPlayer = r.Next(0, gamestate.Players.Count);
         NextPlayer();
     }
 
