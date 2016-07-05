@@ -111,7 +111,7 @@ public class DraftManager : MonoBehaviour
     /// </summary>
     public void TimeIsUp()
     {
-        var selected = cards[0];
+        selected = cards[0];
         //save effect of selected Card
         CreateAndAddChosenCard();
     }
