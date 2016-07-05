@@ -5,21 +5,17 @@ using Assets.Scripts.CardEffects;
 
 public class MoveEffect : CardEffect {
 
-    private Player castingPlayer;
+    private Player castingSnake;
 
     public override void Execute()
     {
-        castingPlayer.Move();
+        castingSnake.Move();
     }
 
-    public static Instantiate<CardEffect> GetFactory()
+    public override void Initialize(CardEffectParamerters p)
     {
-        return (p => new MoveEffect(p.CastingSnake));
-    }
-
-    public MoveEffect(Player caster)
-    {
-        this.castingPlayer = caster;
+        base.Initialize(p);
+        this.castingSnake = base.castingPlayer.Snake;
     }
 
 }

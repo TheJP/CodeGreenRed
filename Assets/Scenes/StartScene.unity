@@ -1608,20 +1608,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cedbec1047f4c9438860c82396b9e42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turnLeftPrefab: {fileID: 190026, guid: 5c2cd71c5c78a424db0934e28abb6b87, type: 2}
-  turnRightPrefab: {fileID: 133756, guid: 4df0993ca910da74cabaaf61bb57f874, type: 2}
+  turnLeftPrefab: {fileID: 0}
+  turnRightPrefab: {fileID: 0}
   commonCardsPrefabs:
-  - {fileID: 198190, guid: 46b87755464210344b59b91dcd3717b9, type: 2}
-  - {fileID: 131218, guid: 774f3313b37fbe64b8c6a996b4faa50b, type: 2}
-  - {fileID: 178104, guid: 269f2e5ebca6ab244a6c74af4cc1460d, type: 2}
-  - {fileID: 185356, guid: 95ad98381377136469531deccaadab7e, type: 2}
+  - {fileID: 11443816, guid: 774f3313b37fbe64b8c6a996b4faa50b, type: 2}
   rareCardsPrefab:
-  - {fileID: 149606, guid: 786dcea0a17603342b428348c2802c15, type: 2}
-  - {fileID: 114866, guid: 0eb4434057c035c469e8a48c50165ab7, type: 2}
-  - {fileID: 121326, guid: 30e6c1e3bd6c3074aa9ac50220559723, type: 2}
-  - {fileID: 199778, guid: f0b34374f90e7c74ab81bd65dd686dae, type: 2}
-  - {fileID: 113202, guid: 7bd635e149e2fe144902c6e70a4cca9c, type: 2}
-  - {fileID: 184374, guid: 305829b87b8e7174e828dd089d966d23, type: 2}
+  - {fileID: 0}
   cardsInBooster: 5
   nRounds: 4
 --- !u!114 &1555403809

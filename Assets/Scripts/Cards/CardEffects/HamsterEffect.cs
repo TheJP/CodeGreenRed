@@ -9,12 +9,6 @@ namespace Assets.Scripts.Cards.CardEffects
 {
     class HamsterEffect : CardEffect
     {
-        private Grid grid;
-        public HamsterEffect(Grid grid)
-        {
-            this.grid = grid;
-        }
-
         public override void Execute()
         {
             var random = new System.Random();
@@ -22,11 +16,6 @@ namespace Assets.Scripts.Cards.CardEffects
             {
                 player.Move();
             }
-        }
-
-        public static Instantiate<CardEffect> GetFactory()
-        {
-            return (p => new HamsterEffect(p.Grid));
         }
     }
 }

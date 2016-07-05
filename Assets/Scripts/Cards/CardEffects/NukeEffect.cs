@@ -9,14 +9,7 @@ namespace Assets.Scripts.Cards.CardEffects
 {
     class NukeEffect : CardEffect
     {
-        private Grid grid;
         private Teams ourTeam;
-        public NukeEffect(Grid grid, Teams ourTeam)
-        {
-            this.grid = grid;
-            this.ourTeam = ourTeam;
-        }
-
         public override void Execute()
         {
             foreach(var enemy in grid.Players.Where(p => p.Team != ourTeam))
@@ -25,9 +18,10 @@ namespace Assets.Scripts.Cards.CardEffects
             }
         }
 
-        public static Instantiate<CardEffect> GetFactory()
+        public override void Initialize(CardEffectParamerters p)
         {
-            return (p => new NukeEffect(p.Grid, p.CastingSnake.Team));
+            base.Initialize(p);
+            ourTeam = castingPlayer.Snake.Team;
         }
     }
 }

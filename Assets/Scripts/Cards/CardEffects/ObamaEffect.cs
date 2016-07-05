@@ -9,20 +9,10 @@ namespace Assets.Scripts.Cards.CardEffects
 {
     class ObamaEffect : CardEffect
     {
-        private Grid grid;
-        public ObamaEffect(Grid grid)
-        {
-            this.grid = grid;
-        }
-
         public override void Execute()
         {
             grid.SpawnRandomPowerup();
         }
 
-        public static Instantiate<CardEffect> GetFactory()
-        {
-            return (p => new ObamaEffect(p.Grid));
-        }
     }
 }

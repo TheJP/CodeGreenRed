@@ -7,10 +7,10 @@ using UnityEngine;
 
 public class CardPool : MonoBehaviour
 {
-    public GameObject turnLeftPrefab;
-    public GameObject turnRightPrefab;
-    public GameObject[] commonCardsPrefabs;
-    public GameObject[] rareCardsPrefab;
+    public CardEffect turnLeftPrefab;
+    public CardEffect turnRightPrefab;
+    public CardEffect[] commonCardsPrefabs;
+    public CardEffect[] rareCardsPrefab;
     public int cardsInBooster = 5;
     public int nRounds = 4;
 
@@ -29,7 +29,7 @@ public class CardPool : MonoBehaviour
         System.Random rand = new System.Random();
         for (int i = 0; i < nRounds; i++)
         {
-            List<GameObject> cards = new List<GameObject>(cardsInBooster);
+            List<CardEffect> cards = new List<CardEffect>(cardsInBooster);
 
             //always two basic movement options
             cards.Add(rand.Next(0, 2) > 0 ? turnLeftPrefab : turnRightPrefab);
@@ -68,7 +68,7 @@ public class CardPool : MonoBehaviour
         System.Random rand = new System.Random();
         for (int i = 0; i < nRounds; i++)
         {
-            List<GameObject> cards = new List<GameObject>(cardsInBooster);
+            List<CardEffect> cards = new List<CardEffect>(cardsInBooster);
             for (int j = 0; j < cardsInBooster; j++)
             {
                 cards.Add(rand.Next(0, 2) > 0 ? turnLeftPrefab : turnRightPrefab);

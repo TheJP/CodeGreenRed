@@ -20,10 +20,5 @@ namespace Assets.Scripts.Cards.CardEffects
             castingSnake.Grow();
             castingSnake.Move();
         }
-
-        public static Instantiate<CardEffect> GetFactory()
-        {
-            return (p => new MaccaroniEffect(p.CastingSnake));
-        }
     }
 }

@@ -10,6 +10,7 @@ GameObject:
   - 4: {fileID: 443946}
   - 114: {fileID: 11442904}
   - 65: {fileID: 6528858}
+  - 114: {fileID: 11443816}
   m_Layer: 0
   m_Name: Cheese Card
   m_TagString: Untagged
@@ -110,7 +111,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc69ebabb05e2d247bfde96d78a45183, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 4
+  highlightBorder: {fileID: 171660}
+--- !u!114 &11443816
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 131218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f15d70a02f08f6f4bb3bf67183c78150, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   highlightBorder: {fileID: 171660}
 --- !u!212 &21227432
 SpriteRenderer:

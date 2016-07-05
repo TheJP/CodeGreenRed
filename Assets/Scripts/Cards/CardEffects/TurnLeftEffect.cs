@@ -8,21 +8,22 @@ namespace Assets.Scripts.Cards.CardEffects
 {
     class TurnLeftEffect : CardEffect
     {
-        private Player castingPlayer;
+        private Player castingSnake;
 
         public TurnLeftEffect(Player castingPlayer)
         {
-            this.castingPlayer = castingPlayer;
+            this.castingSnake = castingPlayer;
         }
 
         public override void Execute()
         {
-            castingPlayer.TurnLeft();
+            castingSnake.TurnLeft();
         }
 
-        public static Instantiate<CardEffect> GetFactory()
+        public override void Initialize(CardEffectParamerters p)
         {
-            return (p => new TurnLeftEffect(p.CastingSnake));
+            base.Initialize(p);
+            castingSnake = castingPlayer.Snake;
         }
     }
 }

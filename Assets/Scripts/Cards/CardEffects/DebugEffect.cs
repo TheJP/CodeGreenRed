@@ -14,9 +14,9 @@ namespace Assets.Scripts.Cards.CardEffects
             Debug.Log("called execute on DebugEffect");
         }
 
-        public static Instantiate<CardEffect> GetFactory()
+        public override void Initialize(CardEffectParamerters effectParams)
         {
-            return (p => new DebugEffect());
+            // do nothing
         }
     }
 }

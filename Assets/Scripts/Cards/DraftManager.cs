@@ -1,4 +1,4 @@
-﻿﻿using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.CardEffects;
 using Assets.Scripts.Cards.CardEffects;
@@ -10,7 +10,7 @@ using UnityEngine.UI;
 public class DraftManager : MonoBehaviour
 {
     //unity editor dependencies
-    public List<GameObject> cards;
+    public List<Card> cards;
     public Transform SpawnPositionsParent;
     //how long before chosing card at random
     public int thinkingTime = 6;
@@ -24,10 +24,9 @@ public class DraftManager : MonoBehaviour
     public float TimeLeft { get; private set; }
 
     private Transform[] CardSpawnPositions;
-    private GameObject selected = null;
+    private Card selected = null;
     private Vector2 dragStartPos; //point in world coordinates where the mouse was originally clicked
     private Vector3 mouseLast = Vector3.zero;
-    private CardEffectFactory cardEffectFactory = new CardEffectFactory();
     private int currentPlayer = 0;
     /// <summary>
     /// boosterpacks which must be opened during this draft round, if 0 => switch to playing mode
@@ -48,11 +47,10 @@ public class DraftManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        addFactories();
         gamestate = GetComponent<GameState>();
         Debug.Assert(gamestate != null);
         ResetTimer();
-        playerText.text = "Player : " + (currentPlayer + 1) + " 's turn ";
+        playerText.GetComponent<Text>().text = "Player : " + (currentPlayer + 1) + " 's turn ";
         CardSpawnPositions = SpawnPositionsParent.GetComponentsInChildren<Transform>();
 
         //DebugTestDraft();
@@ -65,7 +63,7 @@ public class DraftManager : MonoBehaviour
         draftResult = new DraftResult();
         currentPlayer = 0;
         gamestate.CurrPlayer = gamestate.Players[currentPlayer];
-        OnCurrentPlayerChange();        
+        OnCurrentPlayerChange();
     }
 
 
@@ -91,7 +89,8 @@ public class DraftManager : MonoBehaviour
                 draftResult = new DraftResult();
             }
 
-        } else
+        }
+        else
         if (gamestate.State == Mode.Choosing)
         {
             //we're in control
@@ -102,7 +101,7 @@ public class DraftManager : MonoBehaviour
             //DebugExecuteOnKeyPress();
         }
         //HearthStoneDragRotationTrollolol();
-        
+
     }
 
     /// <summary>
@@ -144,17 +143,16 @@ public class DraftManager : MonoBehaviour
         for (int i = 0; i < pack.cardsInBooster.Count; i++)
         {
             var card = Instantiate(pack.cardsInBooster[i]);
-            card.transform.position = CardSpawnPositions[i].position;
+            card.gameObject.transform.position = CardSpawnPositions[i].position;
             cards.Add(card);
         }
-
     }
 
     private void CheckMouseSelection()
     {
         if (Input.GetMouseButtonDown(0))
         {
-                        
+
             //if the user pressed mouse check if he selected a card
             var mouse = Input.mousePosition;
             dragStartPos = Camera.main.ScreenToWorldPoint(mouse);
@@ -162,7 +160,7 @@ public class DraftManager : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(mouse);
             if (Physics.Raycast(ray, out hit, 100.0f))
             {
-                selected = cards.Find(c => c.transform == hit.transform);
+                selected = cards.Find(c => c.gameObject.transform == hit.transform);
 
                 if (selected != null)
                 {
@@ -182,7 +180,7 @@ public class DraftManager : MonoBehaviour
             }
         }
     }
-    
+
     private void HearthStoneDragRotationTrollolol()
     {
         if (selected != null && Input.mousePosition != mouseLast) // user is holding mousebutton down and card is selected
@@ -229,8 +227,10 @@ public class DraftManager : MonoBehaviour
         //save effect of selected Card
         var castingPlayer = gamestate.CurrPlayer;
         var cardeffectParams = new CardEffectParamerters(castingPlayer, grid);
-        var effect = selected.GetComponent<Card>().type.GetEffectType();
-        draftResult.chosenCards.Enqueue(cardEffectFactory.create(effect, cardeffectParams));
+        var effect = selected.GetComponent<CardEffect>();
+        effect.enabled = false;
+        effect.Initialize(cardeffectParams);
+        draftResult.chosenCards.Enqueue(effect);
         selectedCardChosenAnimation();
         //remove it from cached list
         cards.Remove(selected);
@@ -261,7 +261,7 @@ public class DraftManager : MonoBehaviour
             player.Snake.Move();
         }
         if (Input.GetKeyDown(KeyCode.N))
-        {   
+        {
             //switch player
             NextPlayer();
 
@@ -274,53 +274,4 @@ public class DraftManager : MonoBehaviour
     //}
 
     //initialize new Cards here and in Dictionary below
-    private void addFactories()
-    {
-        //UPDATE these entries and cardEffectDictionary below
-        //TODO could be done with relection
-        cardEffectFactory.addFactoryMethod<MoveEffect>(MoveEffect.GetFactory());
-        cardEffectFactory.addFactoryMethod<DebugEffect>(DebugEffect.GetFactory());
-        cardEffectFactory.addFactoryMethod<TurnLeftEffect>(TurnLeftEffect.GetFactory());
-        cardEffectFactory.addFactoryMethod<TurnRightEffect>(TurnRightEffect.GetFactory());
-        cardEffectFactory.addFactoryMethod<CheeseEffect>(CheeseEffect.GetFactory());
-        cardEffectFactory.addFactoryMethod<ObamaEffect>(ObamaEffect.GetFactory());
-        cardEffectFactory.addFactoryMethod<SpoilerEffect>(SpoilerEffect.GetFactory());
-        cardEffectFactory.addFactoryMethod<HamsterEffect>(HamsterEffect.GetFactory());
-        cardEffectFactory.addFactoryMethod<TeddyEffect>(TeddyEffect.GetFactory());
-        cardEffectFactory.addFactoryMethod<MaccaroniEffect>(MaccaroniEffect.GetFactory());
-        cardEffectFactory.addFactoryMethod<WeddingEffect>(WeddingEffect.GetFactory());
-        cardEffectFactory.addFactoryMethod<NukeEffect>(NukeEffect.GetFactory());
-        cardEffectFactory.addFactoryMethod<FishEffect>(FishEffect.GetFactory());
-        cardEffectFactory.addFactoryMethod<UnicornEffect>(UnicornEffect.GetFactory());
-    }
-}
-
-public enum CardType { Move, Right, Left, Debug, Cheese, Obama, Spoiler, Hamster, Teddy, Maccaroni, Wedding, Nuke, Fish, Unicorn }
-/// <summary>
-/// Enables us to select cardtype in unity Editor
-/// </summary>
-public static class CardTypeExtension
-{
-    static Dictionary<CardType, Type> cardEffectDictionary = new Dictionary<CardType, Type>()
-    {
-        { CardType.Move, typeof(MoveEffect) },
-        { CardType.Debug, typeof(DebugEffect) },
-        { CardType.Left, typeof(TurnLeftEffect) },
-        { CardType.Right, typeof(TurnRightEffect) },
-        { CardType.Cheese, typeof(CheeseEffect) },
-        { CardType.Obama, typeof(ObamaEffect) },
-        { CardType.Spoiler, typeof(SpoilerEffect) },
-        { CardType.Hamster, typeof(HamsterEffect) },
-        { CardType.Teddy, typeof(TeddyEffect) },
-        { CardType.Maccaroni, typeof(MaccaroniEffect) },
-        { CardType.Wedding, typeof(WeddingEffect) },
-        { CardType.Nuke, typeof(NukeEffect) },
-        { CardType.Fish, typeof(FishEffect) },
-        { CardType.Unicorn, typeof(UnicornEffect) }
-    };
-    public static Type GetEffectType(this CardType cardType)
-    {
-        return cardEffectDictionary[cardType];
-    }
-
 }

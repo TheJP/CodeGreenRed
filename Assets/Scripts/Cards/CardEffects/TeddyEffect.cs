@@ -21,10 +21,5 @@ namespace Assets.Scripts.Cards.CardEffects
             var player = grid.Players.Shuffle(new System.Random()).Where(p => !p.Dead).FirstOrDefault();
             if (player != null) { player.Shrink(); }
         }
-
-        public static Instantiate<CardEffect> GetFactory()
-        {
-            return (p => new TeddyEffect(p.Grid));
-        }
     }
 }

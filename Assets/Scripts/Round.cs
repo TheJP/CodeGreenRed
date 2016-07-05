@@ -11,8 +11,8 @@ namespace Assets.Scripts
     /// </summary>
     public class BoosterPack
     {
-        public readonly List<GameObject> cardsInBooster;
-        public BoosterPack(List<GameObject> cards)
+        public readonly List<CardEffect> cardsInBooster;
+        public BoosterPack(List<CardEffect> cards)
         {
             this.cardsInBooster = cards;
         }

@@ -10,19 +10,14 @@ namespace Assets.Scripts.Cards.CardEffects
     class MaccaroniEffect : CardEffect
     {
         private Player castingSnake;
-        public MaccaroniEffect(Player castingSnake)
-        {
-            this.castingSnake = castingSnake;
-        }
-
         public override void Execute()
         {
             castingSnake.Grow();
         }
-
-        public static Instantiate<CardEffect> GetFactory()
+        public override void Initialize(CardEffectParamerters p)
         {
-            return (p => new MaccaroniEffect(p.CastingSnake));
+            base.Initialize(p);
+            this.castingSnake = castingPlayer.Snake;
         }
     }
 }

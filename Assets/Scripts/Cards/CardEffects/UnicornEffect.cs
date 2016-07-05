@@ -19,10 +19,5 @@ namespace Assets.Scripts.Cards.CardEffects
         {
             castingSnake.Move(2);
         }
-
-        public static Instantiate<CardEffect> GetFactory()
-        {
-            return (p => new UnicornEffect(p.CastingSnake));
-        }
     }
 }

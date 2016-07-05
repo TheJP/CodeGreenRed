@@ -19,10 +19,10 @@ namespace Assets.Scripts.Cards.CardEffects
         {
             castingSnake.Move();
         }
-
-        public static Instantiate<CardEffect> GetFactory()
+        public override void Initialize(CardEffectParamerters p)
         {
-            return (p => new SpoilerEffect(p.CastingSnake));
+            base.Initialize(p);
+            castingSnake = castingPlayer.Snake;
         }
     }
 }
