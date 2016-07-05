@@ -122,7 +122,7 @@ public class DraftManager : MonoBehaviour
         if (cards.Count <= cardsPerPack - gamestate.Players.Count)
         {
             //done choosing cards
-            cards.ForEach(c => { c.gameObject.SetActive(false); Destroy(c); });
+            cards.ForEach(c => { Destroy(c.gameObject); });
             cards.Clear();
             gamestate.State = Mode.OpenPack;
         }
@@ -234,8 +234,6 @@ public class DraftManager : MonoBehaviour
         selectedCardChosenAnimation();
         //remove it from cached list
         cards.Remove(selected);
-        //then destroy it
-        Destroy(selected);
         selected = null;
         NextPlayer();
 

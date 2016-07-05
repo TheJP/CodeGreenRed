@@ -37,7 +37,7 @@ public class PlayingStateController : MonoBehaviour {
                 //play effect
                 var cardeffect = DraftResult.chosenCards.Dequeue();
                 cardeffect.Execute();
-                Destroy(cardeffect);
+                Destroy(cardeffect.gameObject);
 
                 //always move after effect
                 var snake = NextPlayer().Snake;
