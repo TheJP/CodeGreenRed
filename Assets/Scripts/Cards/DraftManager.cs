@@ -42,6 +42,7 @@ public class DraftManager : MonoBehaviour
     /// after minCards is reached, every player has chosen a card in the current draft
     /// </summary>
     private const int cardsPerPack = 5;
+    private System.Random r = new System.Random();
 
 
     // Use this for initialization
@@ -98,6 +99,11 @@ public class DraftManager : MonoBehaviour
             if (TimeLeft <= 0) { TimeIsUp(); }
 
             CheckMouseSelection();
+            if (gamestate.CurrPlayer.Snake.Dead)
+            {
+                NextPlayer();
+                ResetTimer();
+            }
             //DebugExecuteOnKeyPress();
         }
         //HearthStoneDragRotationTrollolol();
@@ -119,7 +125,8 @@ public class DraftManager : MonoBehaviour
     /// </summary>
     private void CheckDraftDone()
     {
-        if (cards.Count <= cardsPerPack - gamestate.Players.Count)
+        var deadCount = gamestate.Players.FindAll(p => p.Snake.Dead).Count;
+        if (cards.Count - deadCount <= cardsPerPack - gamestate.Players.Count)
         {
             //done choosing cards
             cards.ForEach(c => { Destroy(c.gameObject); });
@@ -146,6 +153,9 @@ public class DraftManager : MonoBehaviour
             card.gameObject.transform.position = CardSpawnPositions[i].position;
             cards.Add(card);
         }
+
+        currentPlayer = r.Next(0, gamestate.Players.Count);
+        NextPlayer();
     }
 
     private void CheckMouseSelection()
@@ -246,6 +256,11 @@ public class DraftManager : MonoBehaviour
         currentPlayer = (currentPlayer + 1) % gamestate.Players.Count;
         gamestate.CurrPlayer = gamestate.Players[currentPlayer];
         OnCurrentPlayerChange();
+        if (gamestate.CurrPlayer.Snake.Dead)
+        {
+            NextPlayer();
+            ResetTimer();
+        }
     }
     //debugging routines
     private void DebugExecuteOnKeyPress()
