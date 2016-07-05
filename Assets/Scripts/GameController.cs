@@ -39,8 +39,7 @@ public class GameController : MonoBehaviour
 
         //initialize grid and add Player references to playerinfo
         gamestate.Players[0].Snake = Grid.AddPlayer(new Point(7, 2), Directions.North, Teams.Red);
-        gamestate.CurrPlayer = gamestate.Players[0];
-        gamestate.CurrPlayer = gamestate.Players[0]; //lel
+        gamestate.SelectNewCurrentPlayer(gamestate.Players[0]);
         gamestate.Players[1].Snake = Grid.AddPlayer(new Point(7, 12), Directions.South, Teams.Green);
         if (nPlayers == 4)
         {

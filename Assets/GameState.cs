@@ -12,9 +12,8 @@ public class GameState : MonoBehaviour
 {
     public Mode State { get; set; }
     public List<PlayerInfo> Players { get; private set; }
-    public PlayerInfo CurrPlayer { get { return currPlayerField; } set { PrevPlayer = currPlayerField; currPlayerField = value; } }
-    private PlayerInfo currPlayerField;
-    public PlayerInfo PrevPlayer { get; private set; }
+    public PlayerInfo CurrentPlayer { get; private set; }
+    public PlayerInfo PreviousPlayer { get; private set; }
 
     public GameState()
     {
@@ -25,6 +24,14 @@ public class GameState : MonoBehaviour
     public void ResetState()
     {
         Players = new List<PlayerInfo>();
+        PreviousPlayer = null;
+        CurrentPlayer = null;
+    }
+
+    public void SelectNewCurrentPlayer(PlayerInfo newPlayer)
+    {
+        PreviousPlayer = CurrentPlayer;
+        CurrentPlayer = newPlayer;
     }
 }
 

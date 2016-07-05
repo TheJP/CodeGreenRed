@@ -84,7 +84,7 @@ public class DraftManager : MonoBehaviour
             {
                 //we're done with drafting, time to play
                 GetComponent<PlayingStateController>().DraftResult = draftResult;
-                gamestate.CurrPlayer.Snake.Select(false);
+                gamestate.CurrentPlayer.Snake.Select(false);
                 gamestate.State = Mode.Playing;
                 draftResult = new DraftResult();
             }
@@ -98,7 +98,7 @@ public class DraftManager : MonoBehaviour
             if (TimeLeft <= 0) { TimeIsUp(); }
 
             CheckMouseSelection();
-            if (gamestate.CurrPlayer.Snake.Dead)
+            if (gamestate.CurrentPlayer.Snake.Dead)
             {
                 NextPlayer();
                 ResetTimer();
@@ -136,8 +136,8 @@ public class DraftManager : MonoBehaviour
 
     private void OnCurrentPlayerChange()
     {
-        gamestate.PrevPlayer.Snake.Select(false);
-        gamestate.CurrPlayer.Snake.Select(true);
+        if (gamestate.PreviousPlayer != null) { gamestate.PreviousPlayer.Snake.Select(false); }
+        gamestate.CurrentPlayer.Snake.Select(true);
         playerText.text = "Player : " + (currentPlayer + 1) + " 's turn ";
     }
     private void ResetTimer() { TimeLeft = thinkingTime; }
@@ -233,7 +233,7 @@ public class DraftManager : MonoBehaviour
     private void CreateAndAddChosenCard()
     {
         //save effect of selected Card
-        var castingPlayer = gamestate.CurrPlayer;
+        var castingPlayer = gamestate.CurrentPlayer;
         var cardeffectParams = new CardEffectParamerters(castingPlayer, grid);
         var effect = selected.GetComponent<CardEffect>();
         selected.gameObject.SetActive(false);
@@ -252,9 +252,9 @@ public class DraftManager : MonoBehaviour
     private void NextPlayer()
     {
         currentPlayer = (currentPlayer + 1) % gamestate.Players.Count;
-        gamestate.CurrPlayer = gamestate.Players[currentPlayer];
+        gamestate.SelectNewCurrentPlayer(gamestate.Players[currentPlayer]);
         OnCurrentPlayerChange();
-        if (gamestate.CurrPlayer.Snake.Dead)
+        if (gamestate.CurrentPlayer.Snake.Dead)
         {
             NextPlayer();
             ResetTimer();
