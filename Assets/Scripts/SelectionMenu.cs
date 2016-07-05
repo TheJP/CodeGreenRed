@@ -36,7 +36,6 @@ public class SelectionMenu : MonoBehaviour
     private Animator mainCameraAnimator;
     private Animator guiCameraAnimator;
 
-    private bool muted = false;
     private bool rg = true;
 
     private int redScore = 0;
@@ -190,29 +189,23 @@ public class SelectionMenu : MonoBehaviour
         Vector3 myVec = sound.GetComponent<Transform>().position;
         var soundRAC = sound.GetComponent<Animator>().runtimeAnimatorController;
         Destroy(sound);
-        if (muted)
+        if (AudioListener.pause)
         {
-            muted = false;
             //Turn on sound
-
-            myAudioListener.enabled = true;
+            AudioListener.pause = false;
 
             sound = (GameObject)Instantiate(soundOn, myVec, myQuack);
             sound.GetComponent<Animator>().runtimeAnimatorController = soundRAC;
-
             sound.layer = 8;
         }
         else
         {
-            muted = true;
             //Turn off sound
-
-            myAudioListener.enabled = false;
+            AudioListener.pause = true;
 
             sound = (GameObject)Instantiate(soundOff, myVec, myQuack);
             sound.GetComponent<Animator>().runtimeAnimatorController = soundRAC;
             sound.layer = 8;
-
         }
     }
 

@@ -229,13 +229,12 @@ public class Player : MonoBehaviour
     /// <param name="value"></param>
     public void Select(bool value)
     {
-        if (!Dead)
+        if (Dead) { return; }
+        foreach (var bodyPart in body.Concat(new[] { head }))
         {
-            foreach (var particle in body.Concat(new[] { head }).Select(b => b.GetComponent<ParticleSystem>()))
-            {
-                if (value) { particle.Play(); }
-                else { particle.Stop(); }
-            }
+            if(bodyPart == null) { continue; }
+            if (value) { bodyPart.GetComponent<ParticleSystem>().Play(); }
+            else { bodyPart.GetComponent<ParticleSystem>().Stop(); }
         }
     }
 
