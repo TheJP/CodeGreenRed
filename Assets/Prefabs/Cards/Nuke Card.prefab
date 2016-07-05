@@ -8,8 +8,8 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 410686}
-  - 114: {fileID: 11422866}
   - 65: {fileID: 6513756}
+  - 114: {fileID: 11422080}
   m_Layer: 0
   m_Name: Nuke Card
   m_TagString: Untagged
@@ -99,7 +99,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.47, y: 3.6, z: 0.1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &11422866
+--- !u!114 &11422080
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -107,10 +107,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 114866}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc69ebabb05e2d247bfde96d78a45183, type: 3}
+  m_Script: {fileID: 11500000, guid: 1961d194450918a41991919cd352243d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 11
   highlightBorder: {fileID: 123466}
 --- !u!212 &21212592
 SpriteRenderer:

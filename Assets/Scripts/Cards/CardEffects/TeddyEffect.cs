@@ -10,12 +10,6 @@ namespace Assets.Scripts.Cards.CardEffects
     class TeddyEffect : CardEffect
     {
         public const int AmountOfCheese = 3;
-        private Grid grid;
-        public TeddyEffect(Grid grid)
-        {
-            this.grid = grid;
-        }
-
         public override void Execute()
         {
             var player = grid.Players.Shuffle(new System.Random()).Where(p => !p.Dead).FirstOrDefault();

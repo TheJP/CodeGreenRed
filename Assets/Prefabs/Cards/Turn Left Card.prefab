@@ -40,7 +40,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 469024}
-  - 114: {fileID: 11498980}
   - 65: {fileID: 6553800}
   - 114: {fileID: 11479834}
   m_Layer: 0
@@ -109,18 +108,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a991068613fe0f47a8f702d164f1042, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  highlightBorder: {fileID: 120286}
---- !u!114 &11498980
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 190026}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc69ebabb05e2d247bfde96d78a45183, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   highlightBorder: {fileID: 120286}

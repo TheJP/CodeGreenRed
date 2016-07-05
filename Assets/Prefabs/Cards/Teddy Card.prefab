@@ -40,8 +40,8 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 462942}
-  - 114: {fileID: 11426728}
   - 65: {fileID: 6523956}
+  - 114: {fileID: 11429522}
   m_Layer: 0
   m_Name: Teddy Card
   m_TagString: Untagged
@@ -99,7 +99,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.47, y: 3.6, z: 0.1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &11426728
+--- !u!114 &11429522
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -107,10 +107,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 198190}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc69ebabb05e2d247bfde96d78a45183, type: 3}
+  m_Script: {fileID: 11500000, guid: 6b44f4aec7b33c1479d103bc1e546e2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 8
   highlightBorder: {fileID: 180670}
 --- !u!212 &21229290
 SpriteRenderer:
