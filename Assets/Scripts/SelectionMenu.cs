@@ -37,10 +37,6 @@ public class SelectionMenu : MonoBehaviour
 
     private int redScore = 0;
     private int greenScore = 0;
-    private bool forward = true;
-
-
-    //Should be handled in another script
 
     private Grid grid;
 
@@ -266,9 +262,6 @@ public class SelectionMenu : MonoBehaviour
 
                     //TODO: create Map with options (player and what specific map?)
                     ChangeMapLayout();
-
-
-
                 }
                 else if (selectedObject[currentPosition].name.Contains("Sound"))
                 {
@@ -278,7 +271,6 @@ public class SelectionMenu : MonoBehaviour
                 {
                     ToggleBlind();
                 }
-
             }
 
 
@@ -288,16 +280,9 @@ public class SelectionMenu : MonoBehaviour
                 gameController.StartGame(players, grid);
                 gamestate.State = Mode.AboutToStart;
 
-
-
                 mainCameraAnimator.Play("myCameraForward");
                 guiCameraAnimator.Play("GuiCameraForward");
-
-                //mainCameraAnimator.Play("myCameraReward");
-
             }
-
-
 
             if (currentPosition != newPosition)
             {
@@ -305,9 +290,7 @@ public class SelectionMenu : MonoBehaviour
                 MoveHearts();
             }
         }
-
     }
-
 
     public void ChangeMapLayout()
     {
@@ -319,6 +302,4 @@ public class SelectionMenu : MonoBehaviour
         grid = Instantiate(gridPrefab).GetComponent<Grid>();
         ChangeMapLayout();
     }
-
-
 }

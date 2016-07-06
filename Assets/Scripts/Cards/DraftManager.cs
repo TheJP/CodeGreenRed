@@ -27,7 +27,7 @@ public class DraftManager : MonoBehaviour
 
     private Transform[] CardSpawnPositions;
     private Card selected = null;
-    private Vector2 dragStartPos; //point in world coordinates where the mouse was originally clicked
+    //private Vector2 dragStartPos; //point in world coordinates where the mouse was originally clicked
     private Vector3 mouseLast = Vector3.zero;
     private int currentPlayer = 0;
     /// <summary>
@@ -44,8 +44,6 @@ public class DraftManager : MonoBehaviour
     /// after minCards is reached, every player has chosen a card in the current draft
     /// </summary>
     private const int cardsPerPack = 5;
-    private System.Random r = new System.Random();
-
 
     // Use this for initialization
     void Start()
@@ -159,7 +157,7 @@ public class DraftManager : MonoBehaviour
 
             //if the user pressed mouse check if he selected a card
             var mouse = Input.mousePosition;
-            dragStartPos = Camera.main.ScreenToWorldPoint(mouse);
+            //dragStartPos = Camera.main.ScreenToWorldPoint(mouse);
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(mouse);
             if (Physics.Raycast(ray, out hit, 100.0f))
@@ -192,13 +190,11 @@ public class DraftManager : MonoBehaviour
             Vector2 curPos = Camera.main.ScreenToWorldPoint(curScreenPoint);// + offset;
             selected.transform.position = curPos;
 
-            var dragDir = new Vector2(curPos.x - dragStartPos.x, 0);
+            //var dragDir = new Vector2(curPos.x - dragStartPos.x, 0);
 
-            var from = selected.transform.rotation;
-            Quaternion targetrotation = Quaternion.LookRotation(dragDir);
+            //var from = selected.transform.rotation;
+            //Quaternion targetrotation = Quaternion.LookRotation(dragDir);
             //selected.transform.rotation = Quaternion.RotateTowards(selected.transform.rotation, targetrotation, 50 * Time.deltaTime);
-
-
         }
         mouseLast = Input.mousePosition;
     }
