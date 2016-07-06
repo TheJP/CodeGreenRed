@@ -202,7 +202,7 @@ public class SelectionMenu : MonoBehaviour
         if (gamestate.State == Mode.Menu)
         {
 
-            if (Input.GetKeyDown("up") || Input.GetKeyDown("w"))
+            if (Input.GetButtonDown("Up"))
             {
 
                 if (currentPosition == 0)
@@ -215,7 +215,7 @@ public class SelectionMenu : MonoBehaviour
                 }
             }
 
-            if (Input.GetKeyDown("down") || Input.GetKeyDown("s"))
+            if (Input.GetButtonDown("Down"))
             {
                 if (currentPosition == selectedObject.Length - 1)
                 {
@@ -227,7 +227,7 @@ public class SelectionMenu : MonoBehaviour
                 }
             }
 
-            if (Input.GetKeyDown("a") || Input.GetKeyDown("left"))
+            if (Input.GetButtonDown("Left"))
             {
 
                 //Increase/dec player count change maps
@@ -253,7 +253,7 @@ public class SelectionMenu : MonoBehaviour
                     ToggleBlind();
                 }
             }
-            if (Input.GetKeyDown("d") || Input.GetKeyDown("right") || Input.GetKeyDown("return"))
+            if (Input.GetButtonDown("Right") || Input.GetButtonDown("Submit"))
             {
                 if (selectedObject[currentPosition].name.Contains("Count"))
                 {
@@ -282,7 +282,7 @@ public class SelectionMenu : MonoBehaviour
             }
 
 
-            if (Input.GetKeyDown("return") && selectedObject[currentPosition].name.Contains("Start"))
+            if (Input.GetButtonDown("Submit") && selectedObject[currentPosition].name.Contains("Start"))
             {
                 //Starting game!:
                 gameController.StartGame(players, grid);
