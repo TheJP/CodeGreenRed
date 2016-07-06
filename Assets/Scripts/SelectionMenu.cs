@@ -6,14 +6,14 @@ public class SelectionMenu : MonoBehaviour
 {
 
     public GameObject[] selectedObject;
-    public GameObject heart;
-    public GameObject soundOn;
-    public GameObject soundOff;
-    public GameObject mainCamera;
-    public GameObject guiCamera;
+    public GameObject heartPrefab;
+    public GameObject soundOnPrefab;
+    public GameObject soundOffPrefab;
+    public Animator mainCamera;
+    public Animator guiCamera;
     public RuntimeAnimatorController rAC;
-    public GameObject GreenScoreObject;
-    public GameObject RedScoreObject;
+    public TextMesh greenScoreText;
+    public TextMesh redScoreText;
 
     public GameObject gridHolder;
     public GameObject gridPrefab;
@@ -24,11 +24,8 @@ public class SelectionMenu : MonoBehaviour
     private GameObject heartRight;
     private GameObject heartSecondLeft;
     private GameObject heartSecondRight;
-    private GameObject sound;
+    private GameObject sound = null;
 
-
-
-    private AudioListener myAudioListener;
     private int currentPosition = 0;
     private int newPosition = 0;
     private WallLayouts currentMap = WallLayouts.NoWalls;
@@ -50,13 +47,13 @@ public class SelectionMenu : MonoBehaviour
     public void IncrementRedScore()
     {
         redScore++;
-        RedScoreObject.GetComponent<TextMesh>().text = ("R:" + redScore);
+        redScoreText.text = ("R:" + redScore);
     }
 
     public void IncrementGreenScore()
     {
         greenScore++;
-        GreenScoreObject.GetComponent<TextMesh>().text = ("G:"+greenScore);
+        greenScoreText.text = ("G:"+greenScore);
     }
 
     public void EnableScript() {
@@ -76,8 +73,8 @@ public class SelectionMenu : MonoBehaviour
     {
         InizializeMap();
         spawnHeartsNew();
-        mainCameraAnimator = mainCamera.GetComponent<Animator>();
-        guiCameraAnimator = guiCamera.GetComponent<Animator>();
+        mainCameraAnimator = mainCamera;
+        guiCameraAnimator = guiCamera;
 
         foreach (GameObject obj in selectedObject)
         {
@@ -94,17 +91,12 @@ public class SelectionMenu : MonoBehaviour
             {
                 //Turn sound on.
                 Vector3 mySoundVec = obj.GetComponent<RectTransform>().localPosition;
-                sound = (GameObject)Instantiate(soundOn, mySoundVec, Quaternion.LookRotation(new Vector3(0, 1)));
-
+                sound = (GameObject)Instantiate(AudioListener.pause ? soundOffPrefab : soundOnPrefab, mySoundVec, Quaternion.identity);
                 sound.layer = 8;
-                myAudioListener = (AudioListener)mainCamera.GetComponent<AudioListener>();
-
             }
-
         }
 
     }
-
 
     private void spawnHeartsNew()
     {
@@ -113,8 +105,8 @@ public class SelectionMenu : MonoBehaviour
         Vector3 myVec = myRecTran.localPosition;
         float myWidth = myRecTran.rect.width;
 
-        heartLeft = (GameObject)Instantiate(heart, new Vector3(myVec.x + (myWidth / 4) + 5, myVec.y), Quaternion.identity);
-        heartRight = (GameObject)Instantiate(heart, new Vector3(myVec.x - (myWidth / 4) - 5, myVec.y), Quaternion.identity);
+        heartLeft = (GameObject)Instantiate(heartPrefab, new Vector3(myVec.x + (myWidth / 4) + 5, myVec.y), Quaternion.identity);
+        heartRight = (GameObject)Instantiate(heartPrefab, new Vector3(myVec.x - (myWidth / 4) - 5, myVec.y), Quaternion.identity);
 
         heartLeft.layer = 8;
         heartRight.layer = 8;
@@ -122,8 +114,8 @@ public class SelectionMenu : MonoBehaviour
         heartLeft.GetComponent<Animator>().runtimeAnimatorController = rAC;
         heartRight.GetComponent<Animator>().runtimeAnimatorController = rAC;
 
-        heartSecondLeft = (GameObject)Instantiate(heart, new Vector3(myVec.x + (myWidth / 4) + 5 + 3, myVec.y), Quaternion.identity);
-        heartSecondRight = (GameObject)Instantiate(heart, new Vector3(myVec.x - (myWidth / 4) - 5 - 3, myVec.y), Quaternion.identity);
+        heartSecondLeft = (GameObject)Instantiate(heartPrefab, new Vector3(myVec.x + (myWidth / 4) + 5 + 3, myVec.y), Quaternion.identity);
+        heartSecondRight = (GameObject)Instantiate(heartPrefab, new Vector3(myVec.x - (myWidth / 4) - 5 - 3, myVec.y), Quaternion.identity);
 
         heartSecondLeft.layer = 8;
         heartSecondRight.layer = 8;
@@ -179,28 +171,14 @@ public class SelectionMenu : MonoBehaviour
     private void ToggleSound()
     {
 
-        Quaternion myQuack = sound.GetComponent<Transform>().rotation;
-        Vector3 myVec = sound.GetComponent<Transform>().position;
+        Quaternion myQuack = sound.transform.rotation;
+        Vector3 myVec = sound.transform.position;
         var soundRAC = sound.GetComponent<Animator>().runtimeAnimatorController;
         Destroy(sound);
-        if (AudioListener.pause)
-        {
-            //Turn on sound
-            AudioListener.pause = false;
-
-            sound = (GameObject)Instantiate(soundOn, myVec, myQuack);
-            sound.GetComponent<Animator>().runtimeAnimatorController = soundRAC;
-            sound.layer = 8;
-        }
-        else
-        {
-            //Turn off sound
-            AudioListener.pause = true;
-
-            sound = (GameObject)Instantiate(soundOff, myVec, myQuack);
-            sound.GetComponent<Animator>().runtimeAnimatorController = soundRAC;
-            sound.layer = 8;
-        }
+        AudioListener.pause = !AudioListener.pause;
+        sound = (GameObject)Instantiate(AudioListener.pause ? soundOffPrefab : soundOnPrefab, myVec, myQuack);
+        sound.GetComponent<Animator>().runtimeAnimatorController = soundRAC;
+        sound.layer = 8;
     }
 
     private void ToggleBlind()

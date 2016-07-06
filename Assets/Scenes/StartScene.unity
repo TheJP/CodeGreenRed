@@ -1710,14 +1710,14 @@ MonoBehaviour:
   - {fileID: 510209769}
   - {fileID: 2063451323}
   - {fileID: 1814306130}
-  heart: {fileID: 193978, guid: 9dc0647a58a2956438b46d2c0fc49dd4, type: 2}
-  soundOn: {fileID: 152212, guid: 9654fe001bbafff4e9ce55c1b9a78981, type: 2}
-  soundOff: {fileID: 160338, guid: 03b81c74ea148d84f8b32988c8baad34, type: 2}
-  mainCamera: {fileID: 551804225}
-  guiCamera: {fileID: 1420206874}
+  heartPrefab: {fileID: 193978, guid: 9dc0647a58a2956438b46d2c0fc49dd4, type: 2}
+  soundOnPrefab: {fileID: 152212, guid: 9654fe001bbafff4e9ce55c1b9a78981, type: 2}
+  soundOffPrefab: {fileID: 160338, guid: 03b81c74ea148d84f8b32988c8baad34, type: 2}
+  mainCamera: {fileID: 551804231}
+  guiCamera: {fileID: 1420206875}
   rAC: {fileID: 9100000, guid: 5dd117ce475370a4ea75b659c15523f1, type: 2}
-  GreenScoreObject: {fileID: 719879675}
-  RedScoreObject: {fileID: 206245569}
+  greenScoreText: {fileID: 719879677}
+  redScoreText: {fileID: 206245571}
   gridHolder: {fileID: 146997298}
   gridPrefab: {fileID: 127458, guid: e588f0ec1c692c74385dbf0d96c26b77, type: 2}
   gamestate: {fileID: 1555403805}
