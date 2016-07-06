@@ -60,30 +60,24 @@ public class SelectionMenu : MonoBehaviour
     }
 
     public void EnableScript() {
-        guiCameraAnimator.Play("GuiCameraReward");
+        guiCameraAnimator.Play("GuiCameraBackward");
         mainCameraAnimator.Play("myCameraReward");
 
-        StartCoroutine(waitUntilEnable());
+        Invoke("Enable", 2f);
+    }
 
+    private void Enable() {
+        gamestate.State = Mode.Menu;
         Destroy(grid.gameObject);
         InizializeMap();
     }
 
-    IEnumerator waitUntilEnable() {
-        yield return new WaitForSeconds(2);
-        gamestate.State = Mode.Menu;
-    }
-
-    void Start()
+    private void Start()
     {
         InizializeMap();
         spawnHeartsNew();
         mainCameraAnimator = mainCamera.GetComponent<Animator>();
-
         guiCameraAnimator = guiCamera.GetComponent<Animator>();
-
-
-
 
         foreach (GameObject obj in selectedObject)
         {
@@ -112,7 +106,7 @@ public class SelectionMenu : MonoBehaviour
     }
 
 
-    void spawnHeartsNew()
+    private void spawnHeartsNew()
     {
 
         RectTransform myRecTran = selectedObject[currentPosition].GetComponent<RectTransform>();
@@ -137,23 +131,23 @@ public class SelectionMenu : MonoBehaviour
         heartSecondLeft.GetComponent<Animator>().runtimeAnimatorController = rAC;
         heartSecondRight.GetComponent<Animator>().runtimeAnimatorController = rAC;
 
-        deactivateAdditionalHearts();
+        DeactivateAdditionalHearts();
     }
 
 
-    void deactivateAdditionalHearts()
+    private void DeactivateAdditionalHearts()
     {
         heartSecondLeft.SetActive(false);
         heartSecondRight.SetActive(false);
     }
 
-    void activateAdditionalHearts()
+    private void ActivateAdditionalHearts()
     {
         heartSecondLeft.SetActive(true);
         heartSecondRight.SetActive(true);
     }
 
-    void moveHearts()
+    private void MoveHearts()
     {
         RectTransform myRecTran = selectedObject[currentPosition].GetComponent<RectTransform>();
         Vector3 myVec = myRecTran.localPosition;
@@ -167,22 +161,22 @@ public class SelectionMenu : MonoBehaviour
         heartSecondRight.transform.position = (new Vector3(myVec.x + (myWidth / 4) + 5 + 3, myVec.y));
     }
 
-    void togglePlayers()
+    private void TogglePlayers()
     {
         if (players == 2)
         {
             players = 4;
-            activateAdditionalHearts();
+            ActivateAdditionalHearts();
         }
         else
         {
             players = 2;
-            deactivateAdditionalHearts();
+            DeactivateAdditionalHearts();
         }
         selectedObject[currentPosition].GetComponent<TextMesh>().text = ("Player: " + players);
     }
 
-    void toggleSound()
+    private void ToggleSound()
     {
 
         Quaternion myQuack = sound.GetComponent<Transform>().rotation;
@@ -209,7 +203,7 @@ public class SelectionMenu : MonoBehaviour
         }
     }
 
-    void toggleBlind()
+    private void ToggleBlind()
     {
 
         if (rg)
@@ -261,7 +255,7 @@ public class SelectionMenu : MonoBehaviour
                 //Increase/dec player count change maps
                 if (selectedObject[currentPosition].name.Contains("Count"))
                 {
-                    togglePlayers();
+                    TogglePlayers();
                 }
                 else if (selectedObject[currentPosition].name.Contains("Map"))
                 {
@@ -274,18 +268,18 @@ public class SelectionMenu : MonoBehaviour
 
                 else if (selectedObject[currentPosition].name.Contains("Sound"))
                 {
-                    toggleSound();
+                    ToggleSound();
                 }
                 else if (selectedObject[currentPosition].name.Contains("Blind"))
                 {
-                    toggleBlind();
+                    ToggleBlind();
                 }
             }
             if (Input.GetKeyDown("d") || Input.GetKeyDown("right") || Input.GetKeyDown("return"))
             {
                 if (selectedObject[currentPosition].name.Contains("Count"))
                 {
-                    togglePlayers();
+                    TogglePlayers();
                 }
                 else if (selectedObject[currentPosition].name.Contains("Map"))
                 {
@@ -300,11 +294,11 @@ public class SelectionMenu : MonoBehaviour
                 }
                 else if (selectedObject[currentPosition].name.Contains("Sound"))
                 {
-                    toggleSound();
+                    ToggleSound();
                 }
                 else if (selectedObject[currentPosition].name.Contains("Blind"))
                 {
-                    toggleBlind();
+                    ToggleBlind();
                 }
 
             }
@@ -330,7 +324,7 @@ public class SelectionMenu : MonoBehaviour
             if (currentPosition != newPosition)
             {
                 currentPosition = newPosition;
-                moveHearts();
+                MoveHearts();
             }
         }
 
