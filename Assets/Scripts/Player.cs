@@ -7,9 +7,11 @@ public class Player : MonoBehaviour
 {
     /// <summary>Determines, how many body elements are created per tile.</summary>
     public const int BodyElementsPerTile = 3;
+
     /// <summary>Animation movement speed.</summary>
     public const float MovementSpeed = 2f;
     public const int StartingLength = 3;
+
     /// <summary>Coordinate offset for head and body sprites.</summary>
     public readonly Vector3 PlayerOffset = new Vector3(0.5f, 0.5f);
     public readonly Vector3 ArrowScale = new Vector3(0.5f, 0.5f, 0.5f);
@@ -20,6 +22,7 @@ public class Player : MonoBehaviour
     public GameObject playerHeadPrefab;
     public GameObject playerBodyPrefab;
     public GameObject explodeParticlesPrefab;
+
     public Material greenMaterial;
     public Material redMaterial;
     public Sprite[] playerSprites;
@@ -42,12 +45,16 @@ public class Player : MonoBehaviour
 
     /// <summary>The direction, in which the snake is currently heading.</summary>
     public Directions Direction { get; private set; }
+
     /// <summary>The position of the snake head, which is relevant for the game logic. (The animation may not be that far yet.)</summary>
     public Point Position { get; private set; }
+
     /// <summary>The position of all body elements of the snake, which are relevant for the game logic.</summary>
     public Queue<Point> BodyPositions { get; private set; }
+
     /// <summary>Count of all body parts of the snakes, which already exist or will be grown on the next moves.</summary>
     public int SnakeLength { get { return BodyPositions.Count + grow; } }
+
     public Teams Team
     {
         get { return team; }
@@ -57,6 +64,7 @@ public class Player : MonoBehaviour
             if(arrow != null) { arrow.GetComponent<Arrow>().Team = value; }
         }
     }
+
     /// <summary>Grid, in which the snake moves. Has to be set, before the snake starts.</summary>
     public Grid Grid { get; set; }
     /// <summary>Determines, if the player is dead.</summary>
@@ -78,19 +86,35 @@ public class Player : MonoBehaviour
     public void Grow(int amount = 1)
     {
         grow += amount;
-        if (grow < 0) { grow = 0; } //Cannot be less than 0
+        if (grow < 0)
+		{
+			grow = 0;
+		} //Cannot be less than 0
     }
 
     /// <summary>Makes the snake shorter by the given amount.</summary>
     public void Shrink()
     {
-        if (Dead) { return; }
-        if (grow > 0) { --grow; }
-        else if (BodyPositions.Count <= 1) { Dead = true; Die(); }
+        if (Dead)
+		{
+			return;
+		}
+
+        if (grow > 0)
+		{
+			--grow;
+		}
+        else if (BodyPositions.Count <= 1)
+		{
+			Dead = true; Die();
+		}
         else
         {
             BodyPositions.Dequeue();
-            if (animationHasToGrow > 0) { --animationHasToGrow; }
+            if (animationHasToGrow > 0)
+			{
+				--animationHasToGrow;
+			}
             else
             {
                 for (int i = 0; i < BodyElementsPerTile; ++i)
@@ -121,32 +145,68 @@ public class Player : MonoBehaviour
     /// <param name="amount">Amount that the snake will move meassured in tiles.</param>
     public void Move(int amount = 1)
     {
-        if (Dead) { return; }
+        if (Dead)
+		{
+			return;
+		}
         var startMovement = !headAnimation.Any() && amount > 0;
         var previousHeadAnimation = Position.ToVector() + PlayerOffset;
         var canceled = 0;
+
         for (int i = 0; i < amount; ++i)
         {
             var targetPosition = Position + Direction.Movement();
             //Wrap around the edges of the grid
-            if (targetPosition.X < 0) { targetPosition = new Point(targetPosition.X + Grid.width, targetPosition.Y); }
-            if (targetPosition.X >= Grid.width) { targetPosition = new Point(targetPosition.X - Grid.width, targetPosition.Y); }
-            if (targetPosition.Y < 0) { targetPosition = new Point(targetPosition.X, targetPosition.Y + Grid.height); }
-            if (targetPosition.Y >= Grid.height) { targetPosition = new Point(targetPosition.X, targetPosition.Y - Grid.height); }
+            if (targetPosition.X < 0)
+			{
+				targetPosition = new Point(targetPosition.X + Grid.width, targetPosition.Y);
+			}
+
+            if (targetPosition.X >= Grid.width)
+			{
+				targetPosition = new Point(targetPosition.X - Grid.width, targetPosition.Y);
+			}
+
+            if (targetPosition.Y < 0)
+			{
+				targetPosition = new Point(targetPosition.X, targetPosition.Y + Grid.height);
+			}
+
+            if (targetPosition.Y >= Grid.height)
+			{
+				targetPosition = new Point(targetPosition.X, targetPosition.Y - Grid.height);
+			}
+
             //Trigger movement event
             if (BeforeMove != null)
             {
                 var arguments = new MoveEventArguments(this, targetPosition);
                 BeforeMove(arguments);
-                if (Dead) { return; }
-                if (arguments.Canceled) { ++canceled; continue; }
+                if (Dead)
+				{
+					return;
+				}
+
+                if (arguments.Canceled)
+				{
+					++canceled;
+					continue;
+				}
             }
+
             //Move player
             Position = targetPosition;
             BodyPositions.Enqueue(Position);
             headAnimation.Enqueue(Position);
-            if (grow > 0) { --grow; ++animationHasToGrow; }
-            else { BodyPositions.Dequeue(); }
+            if (grow > 0)
+			{
+				--grow;
+				++animationHasToGrow;
+			}
+            else
+			{
+				BodyPositions.Dequeue();
+			}
         }
         if (startMovement && canceled < amount)
         {
@@ -163,16 +223,23 @@ public class Player : MonoBehaviour
             --animationHasToGrow;
             SpawnBody();
         }
+
         if (bodyAnimation.Any())
         {
             for (int i = bodyAnimation.Count - 1; i >= BodyElementsPerTile; --i)
             {
                 bodyAnimation[i] = bodyAnimation[i - BodyElementsPerTile];
             }
-            var distance = ((headAnimation.Peek().ToVector() + PlayerOffset) - head.transform.localPosition);
+
+			var distance = ((headAnimation.Peek().ToVector() + PlayerOffset) - head.transform.localPosition);
             var distribution = distance.normalized / BodyElementsPerTile;
-            if(distance.magnitude > 2) { distribution = -distribution; } //Change direction for warpping around edges
-            for (int i = 0; i < BodyElementsPerTile; ++i)
+
+			if(distance.magnitude > 2)
+			{
+				distribution = -distribution;
+			} //Change direction for warpping around edges
+
+			for (int i = 0; i < BodyElementsPerTile; ++i)
             {
                 bodyAnimation[i] = (headAnimation.Peek().ToVector() + PlayerOffset) - (i + 1) * distribution;
             }
@@ -182,14 +249,17 @@ public class Player : MonoBehaviour
     private void SpawnBody()
     {
         for (int i = 0; i < BodyElementsPerTile; ++i)
-        {
+		{
             var bodyPart = Instantiate(playerBodyPrefab);
-            bodyPart.transform.parent = transform;
+
+			bodyPart.transform.parent = transform;
             bodyPart.transform.localPosition = bodyAnimation.Count > 0 ? bodyAnimation.Last() : previousHeadAnimation;
             bodyPart.transform.localScale = BodyScale; //Local scaling is not set correctly by unity when spawning (fixed with this)
             bodyPart.GetComponent<SpriteRenderer>().material = Team == Teams.Green ? greenMaterial : redMaterial;
-            //TODO: Generalize
-            bodyPart.GetComponent<SpriteRenderer>().sprite = playerSprites[0];
+
+			//TODO: Generalize
+
+			bodyPart.GetComponent<SpriteRenderer>().sprite = playerSprites[0];
             body.Add(bodyPart);
             bodyAnimation.Add(bodyPart.transform.localPosition);
         }
@@ -197,14 +267,21 @@ public class Player : MonoBehaviour
 
     public void TurnLeft()
     {
-        if (Dead) { return; }
+        if (Dead)
+		{
+			return;
+		}
         Direction = Direction.TurnLeft();
         arrow.GetComponent<Arrow>().TurnTo(Direction.Angle());
     }
 
     public void TurnRight()
     {
-        if (Dead) { return; }
+        if (Dead)
+		{
+			return;
+		}
+
         Direction = Direction.TurnRight();
         arrow.GetComponent<Arrow>().TurnTo(Direction.Angle());
     }
@@ -212,7 +289,11 @@ public class Player : MonoBehaviour
     /// <summary>Kills this snake.</summary>
     public void Die()
     {
-        while(BodyPositions.Count > 1) { Shrink(); }
+        while(BodyPositions.Count > 1)
+		{
+			Shrink();
+		}
+
         Dead = true;
         ExplodeSprite(head);
         Destroy(arrow);
@@ -222,19 +303,37 @@ public class Player : MonoBehaviour
         grow = 0;
         animationHasToGrow = 0;
         BodyPositions.Clear();
-        if(AfterDeath != null) { AfterDeath(this); }
+
+		if(AfterDeath != null)
+		{
+			AfterDeath(this);
+		}
     }
 
     /// <summary>Controls, if this snake is selected or not.</summary>
     /// <param name="value"></param>
     public void Select(bool value)
     {
-        if (Dead) { return; }
+        if (Dead)
+		{
+			return;
+		}
+
         foreach (var bodyPart in body.Concat(new[] { head }))
         {
-            if(bodyPart == null) { continue; }
-            if (value) { bodyPart.GetComponent<ParticleSystem>().Play(); }
-            else { bodyPart.GetComponent<ParticleSystem>().Stop(); }
+            if(bodyPart == null)
+			{
+				continue;
+			}
+
+            if (value)
+			{
+				bodyPart.GetComponent<ParticleSystem>().Play();
+			}
+            else
+			{
+				bodyPart.GetComponent<ParticleSystem>().Stop();
+			}
         }
     }
 
@@ -246,12 +345,14 @@ public class Player : MonoBehaviour
         head.transform.localPosition = Position.ToVector() + PlayerOffset;
         head.transform.localScale = HeadScale; //Local scaling is not set correctly by unity when spawning (fixed with this)
         head.GetComponent<SpriteRenderer>().material = Team == Teams.Green ? greenMaterial : redMaterial;
+
         //Spawn arrow
         arrow = Instantiate(arrowPrefab);
         arrow.transform.parent = head.transform;
         arrow.transform.localPosition = new Vector3(0f, 0f, -1f);
         arrow.GetComponent<Arrow>().Turn(Direction.Angle(), Direction.Angle());
         arrow.GetComponent<Arrow>().Team = Team;
+
         //TODO: Generalize
         head.GetComponent<SpriteRenderer>().sprite = playerSprites[0];
     }
@@ -264,10 +365,25 @@ public class Player : MonoBehaviour
         //Wrap around the edges of the grid
         if (direction.magnitude > 2f)
         {
-            if (target.x + 2f < transform.localPosition.x) { transform.Translate(-Grid.width, 0f, 0f, Space.Self); }
-            if (target.x - 2f > transform.localPosition.x) { transform.Translate(Grid.width, 0f, 0f, Space.Self); }
-            if (target.y + 2f < transform.localPosition.y) { transform.Translate(0f, -Grid.height, 0f, Space.Self); }
-            if (target.y - 2f > transform.localPosition.y) { transform.Translate(0f, Grid.height, 0f, Space.Self); }
+            if (target.x + 2f < transform.localPosition.x)
+			{
+				transform.Translate(-Grid.width, 0f, 0f, Space.Self);
+			}
+
+            if (target.x - 2f > transform.localPosition.x)
+			{
+				transform.Translate(Grid.width, 0f, 0f, Space.Self);
+			}
+
+            if (target.y + 2f < transform.localPosition.y)
+			{
+				transform.Translate(0f, -Grid.height, 0f, Space.Self);
+			}
+
+            if (target.y - 2f > transform.localPosition.y)
+			{
+				transform.Translate(0f, Grid.height, 0f, Space.Self);
+			}
         }
         transform.Translate(direction.normalized * Time.deltaTime * MovementSpeed, Space.Self);
     }
