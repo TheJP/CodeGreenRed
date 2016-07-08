@@ -56,24 +56,6 @@
 
 				v += sin(sqrt(100 * (cx * cx + cy * cy) + 1 + _Time[0]));
 
-	//						  float v = 0.0;
-    //vec2 c = v_coords * u_k - u_k/2.0;
-    //v += sin((c.x+u_time));
-    //v += sin((c.y+u_time)/2.0);
-    //v += sin((c.x+c.y+u_time)/2.0);
-    //c += u_k/2.0 * vec2(sin(u_time/3.0), cos(u_time/2.0));
-    //v += sin(sqrt(c.x*c.x+c.y*c.y+1.0)+u_time);
-    //v = v/2.0;
-    //vec3 col = vec3(1, sin(PI*v), cos(PI*v));
-    //gl_FragColor = vec4(col*.5 + .5, 1);
-
-    	//		float v = 0.0;
-
-    	//		float2 c = i.uv;
-    	//		v += sin(c.x + _Time[1]);
-    	//		v += sin((c.y + _Time[1])/2.0);
-    	//		v += sin((c.x + c.y + _Time[1])/2.0);
-
 				col.r = sin(v * 3.1418) / (2 * (2.0 + sin(_Time[3])) /5);
 				col.g = cos(v * 3.1418) / (2 * (2.0 + sin(_Time[3])) /5);
 				col *= 0.3;
